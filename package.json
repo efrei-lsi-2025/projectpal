@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "projet-efrei-ticket",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -9,12 +9,16 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@next-auth/prisma-adapter": "^1.0.6",
+    "@sidebase/nuxt-auth": "^0.6.0-alpha.2",
     "@types/node": "^18",
-    "nuxt": "^3.4.2"
+    "nuxt": "^3.4.2",
+    "prisma": "^4.13.0"
   },
   "packageManager": "yarn@1.22.19",
   "dependencies": {
     "@pinia-plugin-persistedstate/nuxt": "^1.1.1",
-    "@pinia/nuxt": "^0.4.9"
+    "@pinia/nuxt": "^0.4.9",
+    "@prisma/client": "^4.13.0"
   }
 }

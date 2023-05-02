@@ -1,6 +1,10 @@
 <template>
   <div>
     <h1>Index page</h1>
-    <p>Here is the index page</p>
+    <p>{{ test }}</p>
   </div>
 </template>
+
+<script lang="ts" setup>
+const test = await $fetch("/api/test");
+</script>
