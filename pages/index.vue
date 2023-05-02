@@ -6,6 +6,7 @@
 
     {{ auth.status }}
     <p><button @click="auth.signIn('github')">Test Login</button></p>
+    <p><button @click="auth.signOut()">Test Logout</button></p>
   </div>
 </template>
 

@@ -9,10 +9,14 @@ export default NuxtAuthHandler({
   secret: config.secret,
   adapter: PrismaAdapter(prisma),
   providers: [
-    // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
+    // @ts-expect-error https://sidebase.io/nuxt-auth/getting-started/quick-start
     GithubProvider.default({
       clientId: config.github.clientId,
       clientSecret: config.github.clientSecret,
     }),
   ],
+  pages: {
+    signIn: "/auth/login",
+  },
+  debug: true,
 });
