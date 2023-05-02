@@ -6,6 +6,9 @@ export default defineNuxtConfig({
     github: {
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET
+    },
+    auth: {
+      origin: process.env.AUTH_ORIGIN
     }
   }
 })

@@ -6,13 +6,8 @@ import GithubProvider from 'next-auth/providers/github'
 const config = useRuntimeConfig()
 
 export default NuxtAuthHandler({
-  secret: process.env.APP_SECRET,
+  secret: config.secret,
   adapter: PrismaAdapter(prisma),
-  callbacks: {
-    session: async ({ session, user }) => {
-      return session
-    }
-  },
   providers: [
     GithubProvider({
       clientId: config.github.clientId,
