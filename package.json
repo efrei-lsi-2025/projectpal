@@ -6,7 +6,7 @@
     "dev": "dotenv -e .env.development.local nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
+    "postinstall": "nuxt prepare && prisma generate",
     "prisma": "dotenv -e .env.development.local prisma"
   },
   "devDependencies": {
