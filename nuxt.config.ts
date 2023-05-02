@@ -8,5 +8,5 @@ export default defineNuxtConfig({
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     },
   },
-  auth: { provider: { type: "authjs" } },
+  auth: { globalAppMiddleware: true, provider: { type: "authjs" } },
 });
