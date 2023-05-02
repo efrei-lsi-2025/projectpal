@@ -1,6 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  css: [
+    "@/assets/style/global.scss",
+    "@/assets/style/theme.css",
+    "primevue/resources/primevue.css",
+    "primeicons/primeicons.css",
+  ],
   modules: ["@sidebase/nuxt-auth"],
+  build: {
+    transpile: ["primevue"],
+  },
   runtimeConfig: {
     secret: process.env.APP_SECRET,
     github: {
@@ -8,5 +17,8 @@ export default defineNuxtConfig({
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     },
   },
-  auth: { globalAppMiddleware: true, provider: { type: "authjs" } },
+  auth: {
+    enableGlobalAppMiddleware: true,
+    defaultProvider: "github",
+  },
 });
