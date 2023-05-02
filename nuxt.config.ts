@@ -16,9 +16,16 @@ export default defineNuxtConfig({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     },
-  },
-  auth: {
-    enableGlobalAppMiddleware: true,
-    defaultProvider: "github",
+    public: {
+      auth: {
+        enableGlobalAppMiddleware: true,
+        defaultProvider: "github",
+      },
+      vercel: {
+        commitSha: process.env.VERCEL_GIT_COMMIT_SHA,
+        branch: process.env.VERCEL_GIT_COMMIT_REF,
+        env: process.env.VERCEL_ENV,
+      },
+    },
   },
 });

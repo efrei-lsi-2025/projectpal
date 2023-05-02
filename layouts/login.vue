@@ -8,6 +8,8 @@
       ><b>ProjectPal</b> • Projet réalisé dans le cadre du module de Web @
       EFREI</span
     >
+
+    <Footer></Footer>
   </div>
 </template>
 
