@@ -3,15 +3,17 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "dotenv -e .env.development.local nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "prisma": "dotenv -e .env.development.local prisma"
   },
   "devDependencies": {
     "@next-auth/prisma-adapter": "^1.0.6",
     "@sidebase/nuxt-auth": "^0.6.0-alpha.2",
     "@types/node": "^18",
+    "dotenv-cli": "^7.2.1",
     "nuxt": "^3.4.2",
     "prisma": "^4.13.0"
   },
