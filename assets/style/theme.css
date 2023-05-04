@@ -1186,7 +1186,7 @@
   color: #7c7c7c;
   background: #fff;
   padding: 0.5rem 0.75rem;
-  border: 2px solid #e1e1e1;
+  border: 1px solid #e1e1e1;
   transition: background-color 0.3s, color 0.3s, border-color 0.3s,
     box-shadow 0.3s;
   appearance: none;
