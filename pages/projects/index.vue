@@ -19,6 +19,7 @@
 
         <div class="section">
             <p class="title">Utilisateurs</p>
+            <!-- Composant à ajouter pour les utilisateurs -->
         </div>
 
         <div class="section">
@@ -35,65 +36,62 @@
 
 
 <script setup lang="ts">
-import TextArea from 'primevue/textarea'
-import InputText from 'primevue/inputtext'
-import ColorPicker from 'primevue/colorpicker'
-import Chips from 'primevue/chips'
-import Button from 'primevue/button'
 
-let name : Ref<string> = ref('')
-let description : Ref<string> = ref('')
-let color : Ref<string> = ref('f3a40b')
-let ticketStates: Ref<Array<string>> = ref([])
+    let name = ref('')
+    let description = ref('')
+    let color = ref('f3a40b')
+    let ticketStates = ref([])
 
-const createProject = () : void => { 
-    console.log (
-        `Name : ${name.value}
-        Description: ${description.value}
-        Categories: ${ticketStates.value}
-        `
-        )
-    }
+    const createProject = () : void => { 
+        console.log (
+            `Name : ${name.value}
+            Description: ${description.value}
+            Categories: ${ticketStates.value}
+            `
+            )
+        }
 
-definePageMeta({
-    layout: "projects",
-})
+    definePageMeta({
+        layout: "projects",
+    })
 
 </script>
 
 
 <style lang="scss" scoped>
-.section {
-    padding: 1.5em 0;
-}
 
-.mx-20px {
-    margin: 0px 20px;
-}
+    .section {
+        padding: 1.5em 0;
+    }
 
-.title {
-    color: #000;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
+    .mx-20px {
+        margin: 0px 20px;
+    }
 
-.w-100 {
-    width: 100%;
-}
+    .title {
+        color: #000;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
 
-.section > .p-chips {
-    display:block;
-}
+    .w-100 {
+        width: 100%;
+    }
 
-.section:first-of-type {
-    display: grid;
-    grid-template-columns: 1fr 1fr 4fr 1fr 3fr;
-    column-gap: 20px;
-}
+    .section > .p-chips {
+        display:block;
+    }
+
+    .section:first-of-type {
+        display: grid;
+        grid-template-columns: 1fr 1fr 4fr 1fr 3fr;
+        column-gap: 20px;
+    }
 
 
-label {
-    display: inline-block;
-    margin: 0.5rem 0;
-}
+    label {
+        display: inline-block;
+        margin: 0.5rem 0;
+    }
+
 </style>

@@ -1,6 +1,10 @@
 import { defineNuxtPlugin } from "#app";
 import PrimeVue from "primevue/config";
 import Button from "primevue/button";
+import TextArea from 'primevue/textarea'
+import InputText from 'primevue/inputtext'
+import ColorPicker from 'primevue/colorpicker'
+import Chips from 'primevue/chips'
 
 import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
@@ -11,4 +15,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   nuxtApp.vueApp.component("Toast", Toast);
   nuxtApp.vueApp.component("Button", Button);
+  nuxtApp.vueApp.component("TextArea", TextArea);
+  nuxtApp.vueApp.component("InputText", InputText);
+  nuxtApp.vueApp.component("ColorPicker", ColorPicker);
+  nuxtApp.vueApp.component("Chips", Chips);
 });

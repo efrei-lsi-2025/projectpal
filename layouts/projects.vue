@@ -2,7 +2,7 @@
 
   <div class="page-wrapper">
     
-    <div class="topline"></div>
+    <div class="top-line"></div>
 
     <div class="body">
 
@@ -27,7 +27,7 @@
   min-height: 100vh;
 }
 
-.topline {
+.top-line {
   background: #000;
   height: 5px;
 }
