@@ -2,13 +2,14 @@
     <div class="mx-20px">
 
         <div class="section">
-            <label for="nameInput" class="title">Name</label>
-            <InputText id="nameInput" v-model="name" />
+            <label for="nameInput" class="title">Nom du projet</label>
             <ColorPicker v-model="color" />
-        </div>
-
-        <div class="section">
+            <InputText id="nameInput" v-model="name" class="field" />
+            
+            <!-- Pour le client, remplacer le InputText par un autre composant, plus tard -->
             <label for="clientInput" class="title">Client</label>
+            <InputText id="clientInput" class="field" />
+
         </div>
 
         <div class="section">
@@ -24,6 +25,10 @@
             <p class="title">Catégories</p>
             <Chips v-model="ticketStates" />
         </div>
+        
+        <div class="section">
+            <Button icon="pi pi-check" label="Valider" severity="success" @click="createProject"></Button>
+        </div>
 
     </div>
 </template>
@@ -34,11 +39,21 @@ import TextArea from 'primevue/textarea'
 import InputText from 'primevue/inputtext'
 import ColorPicker from 'primevue/colorpicker'
 import Chips from 'primevue/chips'
+import Button from 'primevue/button'
 
 let name : Ref<string> = ref('')
 let description : Ref<string> = ref('')
 let color : Ref<string> = ref('f3a40b')
 let ticketStates: Ref<Array<string>> = ref([])
+
+const createProject = () : void => { 
+    console.log (
+        `Name : ${name.value}
+        Description: ${description.value}
+        Categories: ${ticketStates.value}
+        `
+        )
+    }
 
 definePageMeta({
     layout: "projects",
@@ -65,6 +80,17 @@ definePageMeta({
 .w-100 {
     width: 100%;
 }
+
+.section > .p-chips {
+    display:block;
+}
+
+.section:first-of-type {
+    display: grid;
+    grid-template-columns: 1fr 1fr 4fr 1fr 3fr;
+    column-gap: 20px;
+}
+
 
 label {
     display: inline-block;
