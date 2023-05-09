@@ -1,10 +1,8 @@
 <template>
-  <div class="page-wrapper">
-    <div class="top-line"></div>
-
+  <div class="default-layout">
     <Header></Header>
 
-    <div class="body">
+    <div class="content">
       <slot />
     </div>
 
@@ -15,18 +13,17 @@
 <script lang="ts" setup></script>
 
 <style lang="scss" scoped>
-.page-wrapper {
-  position: relative;
-  min-height: 100vh;
-}
+.default-layout {
+  border-top: 5px solid #000;
 
-.top-line {
-  background: #000;
-  height: 5px;
-}
+  height: 100vh;
+  background-color: #f5f5f5;
+  flex-direction: column;
 
-.body {
-  margin: 5px 35px;
-  padding-bottom: 2.5rem;
+  gap: 1rem;
+
+  .content {
+    margin: 5px 35px;
+  }
 }
 </style>
