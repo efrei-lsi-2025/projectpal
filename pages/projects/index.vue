@@ -56,9 +56,6 @@ const createProject = (): void => {
   );
 };
 
-definePageMeta({
-  layout: "projects",
-});
 </script>
 
 <style lang="scss" scoped>

@@ -14,9 +14,10 @@
 
 <style lang="scss" scoped>
 .default-layout {
+  position: relative;
   border-top: 5px solid #000;
 
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f5f5f5;
   flex-direction: column;
 
@@ -24,6 +25,7 @@
 
   .content {
     margin: 5px 35px;
+    padding-bottom: 2.5rem;
   }
 }
 </style>
