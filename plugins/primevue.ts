@@ -7,6 +7,7 @@ import ColorPicker from "primevue/colorpicker";
 import Chips from "primevue/chips";
 import Menu from "primevue/menu";
 import Avatar from "primevue/avatar";
+import AutoComplete from 'primevue/autocomplete'
 
 import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
@@ -23,4 +24,5 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component("Chips", Chips);
   nuxtApp.vueApp.component("Menu", Menu);
   nuxtApp.vueApp.component("Avatar", Avatar);
+  nuxtApp.vueApp.component("AutoComplete", AutoComplete);
 });

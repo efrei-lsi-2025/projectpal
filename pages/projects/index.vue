@@ -6,18 +6,14 @@
       <InputText id="nameInput" v-model="name" class="field" />
 
       <!-- Pour le client, remplacer le InputText par un autre composant, plus tard -->
-      <label for="clientInput" class="title">Client</label>
-      <InputText id="clientInput" class="field" />
+      <span class="title label">Client</span>
+      <AutoComplete v-model="selectedClient" :suggestions="filteredClients" optionLabel="name" @complete="search" forceSelection>
+      </AutoComplete>
     </div>
 
     <div class="section">
       <p class="title">Description</p>
-      <TextArea
-        v-model="description"
-        autoResize
-        rows="5"
-        class="w-100 p-inputtext"
-      />
+      <TextArea v-model="description" autoResize rows="5" class="w-100 p-inputtext" />
     </div>
 
     <div class="section">
@@ -31,30 +27,42 @@
     </div>
 
     <div class="section">
-      <Button
-        icon="pi pi-check"
-        label="Valider"
-        severity="success"
-        @click="createProject"
-      ></Button>
+      <Button icon="pi pi-check" label="Valider" severity="success" @click="createProject"></Button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { Client } from '@prisma/client';
+
+
 let name = ref("");
 let description = ref("");
 let color = ref("f3a40b");
 let ticketStates = ref([]);
 
 const createProject = (): void => {
-  console.log(
-    `Name : ${name.value}
-            Description: ${description.value}
-            Categories: ${ticketStates.value}
-            `
-  );
+
 };
+
+const clients = ref([]);
+const filteredClients = ref([]);
+const selectedClient = ref();
+
+clients.value = await $fetch('/api/clients');
+
+const search = (event: { originalEvent: Event, query: string }) => {
+  setTimeout(() => {
+    if (!event.query.trim().length) {
+      filteredClients.value = [...clients.value];
+    } else {
+      filteredClients.value = clients.value.filter((client: Client) => {
+        return client.name?.toLowerCase().startsWith(event.query.toLowerCase());
+      });
+    }
+  }, 250);
+}
+
 
 </script>
 
@@ -77,7 +85,7 @@ const createProject = (): void => {
   width: 100%;
 }
 
-.section > .p-chips {
+.section>.p-chips {
   display: block;
 }
 
@@ -87,7 +95,8 @@ const createProject = (): void => {
   column-gap: 20px;
 }
 
-label {
+label,
+.label {
   display: inline-block;
   margin: 0.5rem 0;
 }
