@@ -1,18 +1,32 @@
 <template>
-  <slot />
+  <div class="page-wrapper">
+    <div class="top-line"></div>
+
+    <Header></Header>
+
+    <div class="body">
+      <slot />
+    </div>
+
+    <Footer></Footer>
+  </div>
 </template>
 
 <script lang="ts" setup></script>
 
 <style lang="scss" scoped>
-.default-layout {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5;
-  flex-direction: column;
+.page-wrapper {
+  position: relative;
+  min-height: 100vh;
+}
 
-  gap: 1rem;
+.top-line {
+  background: #000;
+  height: 5px;
+}
+
+.body {
+  margin: 5px 35px;
+  padding-bottom: 2.5rem;
 }
 </style>
