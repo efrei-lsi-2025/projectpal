@@ -3,11 +3,11 @@
     <div class="section">
       <label for="nameInput" class="title">Nom du projet</label>
       <ColorPicker v-model="color" />
-      <InputText id="nameInput" v-model="name" class="field" />
+      <InputText id="nameInput" v-model="name" />
 
       <!-- Pour le client, remplacer le InputText par un autre composant, plus tard -->
       <span class="title label">Client</span>
-      <AutoComplete v-model="selectedClient" :suggestions="filteredClients" optionLabel="name" @complete="search" forceSelection>
+      <AutoComplete v-model="selectedClient" :suggestions="filteredClients" optionLabel="name" @complete="search" class="autocomplete" forceSelection>
       </AutoComplete>
     </div>
 
@@ -93,6 +93,10 @@ const search = (event: { originalEvent: Event, query: string }) => {
   display: grid;
   grid-template-columns: 1fr 1fr 4fr 1fr 3fr;
   column-gap: 20px;
+}
+
+.autocomplete {
+  display: grid;
 }
 
 label,
