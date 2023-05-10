@@ -8,6 +8,9 @@ import Chips from "primevue/chips";
 import Menu from "primevue/menu";
 import Avatar from "primevue/avatar";
 import AutoComplete from 'primevue/autocomplete'
+import SelectButton from 'primevue/selectbutton'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
 
 import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
@@ -25,4 +28,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component("Menu", Menu);
   nuxtApp.vueApp.component("Avatar", Avatar);
   nuxtApp.vueApp.component("AutoComplete", AutoComplete);
+  nuxtApp.vueApp.component("SelectButton", SelectButton);
+  nuxtApp.vueApp.component("DataTable", DataTable);
+  nuxtApp.vueApp.component("Column", Column);
 });

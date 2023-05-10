@@ -6,7 +6,7 @@
             <InputText id="nameInput" v-model="name" />
 
             <span class="title label">Client</span>
-            <AutoComplete v-model="selectedClient" :suggestions="filteredClients" optionLabel="name" @complete="search"
+            <AutoComplete v-model="selectedClient" :suggestions="filteredClients" optionLabel="name" @complete="searchClient"
                 class="autocomplete" forceSelection></AutoComplete>
         </div>
 
@@ -17,7 +17,20 @@
 
         <div class="section">
             <p class="title">Utilisateurs</p>
-            <!-- Composant à ajouter pour les utilisateurs -->
+            
+            <DataTable :value="projectMembers" removableSort tableStyle="min-width: 50rem">
+                <Column field="name" sortable header="Nom">
+                    <template #body="slotProps">
+                        <div style="display: flex; align-items: center; gap: 25px;">
+                            <img :src="`${slotProps.data.image}`" style="width: 30px; border-radius: 50%;" />
+                            <span>{{ slotProps.data.name }}</span>
+                        </div>
+                        
+                    </template>
+                </Column>
+                <Column field="role" sortable header="Role"></Column>
+            </DataTable>
+
         </div>
 
         <div class="section">
@@ -32,10 +45,18 @@
 </template>
 
 <script setup lang="ts">
-import { Client } from '@prisma/client';
+import { Client, Role } from '@prisma/client';
 import { User } from '@prisma/client';
 import { ProjectMember } from '@prisma/client';
+import { type } from 'os';
 
+
+type Member = {
+    userId: string,
+    role: string,
+    name: string | null,
+    image: string | null,
+}
 
 const auth = useAuth();
 
@@ -51,7 +72,25 @@ const selectedClient: Ref<Client | undefined> = ref();
 
 clients.value = await $fetch('/api/projects/clients');
 
-const search = (event: { originalEvent: Event, query: string }) => {
+// Utilisateurs et membres
+const users = ref([]);
+const filteredUsers: Ref<Array<User>> = ref([]);
+const selectedUser: Ref<User | undefined> = ref();
+
+users.value = await $fetch('/api/projects/user');
+const user = (await $fetch(`/api/projects/user/${auth.data.value?.user?.name}`) as User)
+const projectMembers: Ref<Array<Member>> = ref([]);
+projectMembers.value.push(
+    {
+        userId: user.id,
+        role: Role.OWNER,
+        image: user.image,
+        name: user.name,
+    }
+);
+
+
+const searchClient = (event: { originalEvent: Event, query: string }) => {
     setTimeout(() => {
         if (!event.query.trim().length) {
             filteredClients.value = [...clients.value];
@@ -63,20 +102,17 @@ const search = (event: { originalEvent: Event, query: string }) => {
     }, 250);
 }
 
-// Utilisateurs
-const members: Ref<Array<ProjectMember>> = ref([]);
-const filteredUsers: Ref<Array<User>> = ref([]);
-const selectedUser: Ref<User | undefined> = ref();
-
-const user = await $fetch(`/api/projects/user/${auth.data.value?.user?.name}`) as User;
-members.value.push(
-    {
-        userId: user.id,
-        role: 'OWNER',
-        id: '',
-        projectId: 0
-    }
-);
+const searchUser = (event: {originalEvent: Event, query: string}) => {
+    setTimeout(() => {
+        if (!event.query.trim().length) {
+            filteredUsers.value = [...users.value];
+        } else {
+            filteredUsers.value = users.value.filter((user: User) => {
+                return user.name?.toLowerCase().startsWith(event.query.toLowerCase());
+            });
+        }
+    }, 250);
+}
 
 const createProject = (): void => {
     console.log(
@@ -84,10 +120,12 @@ const createProject = (): void => {
         "Color : " + color.value + "\n" +
         "Client : " + selectedClient.value?.name + "\n" +
         "Categories : " + ticketStates.value.toString() + "\n" +
-        "Members : " + members.value.map(value => "\n\t" + value.userId + " " + value.role.toString()) + "\n" +
+        "Members : " + projectMembers.value.map(value => "\n\t" + value.userId + " " + value.role.toString()) + "\n" +
         "Description : " + description.value + "\n" 
     )
 };
+
+
 
 </script>
 
