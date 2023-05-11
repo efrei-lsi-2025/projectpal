@@ -1,55 +1,42 @@
 <template>
-    <div class="mx-20px">
-        <div class="section">
-            <label for="nameInput" class="title">Nom du projet</label>
-            <ColorPicker v-model="color" />
-            <InputText id="nameInput" v-model="name" />
+    <div class="project-layout">
+        <div class="py-3 align-items-center formgrid grid">
+            <div class="field col-12 md:col-6 pr-5">
+                <h2 class="mr-4">Nom du projet</h2>
+                <InputText class=" w-10" v-model="name" />
+            </div>
 
-            <span class="title label">Client</span>
-            <AutoComplete v-model="selectedClient" :suggestions="filteredClients" optionLabel="name" @complete="searchClient"
-                class="autocomplete" forceSelection></AutoComplete>
+            <div class="field col-12 md:col-6">
+                <h2 class="mr-5">Client</h2>
+                <ProjectsClientLookup class="mr-6 w-10" @client-selected="setSelectedClient"></ProjectsClientLookup>
+                <ColorPicker v-model="color" />
+            </div>
         </div>
 
-        <div class="section">
-            <p class="title">Description</p>
-            <TextArea v-model="description" autoResize rows="5" class="w-100 p-inputtext" />
+        <div class="py-3">
+            <h2>Description</h2>
+            <TextArea v-model="description" autoResize rows="5" class="w-full" />
         </div>
 
-        <div class="section">
-            <p class="title">Utilisateurs</p>
-            
-            <DataTable :value="projectMembers" removableSort tableStyle="min-width: 50rem">
-                <Column field="name" sortable header="Nom">
-                    <template #body="slotProps">
-                        <div style="display: flex; align-items: center; gap: 25px;">
-                            <img :src="`${slotProps.data.image}`" style="width: 30px; border-radius: 50%;" />
-                            <span>{{ slotProps.data.name }}</span>
-                        </div>
-                        
-                    </template>
-                </Column>
-                <Column field="role" sortable header="Role"></Column>
-            </DataTable>
-
+        <div class="py-3">
+            <h2>Utilisateurs</h2>
+            <ProjectsUserTable :model-value="projectMembers"></ProjectsUserTable>
         </div>
 
-        <div class="section">
-            <p class="title">Catégories</p>
-            <Chips v-model="ticketStates" />
+        <div class="py-3">
+            <h2>Catégories</h2>
+            <Chips v-model="ticketStates" class="block" />
         </div>
 
-        <div class="section">
+        <div class="py-3">
             <Button icon="pi pi-check" label="Valider" severity="success" @click="createProject"></Button>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { Client, Role } from '@prisma/client';
-import { User } from '@prisma/client';
-import { ProjectMember } from '@prisma/client';
+import { Client, Role, User } from '@prisma/client';
 import { type } from 'os';
-
 
 type Member = {
     userId: string,
@@ -60,25 +47,17 @@ type Member = {
 
 const auth = useAuth();
 
-let name = ref("");
-let description = ref("");
-let color = ref("f3a40b");
-let ticketStates = ref([]);
+const name = ref("");
+const description = ref("");
+const color = ref("f3a40b");
+const ticketStates = ref([]);
 
-// Clients
-const clients = ref([]);
-const filteredClients = ref([]);
 const selectedClient: Ref<Client | undefined> = ref();
+const setSelectedClient = (client: undefined | null | string | Client) => {
+    if (typeof client !== "string" && client !== null) {selectedClient.value = client;}
+}
 
-clients.value = await $fetch('/api/projects/clients');
-
-// Utilisateurs et membres
-const users = ref([]);
-const filteredUsers: Ref<Array<User>> = ref([]);
-const selectedUser: Ref<User | undefined> = ref();
-
-users.value = await $fetch('/api/projects/user');
-const user = (await $fetch(`/api/projects/user/${auth.data.value?.user?.name}`) as User)
+const user = (await $fetch(`/api/projects/user/${auth.data.value?.user?.name}`) as User);
 const projectMembers: Ref<Array<Member>> = ref([]);
 projectMembers.value.push(
     {
@@ -89,31 +68,6 @@ projectMembers.value.push(
     }
 );
 
-
-const searchClient = (event: { originalEvent: Event, query: string }) => {
-    setTimeout(() => {
-        if (!event.query.trim().length) {
-            filteredClients.value = [...clients.value];
-        } else {
-            filteredClients.value = clients.value.filter((client: Client) => {
-                return client.name?.toLowerCase().startsWith(event.query.toLowerCase());
-            });
-        }
-    }, 250);
-}
-
-const searchUser = (event: {originalEvent: Event, query: string}) => {
-    setTimeout(() => {
-        if (!event.query.trim().length) {
-            filteredUsers.value = [...users.value];
-        } else {
-            filteredUsers.value = users.value.filter((user: User) => {
-                return user.name?.toLowerCase().startsWith(event.query.toLowerCase());
-            });
-        }
-    }, 250);
-}
-
 const createProject = (): void => {
     console.log(
         "Project : " + name.value + "\n" +
@@ -121,50 +75,14 @@ const createProject = (): void => {
         "Client : " + selectedClient.value?.name + "\n" +
         "Categories : " + ticketStates.value.toString() + "\n" +
         "Members : " + projectMembers.value.map(value => "\n\t" + value.userId + " " + value.role.toString()) + "\n" +
-        "Description : " + description.value + "\n" 
+        "Description : " + description.value + "\n"
     )
 };
-
-
 
 </script>
 
 <style lang="scss" scoped>
-.section {
-    padding: 1.5em 0;
-}
-
-.mx-20px {
-    margin: 0px 20px;
-}
-
-.title {
-    color: #000;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.w-100 {
-    width: 100%;
-}
-
-.section>.p-chips {
-    display: block;
-}
-
-.section:first-of-type {
-    display: grid;
-    grid-template-columns: 1fr 1fr 4fr 1fr 3fr;
-    column-gap: 20px;
-}
-
-.autocomplete {
-    display: grid;
-}
-
-label,
-.label {
-    display: inline-block;
-    margin: 0.5rem 0;
+.project-layout {
+    margin: 1.5rem;
 }
 </style>
