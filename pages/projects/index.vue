@@ -8,7 +8,7 @@
 
             <div class="field col-12 md:col-6">
                 <h2 class="mr-5">Client</h2>
-                <ClientLookup class="mr-6 w-10" @client-selected="setSelectedClient"></ClientLookup>
+                <ClientLookup class="mr-6 w-10" @client-selected="setSelectedClient" :client-list="clientList"></ClientLookup>
                 <ColorPicker v-model="color" />
             </div>
         </div>
@@ -45,14 +45,14 @@ const description = ref("");
 const color = ref("f3a40b");
 const ticketStates = ref([]);
 
-const clientList: Ref<Array<Client>> = ref(await $fetch('/api/projects/clients'));
+const clientList: Ref<Array<Client>> = ref(await $fetch('/api/client'));
 const selectedClient: Ref<Client | undefined> = ref();
 const setSelectedClient = (client: undefined | null | string | Client) => {
     if (typeof client !== "string" && client !== null) { selectedClient.value = client; }
 }
 
-const userList: Ref<Array<User>> = ref(await $fetch('/api/projects/users'));
-const user = (await $fetch(`/api/projects/user/${auth.data.value?.user?.name}`) as User);
+const userList: Ref<Array<User>> = ref(await $fetch('/api/user'));
+const user = (await $fetch(`/api/user/${auth.data.value?.user?.name}`) as User);
 const projectMembers: Ref<Array<Member>> = ref([]);
 projectMembers.value.push(
     {

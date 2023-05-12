@@ -19,7 +19,6 @@ const clients = ref(props.clientList ?? []);
 const filteredClients: Ref<Array<Client>> = ref([]);
 const selectedClient: Ref<Client | undefined> = ref();
 
-clients.value = await $fetch('/api/projects/clients');
 watch(selectedClient, client => emit('client-selected', client));
 
 const searchClient = (event: { originalEvent: Event, query: string }) => {
