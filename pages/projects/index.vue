@@ -20,12 +20,12 @@
 
         <div class="py-3">
             <h2>Utilisateurs</h2>
-            <ProjectsUserTable :model-value="projectMembers" :users-available="userList"></ProjectsUserTable>
+            <ProjectsUserTable :model-value="members" :users-available="userList"></ProjectsUserTable>
         </div>
 
         <div class="py-3">
             <h2>Catégories</h2>
-            <Chips v-model="ticketStates" class="block" />
+            <Chips v-model="categories" class="block" />
         </div>
 
         <div class="py-3">
@@ -43,7 +43,7 @@ const auth = useAuth();
 const name = ref("");
 const description = ref("");
 const color = ref("f3a40b");
-const ticketStates = ref([]);
+const categories: Ref<Array<string>> = ref([]);
 
 const clientList: Ref<Array<Client>> = ref(await $fetch('/api/client'));
 const selectedClient: Ref<Client | undefined> = ref();
@@ -53,8 +53,8 @@ const setSelectedClient = (client: undefined | null | string | Client) => {
 
 const userList: Ref<Array<User>> = ref(await $fetch('/api/user'));
 const user = (await $fetch(`/api/user/${auth.data.value?.user?.name}`) as User);
-const projectMembers: Ref<Array<Member>> = ref([]);
-projectMembers.value.push(
+const members: Ref<Array<Member>> = ref([]);
+members.value.push(
     {
         userId: user.id,
         role: Role.OWNER,
@@ -64,15 +64,32 @@ projectMembers.value.push(
     }
 );
 
-const createProject = (): void => {
-    console.log(
-        "Project : " + name.value + "\n" +
-        "Color : " + color.value + "\n" +
-        "Client : " + selectedClient.value?.name + "\n" +
-        "Categories : " + ticketStates.value.toString() + "\n" +
-        "Members : " + projectMembers.value.map(value => "\n\t" + value.userId + " " + value.role.toString()) + "\n" +
-        "Description : " + description.value + "\n"
-    )
+const createProject = async () => {
+
+    const ticketStates = categories.value.map(category => {
+        return {
+            name: category,
+            color: "",
+            order: 0,
+        };
+    });
+
+    const projectMembers = members.value.map(member => {
+        return {
+            userId: member.userId,
+            role: member.role
+        };
+    });
+
+    const data = {
+        name: name.value,
+        description: description.value,
+        client: selectedClient.value,
+        ticketStates: ticketStates,
+        projectMembers: projectMembers
+    };
+
+    const project = await $fetch('/api/project/create', {method: 'post', body: {data}})
 };
 
 </script>
