@@ -11,6 +11,8 @@ import AutoComplete from 'primevue/autocomplete'
 import SelectButton from 'primevue/selectbutton'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import Dialog from 'primevue/dialog'
+import Listbox from 'primevue/listbox'
 
 import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
@@ -31,4 +33,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component("SelectButton", SelectButton);
   nuxtApp.vueApp.component("DataTable", DataTable);
   nuxtApp.vueApp.component("Column", Column);
+  nuxtApp.vueApp.component("Dialog", Dialog);
+  nuxtApp.vueApp.component("Listbox", Listbox);
 });

@@ -8,7 +8,7 @@
 
             <div class="field col-12 md:col-6">
                 <h2 class="mr-5">Client</h2>
-                <ProjectsClientLookup class="mr-6 w-10" @client-selected="setSelectedClient"></ProjectsClientLookup>
+                <ClientLookup class="mr-6 w-10" @client-selected="setSelectedClient"></ClientLookup>
                 <ColorPicker v-model="color" />
             </div>
         </div>
@@ -36,14 +36,7 @@
 
 <script setup lang="ts">
 import { Client, Role, User } from '@prisma/client';
-import { type } from 'os';
-
-type Member = {
-    userId: string,
-    role: string,
-    name: string | null,
-    image: string | null,
-}
+import { Member } from "../../components/projects/UserTable.vue"
 
 const auth = useAuth();
 
@@ -65,6 +58,7 @@ projectMembers.value.push(
         role: Role.OWNER,
         image: user.image,
         name: user.name,
+        email: user.email
     }
 );
 
