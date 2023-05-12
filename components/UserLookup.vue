@@ -7,15 +7,18 @@
 <script setup lang="ts">
 import { User } from '@prisma/client';
 
+const props = defineProps({
+    userList: Array<User>
+});
+
 const emit = defineEmits<{
     (event: 'user-selected', payload: User | string | null | undefined): void,
 }>();
 
-const users = ref([]);
+const users: Ref<Array<User>> = ref(props.userList ?? []);
 const filteredUsers: Ref<Array<User>> = ref([]);
 const selectedUser: Ref<User | undefined> = ref();
 
-users.value = await $fetch('/api/projects/users');
 watch(selectedUser, user => emit('user-selected', user));
 
 const searchUser = (event: { originalEvent: Event, query: string }) => {

@@ -20,7 +20,7 @@
 
         <div class="py-3">
             <h2>Utilisateurs</h2>
-            <ProjectsUserTable :model-value="projectMembers"></ProjectsUserTable>
+            <ProjectsUserTable :model-value="projectMembers" :users-available="userList"></ProjectsUserTable>
         </div>
 
         <div class="py-3">
@@ -45,11 +45,13 @@ const description = ref("");
 const color = ref("f3a40b");
 const ticketStates = ref([]);
 
+const clientList: Ref<Array<Client>> = ref(await $fetch('/api/projects/clients'));
 const selectedClient: Ref<Client | undefined> = ref();
 const setSelectedClient = (client: undefined | null | string | Client) => {
-    if (typeof client !== "string" && client !== null) {selectedClient.value = client;}
+    if (typeof client !== "string" && client !== null) { selectedClient.value = client; }
 }
 
+const userList: Ref<Array<User>> = ref(await $fetch('/api/projects/users'));
 const user = (await $fetch(`/api/projects/user/${auth.data.value?.user?.name}`) as User);
 const projectMembers: Ref<Array<Member>> = ref([]);
 projectMembers.value.push(

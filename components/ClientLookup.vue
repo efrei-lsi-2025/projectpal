@@ -7,12 +7,16 @@
 <script setup lang="ts">
 import { Client } from '@prisma/client';
 
+const props = defineProps({
+    clientList: Array<Client>
+});
+
 const emit = defineEmits<{
     (event: 'client-selected', payload: Client | string | null | undefined): void,
 }>();
 
-const clients = ref([]);
-const filteredClients = ref([]);
+const clients = ref(props.clientList ?? []);
+const filteredClients: Ref<Array<Client>> = ref([]);
 const selectedClient: Ref<Client | undefined> = ref();
 
 clients.value = await $fetch('/api/projects/clients');

@@ -26,7 +26,7 @@
         <div>
             <div class="field mt-4">
                 <span class="p-float-label">
-                    <UserLookup class="w-full" inputId="lookup" @user-selected="setSelectedUser"></UserLookup>
+                    <UserLookup :user-list="usersAvailable" class="w-full" inputId="lookup" @user-selected="setSelectedUser"></UserLookup>
                     <label for="lookup">Utilisateur</label>
                 </span>
             </div>
@@ -54,6 +54,7 @@ const auth = useAuth();
 
 const props = defineProps({
     modelValue: Array<Member>,
+    usersAvailable: Array<User>
 });
 
 const emit = defineEmits<{
