@@ -63,7 +63,7 @@ const emit = defineEmits<{
 
 export interface Member {
     userId: string,
-    role: string,
+    role: Role,
     name: string | null,
     email: string | null,
     image: string | null,
