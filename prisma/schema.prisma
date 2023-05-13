@@ -46,6 +46,7 @@ model Project {
   id          Int    @id @default(autoincrement())
   name        String
   description String
+  color     String
 
   tickets Ticket[]
   members ProjectMember[]
@@ -82,7 +83,6 @@ model ProjectMember {
 model TicketState {
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   name      String   @id
-  color     String
   order     Int
   projectId Int
   Ticket    Ticket[]
@@ -100,8 +100,8 @@ model Ticket {
   reporter   ProjectMember? @relation("reporter", fields: [reporterId], references: [id], onDelete: SetNull)
   reporterId String?
 
-  state     TicketState @relation(fields: [stateName], references: [name])
-  stateName String
+  state     TicketState? @relation(fields: [stateName], references: [name], onUpdate: Cascade, onDelete: SetNull)
+  stateName String?
 
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId Int
