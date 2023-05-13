@@ -3,25 +3,28 @@ import { prisma } from "~/server/plugins/prisma"
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
+    console.log(body);
 
-    const name = body.name;
-    const description = body.description;
-    const clientId = body.client.id;
-    const ticketStates = body.ticketStates;
-    const projectMembers = body.projectMembers;
+    const {
+        name,
+        color,
+        description, 
+        client: {id: clientId},
+        ticketStates,
+        projectMembers
+    } = body;
 
-    const projectData = {
+    const project = await prisma.project.create({ data: {
         name: name,
         description: description,
         clientId: clientId,
+        color: color,
         members: {
             create: projectMembers
         },
         ticketStates: {
             create: ticketStates
         }
-    };
-
-    const project = await prisma.project.create({ data: projectData });
-    return { projectData };
+    } });
+    return project;
 })

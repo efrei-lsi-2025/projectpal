@@ -42,7 +42,7 @@ const auth = useAuth();
 
 const name = ref("");
 const description = ref("");
-const color = ref("f3a40b");
+const color = ref("bebebe");
 const categories: Ref<Array<string>> = ref([]);
 
 const clientList: Ref<Array<Client>> = ref(await $fetch('/api/client'));
@@ -84,12 +84,13 @@ const createProject = async () => {
     const data = {
         name: name.value,
         description: description.value,
+        color: color,
         client: selectedClient.value,
         ticketStates: ticketStates,
         projectMembers: projectMembers
     };
 
-    const project = await $fetch('/api/project/create', {method: 'post', body: {data}})
+    await $fetch('/api/project/create', {method: 'post', body: data});
 };
 
 </script>
