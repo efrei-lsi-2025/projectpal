@@ -1,17 +1,15 @@
-import { Client, Role } from "@prisma/client"
-
 export const usePostProject = (data: {
     name: string;
     description: string;
     color: string;
-    client: Client | undefined;
+    client: any;
     ticketStates: {
         name: string;
         order: number;
     }[];
     projectMembers: {
         userId: string;
-        role: Role;
+        role: any;
     }[];
 }) => {
     return $fetch('/api/project/create', {method: 'post', body: data})

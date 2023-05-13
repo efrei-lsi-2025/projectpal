@@ -5,19 +5,18 @@
 </template>
 
 <script setup lang="ts">
-import { User } from '@prisma/client';
 
 const props = defineProps({
-    userList: Array<User>
+    userList: Array<any>
 });
 
 const emit = defineEmits<{
-    (event: 'user-selected', payload: User | string | null | undefined): void,
+    (event: 'user-selected', payload: any): void,
 }>();
 
-const users: Ref<Array<User>> = ref(props.userList ?? []);
-const filteredUsers: Ref<Array<User>> = ref([]);
-const selectedUser: Ref<User | undefined> = ref();
+const users: Ref<Array<any>> = ref(props.userList ?? []);
+const filteredUsers: Ref<Array<any>> = ref([]);
+const selectedUser: Ref<any | undefined> = ref();
 
 watch(selectedUser, user => emit('user-selected', user));
 
@@ -26,7 +25,7 @@ const searchUser = (event: { originalEvent: Event, query: string }) => {
         if (!event.query.trim().length) {
             filteredUsers.value = [...users.value];
         } else {
-            filteredUsers.value = users.value.filter((user: User) => {
+            filteredUsers.value = users.value.filter((user: any) => {
                 return user.name?.toLowerCase().startsWith(event.query.toLowerCase());
             });
         }
