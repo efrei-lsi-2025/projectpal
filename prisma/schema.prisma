@@ -3,14 +3,14 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 }
 
 model User {
-  id       String    @id @default(cuid())
+  id String @id @default(cuid())
 
   name          String?
   email         String?   @unique
@@ -18,11 +18,13 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  
-  accounts      Account[]
-  sessions      Session[]
+
+  accounts Account[]
+  sessions Session[]
 
   projects ProjectMember[]
+
+  logs Log[]
 }
 
 // Projects
@@ -43,7 +45,8 @@ model Client {
 model Project {
   id          Int    @id @default(autoincrement())
   name        String
-  description String
+  description String?
+  color       String?
 
   tickets Ticket[]
   members ProjectMember[]
@@ -80,7 +83,6 @@ model ProjectMember {
 model TicketState {
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   name      String   @id
-  color     String
   order     Int
   projectId Int
   Ticket    Ticket[]
@@ -98,8 +100,8 @@ model Ticket {
   reporter   ProjectMember? @relation("reporter", fields: [reporterId], references: [id], onDelete: SetNull)
   reporterId String?
 
-  state     TicketState @relation(fields: [stateName], references: [name])
-  stateName String
+  state     TicketState? @relation(fields: [stateName], references: [name], onUpdate: Cascade, onDelete: SetNull)
+  stateName String?
 
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId Int
@@ -107,27 +109,25 @@ model Ticket {
 
 // NextAuth
 
-
 model Account {
-  id                 String  @id @default(cuid())
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
+  id                       String  @id @default(cuid())
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? @db.Text
   refresh_token_expires_in Int?
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  access_token             String? @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? @db.Text
+  session_state            String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   @@unique([provider, providerAccountId])
 }
-
 
 model Session {
   id           String   @id @default(cuid())
@@ -143,4 +143,14 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Log {
+  id Int @id @default(autoincrement())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  text      String
+  createdAt DateTime @default(now())
 }

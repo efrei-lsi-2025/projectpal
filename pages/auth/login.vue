@@ -4,7 +4,6 @@
       icon="pi pi-github"
       size="large"
       label="Se connecter avec GitHub"
-      :loading="loading"
       @click="signIn('github')"
     ></Button>
   </div>
