@@ -35,43 +35,49 @@
 </template>
 
 <script setup lang="ts">
-import { Client, Role, User } from '@prisma/client';
 import { Member } from "../../components/projects/UserTable.vue"
+import { Client, User, Role } from '@prisma/client';
 
 const auth = useAuth();
+const allUsers = await useGetAllUsers();
+const allClients = await useGetAllClients();
 
 const name = ref("");
 const description = ref("");
 const color = ref("bebebe");
 const categories: Ref<Array<string>> = ref([]);
 
-const clientList: Ref<Array<Client>> = ref(await $fetch('/api/client'));
+const clientList = ref(allClients);
 const selectedClient: Ref<Client | undefined> = ref();
 const setSelectedClient = (client: undefined | null | string | Client) => {
     if (typeof client !== "string" && client !== null) { selectedClient.value = client; }
 }
 
-const userList: Ref<Array<User>> = ref(await $fetch('/api/user'));
-const user = (await $fetch(`/api/user/${auth.data.value?.user?.name}`) as User);
+const userList = ref(allUsers) as Ref<Array<User>>;
+const user = await useGetUserByName(auth.data.value?.user?.name || "") as User;
 const members: Ref<Array<Member>> = ref([]);
-members.value.push(
-    {
-        userId: user.id,
-        role: Role.OWNER,
-        image: user.image,
-        name: user.name,
-        email: user.email
-    }
-);
+
+if (user) {
+    members.value.push(
+        {
+            userId: user.id,
+            role: Role.OWNER,
+            image: user.image,
+            name: user.name,
+            email: user.email
+        }
+    );
+}
 
 const createProject = async () => {
 
-    const ticketStates = categories.value.map(category => {
-        return {
+    const ticketStates: Array<{name: string, order: number}> = [];
+    let i = 0;
+    categories.value.forEach(category => {
+        ticketStates.push({
             name: category,
-            color: "",
-            order: 0,
-        };
+            order: i++,
+        });
     });
 
     const projectMembers = members.value.map(member => {
@@ -81,16 +87,14 @@ const createProject = async () => {
         };
     });
 
-    const data = {
+    await usePostProject({
         name: name.value,
         description: description.value,
-        color: color,
+        color: color.value,
         client: selectedClient.value,
         ticketStates: ticketStates,
         projectMembers: projectMembers
-    };
-
-    await $fetch('/api/project/create', {method: 'post', body: data});
+    });
 };
 
 </script>
