@@ -2827,11 +2827,11 @@
   border-radius: 0;
 }
 .p-datatable .p-datatable-header {
-  background: #fff;
+  background: var(--gray-100);
   color: #7c7c7c;
-  border: 2px solid #f5f5f5;
-  border-width: 0 0 2px 0;
-  padding: 1rem 1rem;
+  border: 2px solid var(--gray-200);
+  border-width: 0 0 1px 0;
+  padding: 0.5rem 1rem;
   font-weight: 600;
 }
 .p-datatable .p-datatable-footer {
@@ -2848,8 +2848,8 @@
   border: 2px solid #f5f5f5;
   border-width: 0 0 2px 0;
   font-weight: 600;
-  color: #7c7c7c;
-  background: #fff;
+  color: #484848;
+  background: var(--gray-100);
   transition: box-shadow 0.3s;
 }
 .p-datatable .p-datatable-tfoot > tr > td {
@@ -2884,7 +2884,7 @@
   color: #a8a8a8;
 }
 .p-datatable .p-sortable-column.p-highlight {
-  background: #fff;
+  background: var(--bluegray-200);
   color: #000;
 }
 .p-datatable .p-sortable-column.p-highlight .p-sortable-column-icon {

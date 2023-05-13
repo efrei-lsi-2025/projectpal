@@ -1,94 +1,102 @@
 <template>
-  <div class="mx-20px">
-    <div class="section">
-      <label for="nameInput" class="title">Nom du projet</label>
-      <ColorPicker v-model="color" />
-      <InputText id="nameInput" v-model="name" class="field" />
+    <div class="project-layout">
+        <div class="py-3 align-items-center formgrid grid">
+            <div class="field col-12 md:col-6 pr-5">
+                <h2 class="mr-4">Nom du projet</h2>
+                <InputText class=" w-10" v-model="name" />
+            </div>
 
-      <!-- Pour le client, remplacer le InputText par un autre composant, plus tard -->
-      <label for="clientInput" class="title">Client</label>
-      <InputText id="clientInput" class="field" />
-    </div>
+            <div class="field col-12 md:col-6">
+                <h2 class="mr-5">Client</h2>
+                <ClientLookup class="mr-6 w-10" @client-selected="setSelectedClient" :client-list="clientList"></ClientLookup>
+                <ColorPicker v-model="color" />
+            </div>
+        </div>
 
-    <div class="section">
-      <p class="title">Description</p>
-      <TextArea
-        v-model="description"
-        autoResize
-        rows="5"
-        class="w-100 p-inputtext"
-      />
-    </div>
+        <div class="py-3">
+            <h2>Description</h2>
+            <TextArea v-model="description" autoResize rows="5" class="w-full" />
+        </div>
 
-    <div class="section">
-      <p class="title">Utilisateurs</p>
-      <!-- Composant à ajouter pour les utilisateurs -->
-    </div>
+        <div class="py-3">
+            <h2>Utilisateurs</h2>
+            <ProjectsUserTable :model-value="members" :users-available="userList"></ProjectsUserTable>
+        </div>
 
-    <div class="section">
-      <p class="title">Catégories</p>
-      <Chips v-model="ticketStates" />
-    </div>
+        <div class="py-3">
+            <h2>Catégories</h2>
+            <Chips v-model="categories" class="block" />
+        </div>
 
-    <div class="section">
-      <Button
-        icon="pi pi-check"
-        label="Valider"
-        severity="success"
-        @click="createProject"
-      ></Button>
+        <div class="py-3">
+            <Button icon="pi pi-check" label="Valider" severity="success" @click="createProject"></Button>
+        </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
-let name = ref("");
-let description = ref("");
-let color = ref("f3a40b");
-let ticketStates = ref([]);
+import { Client, Role, User } from '@prisma/client';
+import { Member } from "../../components/projects/UserTable.vue"
 
-const createProject = (): void => {
-  console.log(
-    `Name : ${name.value}
-            Description: ${description.value}
-            Categories: ${ticketStates.value}
-            `
-  );
+const auth = useAuth();
+
+const name = ref("");
+const description = ref("");
+const color = ref("bebebe");
+const categories: Ref<Array<string>> = ref([]);
+
+const clientList: Ref<Array<Client>> = ref(await $fetch('/api/client'));
+const selectedClient: Ref<Client | undefined> = ref();
+const setSelectedClient = (client: undefined | null | string | Client) => {
+    if (typeof client !== "string" && client !== null) { selectedClient.value = client; }
+}
+
+const userList: Ref<Array<User>> = ref(await $fetch('/api/user'));
+const user = (await $fetch(`/api/user/${auth.data.value?.user?.name}`) as User);
+const members: Ref<Array<Member>> = ref([]);
+members.value.push(
+    {
+        userId: user.id,
+        role: Role.OWNER,
+        image: user.image,
+        name: user.name,
+        email: user.email
+    }
+);
+
+const createProject = async () => {
+
+    const ticketStates = categories.value.map(category => {
+        return {
+            name: category,
+            color: "",
+            order: 0,
+        };
+    });
+
+    const projectMembers = members.value.map(member => {
+        return {
+            userId: member.userId,
+            role: member.role
+        };
+    });
+
+    const data = {
+        name: name.value,
+        description: description.value,
+        color: color,
+        client: selectedClient.value,
+        ticketStates: ticketStates,
+        projectMembers: projectMembers
+    };
+
+    await $fetch('/api/project/create', {method: 'post', body: data});
 };
 
 </script>
 
 <style lang="scss" scoped>
-.section {
-  padding: 1.5em 0;
-}
-
-.mx-20px {
-  margin: 0px 20px;
-}
-
-.title {
-  color: #000;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.w-100 {
-  width: 100%;
-}
-
-.section > .p-chips {
-  display: block;
-}
-
-.section:first-of-type {
-  display: grid;
-  grid-template-columns: 1fr 1fr 4fr 1fr 3fr;
-  column-gap: 20px;
-}
-
-label {
-  display: inline-block;
-  margin: 0.5rem 0;
+.project-layout {
+    margin: 1.5rem;
 }
 </style>

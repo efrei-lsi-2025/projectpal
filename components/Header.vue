@@ -47,12 +47,12 @@ const userItems = ref([
   {
     label: "Profile",
     icon: "pi pi-fw pi-user",
-    command: () => $router.push("Profile"),
+    command: () => $router.push("profile"),
   },
   {
     label: "Settings",
     icon: "pi pi-fw pi-cog",
-    command: () => $router.push("Settings"),
+    command: () => $router.push("settings"),
   },
   {
     label: "Logout",
