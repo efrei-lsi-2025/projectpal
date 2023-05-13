@@ -45,8 +45,8 @@ model Client {
 model Project {
   id          Int    @id @default(autoincrement())
   name        String
-  description String
-  color     String
+  description String?
+  color       String?
 
   tickets Ticket[]
   members ProjectMember[]
