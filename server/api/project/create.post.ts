@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     name,
     color,
     description,
-    client: { id: clientId },
+    client,
     ticketStates,
     projectMembers,
   } = body;
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     data: {
       name: name,
       description: description,
-      clientId: clientId,
+      clientId: client?.id,
       color: color,
       members: {
         create: projectMembers,

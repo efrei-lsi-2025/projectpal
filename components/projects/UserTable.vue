@@ -63,7 +63,6 @@ export interface Member {
     userId: string,
     role: any,
     name: string | null,
-    email: string | null,
     image: string | null,
 };
 
@@ -99,7 +98,6 @@ const addMember = async () => {
         userId: selectedUser.value.id,
         role: selectedRole.value.role,
         name: selectedUser.value.name,
-        email: selectedUser.value.email,
         image: selectedUser.value.image
     });
 

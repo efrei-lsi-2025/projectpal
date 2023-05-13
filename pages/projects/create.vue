@@ -36,7 +36,6 @@
 
 <script setup lang="ts">
 import { Member } from "../../components/projects/UserTable.vue"
-import { Client, User, Role } from '@prisma/client';
 
 const auth = useAuth();
 const allUsers = await useGetAllUsers();
@@ -48,23 +47,22 @@ const color = ref("bebebe");
 const categories: Ref<Array<string>> = ref([]);
 
 const clientList = ref(allClients);
-const selectedClient: Ref<Client | undefined> = ref();
-const setSelectedClient = (client: undefined | null | string | Client) => {
+const selectedClient = ref();
+const setSelectedClient = (client: any) => {
     if (typeof client !== "string" && client !== null) { selectedClient.value = client; }
 }
 
-const userList = ref(allUsers) as Ref<Array<User>>;
-const user = await useGetUserByName(auth.data.value?.user?.name || "") as User;
+const userList = ref(allUsers);
+const user = await useGetUserByName(auth.data.value?.user?.name || "");
 const members: Ref<Array<Member>> = ref([]);
 
 if (user) {
     members.value.push(
         {
             userId: user.id,
-            role: Role.OWNER,
+            role: "OWNER",
             image: user.image,
-            name: user.name,
-            email: user.email
+            name: user.name
         }
     );
 }
