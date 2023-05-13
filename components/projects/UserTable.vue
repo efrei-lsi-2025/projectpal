@@ -71,6 +71,7 @@ export interface Member {
 
 // Add user dialog
 const selectedUser: Ref<User | undefined> = ref();
+
 const roles = [
     {name: "Développeur", role: Role.DEVELOPER},
     {name: "Manager", role: Role.MANAGER},
