@@ -17,7 +17,6 @@
         size="large"
         ><Avatar
           :image="auth.data.value?.user?.image"
-          class="mr-5"
           size="normal"
           shape="circle"
         />
