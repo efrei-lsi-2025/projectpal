@@ -8,10 +8,14 @@
 </template>
 
 <script lang="ts" setup>
-const test = await $fetch("/api/test");
-const testSession = await $fetch("/api/session");
-
 const auth = useAuth();
+
+try {
+  const testSession = await $fetch("/api/session");
+  console.log(testSession);
+} catch (error) {
+  console.log(error);
+}
 </script>
 
 <style lang="scss" scoped>
