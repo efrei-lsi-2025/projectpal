@@ -1,4 +1,4 @@
-import { prisma } from "~/server/plugins/prisma";
+import { prisma } from "../../plugins/prisma";
 
 export default defineEventHandler(async (event) => {
   if (!event.context.params?.name) throw new Error("Aucun nom n'a été fourni");

@@ -48,13 +48,11 @@
   
 <script lang="ts" setup>
 
-import { User, Role } from '@prisma/client'
-
 const auth = useAuth();
 
 const props = defineProps({
     modelValue: Array<Member>,
-    usersAvailable: Array<User>
+    usersAvailable: Array<any>
 });
 
 const emit = defineEmits<{
@@ -63,22 +61,22 @@ const emit = defineEmits<{
 
 export interface Member {
     userId: string,
-    role: Role,
+    role: any,
     name: string | null,
-    email: string | null,
     image: string | null,
 };
 
 // Add user dialog
-const selectedUser: Ref<User | undefined> = ref();
+const selectedUser: Ref<any | undefined> = ref();
+
 const roles = [
-    {name: "Développeur", role: Role.DEVELOPER},
-    {name: "Manager", role: Role.MANAGER},
+    {name: "Développeur", role: "DEVELOPER"},
+    {name: "Manager", role: "MANAGER"},
 ]
 const selectedRole = ref(roles[0]);
 const isDialogVisible = ref(false);
 
-const setSelectedUser = (user: undefined | null | string | User) => {
+const setSelectedUser = (user: any) => {
     if (typeof user !== "string" && user !== null) {selectedUser.value = user;}
 }
 
@@ -100,7 +98,6 @@ const addMember = async () => {
         userId: selectedUser.value.id,
         role: selectedRole.value.role,
         name: selectedUser.value.name,
-        email: selectedUser.value.email,
         image: selectedUser.value.image
     });
 
