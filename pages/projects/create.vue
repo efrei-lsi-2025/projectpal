@@ -8,7 +8,8 @@
 
             <div class="field col-12 md:col-6">
                 <h2 class="mr-5">Client</h2>
-                <ClientLookup class="mr-6 w-10" @client-selected="setSelectedClient" :client-list="clientList"></ClientLookup>
+                <ClientLookup class="mr-6 w-10" @client-selected="setSelectedClient" :client-list="clientList">
+                </ClientLookup>
                 <ColorPicker v-model="color" />
             </div>
         </div>
@@ -49,7 +50,7 @@ const categories: Ref<Array<string>> = ref([]);
 const clientList = ref(allClients);
 const selectedClient = ref();
 const setSelectedClient = (client: any) => {
-    if (typeof client !== "string" && client !== null) { selectedClient.value = client; }
+    selectedClient.value = client;
 }
 
 const userList = ref(allUsers);
@@ -69,7 +70,15 @@ if (user) {
 
 const createProject = async () => {
 
-    const ticketStates: Array<{name: string, order: number}> = [];
+    if (typeof selectedClient.value == "string" && selectedClient) {
+        //dialog
+        console.log("Create ", selectedClient)
+    } else if (selectedClient.value) {
+        selectedClient.value = selectedClient.value.name;
+    }
+
+
+    const ticketStates: Array<{ name: string, order: number }> = [];
     let i = 0;
     categories.value.forEach(category => {
         ticketStates.push({
