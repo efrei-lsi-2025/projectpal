@@ -1,7 +1,9 @@
-import { prisma } from "~/server/plugins/prisma"
+import { prisma } from "../../plugins/prisma";
+
 
 export default defineEventHandler(async (event) => {
-    return await prisma.project.findMany({
+
+    return await prisma.client.findMany({
         select: {
             name: true,
         }
