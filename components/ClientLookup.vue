@@ -7,7 +7,8 @@
 <script setup lang="ts">
 
 const props = defineProps({
-    clientList: Array<string>
+    clientList: Array<string>,
+    defaultSelected: String
 });
 
 const emit = defineEmits<{
@@ -16,7 +17,7 @@ const emit = defineEmits<{
 
 const clients = ref(props.clientList ?? []);
 const filteredClients: Ref<Array<string>> = ref([]);
-const selectedClient = ref("");
+const selectedClient = ref(props.defaultSelected ?? "");
 
 watch(selectedClient, client => emit('client-selected', client));
 

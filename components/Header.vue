@@ -6,7 +6,7 @@
     <div class="buttons">
       <Button severity="secondary" class="user-button" text @click="toggleMenu" aria-haspopup="true"
         aria-controls="overlay_menu" size="large">
-        <Avatar :image="auth.data.value?.user?.image" size="normal" shape="circle" />
+        <Avatar :image="auth.data.value?.user?.image ?? undefined" size="normal" shape="circle" />
       </Button>
       <Menu ref="menu" append-to="self" id="overlay_menu" :model="userItems" :popup="true" />
     </div>

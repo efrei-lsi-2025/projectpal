@@ -37,7 +37,6 @@
 </template>
 
 <script setup lang="ts">
-import { Member } from "../../components/projects/UserTable.vue"
 
 // Fetch data and init variables
 const auth = useAuth();
@@ -57,7 +56,12 @@ const selectedClient = ref("");
 const setSelectedClient = (client: string) => { selectedClient.value = client; }
 
 const userList = ref(allUsers);
-const members: Ref<Array<Member>> = ref([]);
+const members: Ref<Array<{
+    userId: string,
+    role: any,
+    name: string | null,
+    image: string | null,
+}>> = ref([]);
 
 // Current user added as a member with role OWNER
 const user = await useGetUserByName(auth.data.value?.user?.name || "");
@@ -74,13 +78,13 @@ if (user) {
 }
 
 // Form validation
-const errorMessage = ref("")
+const errorMessage = ref("");
 
 function validateForm() {
     if (!name.value) {
         errorMessage.value = 'Un nom de projet est requis.';
     } else {
-        errorMessage.value = ""
+        errorMessage.value = "";
         return true;
     }
 
@@ -90,8 +94,7 @@ function validateForm() {
 // Create project on submit
 const createProject = async () => {
 
-    validateForm();
-    if (!name.value) return;
+    if (!validateForm()) return;
 
     if (clientList.value?.includes(selectedClient.value)) {
         // Dialog, selon retour on quitte
