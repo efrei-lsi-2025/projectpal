@@ -1,41 +1,10 @@
 import { prisma } from "../../plugins/prisma";
-
-const TicketSelect = {
-  id: true,
-  name: true,
-  description: true,
-  assignee: {
-    select: {
-      id: true,
-      user: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-        },
-      },
-    },
-  },
-  reporter: {
-    select: {
-      id: true,
-      user: {
-        select: {
-          id: true,
-          name: true,
-          image: true,
-        },
-      },
-    },
-  },
-};
+import { TicketSelect } from "../tickets/[id].get";
 
 export default defineEventHandler(async (event) => {
-  const { id } = event.context.params;
-
   const project = await prisma.project.findUnique({
     where: {
-      id: Number(id),
+      id: Number(event.context.params?.id),
     },
     select: {
       id: true,
@@ -44,7 +13,6 @@ export default defineEventHandler(async (event) => {
       color: true,
       client: {
         select: {
-          id: true,
           name: true,
         },
       },

@@ -1,7 +1,7 @@
 import { prisma } from "~/server/plugins/prisma";
 
 export default defineEventHandler(async (event) => {
-  const { id } = event.context.params;
+  const id = event.context.params?.id;
   const body = await readBody(event);
 
   const ticket = await prisma.ticket.findFirst({

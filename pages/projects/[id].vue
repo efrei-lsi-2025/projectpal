@@ -21,30 +21,25 @@
       <h3 v-if="ticketState.tickets.length === 0" class="no-tickets">
         Aucun ticket
       </h3>
-      <div class="create-ticket" @click="createTicket">Créer un ticket</div>
       <div class="tickets">
-        <div
-          v-for="ticket in ticketState.tickets"
-          :key="ticket.id"
-          class="ticket"
-          :data-ticket-id="ticket.id"
-          draggable="true"
-          @dragstart="dragStart"
-          @dragend="dragEnd"
-        >
-          <h3>{{ ticket.name }}</h3>
-          <p>
-            {{ ticket.description }}
-          </p>
-          <div class="users">
-            <img
-              v-for="user in [ticket.reporter, ticket.assignee]"
-              :key="user?.id"
-              :src="user?.user.image"
-              class="user"
-            />
-          </div>
+        <div class="scroll">
+          <TicketsCard
+            v-for="ticket in [
+              ...ticketState.tickets,
+              ...ticketState.tickets,
+              ...ticketState.tickets,
+              ...ticketState.tickets,
+              ...ticketState.tickets,
+            ]"
+            :key="ticket.id"
+            :ticket="ticket"
+            :data-ticket-id="ticket.id"
+            draggable="true"
+            @dragstart="dragStart"
+            @dragend="dragEnd"
+          ></TicketsCard>
         </div>
+        <div class="create-ticket">Créer un ticket</div>
       </div>
     </div>
   </div>
@@ -54,10 +49,14 @@
 const route = useRoute();
 
 const id = route.params.id as string;
-let project = ref(await getProject(id));
+const project: Ref<Awaited<ReturnType<typeof getProject>> | null> = ref(null);
 
 const columns = ref<HTMLDivElement | null>(null);
 const dragging = ref<HTMLDivElement | null>(null);
+
+onMounted(async () => {
+  project.value = await getProject(id);
+});
 
 const dragStart = (e: DragEvent) => {
   dragging.value = e.target as HTMLDivElement;
@@ -73,14 +72,13 @@ const drop = async (e: DragEvent) => {
   const column = e.currentTarget as HTMLDivElement;
   const ticket = dragging.value;
 
-  const from = ticket.parentElement?.parentElement?.dataset.columnName;
+  const from =
+    ticket.parentElement?.parentElement?.parentElement?.dataset.columnName;
   const to = column.dataset.columnName;
-
-  if (from === to) return;
 
   const ticketId = ticket.dataset.ticketId;
 
-  if (!ticketId) return;
+  if (from === to || !ticketId) return;
 
   const fromState = project.value?.ticketStates.find(
     (state) => state.name === from
@@ -156,10 +154,11 @@ const drop = async (e: DragEvent) => {
     .create-ticket {
       border-radius: 5px;
       border: 1px dotted #696969;
-      padding: 0.5rem 1rem;
-      margin-top: 1rem;
+      padding: 0.25rem 1rem;
+      margin-top: 0.5rem;
       color: #696969;
       font-weight: 300;
+      font-size: 0.9rem;
       cursor: pointer;
       text-align: center;
       position: relative;
@@ -184,45 +183,12 @@ const drop = async (e: DragEvent) => {
     }
 
     .tickets {
-      margin-top: 1rem;
-      height: 100%;
+      height: 65vh;
 
-      .ticket {
-        background-color: white;
-        border-radius: 5px;
-        padding: 0.2rem 1rem;
-        margin-top: 1rem;
-
-        &.dragging {
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-          cursor: grabbing;
-        }
-
-        &:hover {
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-          cursor: grab;
-        }
-
-        p {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .users {
-          display: flex;
-          flex-direction: row;
-          justify-content: flex-end;
-          padding: 0.5rem 0;
-          margin-top: 0;
-
-          .user {
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            margin-left: 0.5rem;
-          }
-        }
+      .scroll {
+        max-height: calc(100% - 2rem);
+        overflow-y: scroll;
+        overflow-x: hidden;
       }
     }
   }
