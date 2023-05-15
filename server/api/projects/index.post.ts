@@ -12,7 +12,19 @@ export default defineEventHandler(async (event) => {
     data: {
       name: name,
       description: description,
-      clientId: client?.id,
+      client:
+        client.length > 0
+          ? {
+              connectOrCreate: {
+                where: {
+                  name: client,
+                },
+                create: {
+                  name: client,
+                },
+              },
+            }
+          : undefined,
       color: color,
       members: {
         create: projectMembers,

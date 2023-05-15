@@ -1,22 +1,22 @@
 <template>
     <AutoComplete class="inline-block" input-class="w-11" v-model="selectedClient" :suggestions="filteredClients"
-        optionLabel="name" @complete="searchClient" forceSelection dropdown-icon="pi pi-search" dropdown>
+        @complete="searchClient" dropdown-icon="pi pi-search" dropdown>
     </AutoComplete>
 </template>
 
 <script setup lang="ts">
 
-const props = defineProps(
-    ["clientList"]
-);
+const props = defineProps({
+    clientList: Array<string>
+});
 
 const emit = defineEmits<{
-    (event: 'client-selected', payload: any): void,
+    (event: 'client-selected', payload: string): void,
 }>();
 
 const clients = ref(props.clientList ?? []);
-const filteredClients: Ref<Array<any>> = ref([]);
-const selectedClient: Ref<any> = ref();
+const filteredClients: Ref<Array<string>> = ref([]);
+const selectedClient = ref("");
 
 watch(selectedClient, client => emit('client-selected', client));
 
@@ -25,8 +25,8 @@ const searchClient = (event: { originalEvent: Event, query: string }) => {
         if (!event.query.trim().length) {
             filteredClients.value = [...clients.value];
         } else {
-            filteredClients.value = clients.value.filter((client: any) => {
-                return client.name?.toLowerCase().startsWith(event.query.toLowerCase());
+            filteredClients.value = clients.value.filter((client: string) => {
+                return client.toLowerCase().startsWith(event.query.toLowerCase());
             });
         }
     }, 250);
