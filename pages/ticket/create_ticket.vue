@@ -35,7 +35,7 @@
       <div class="form-row">
         <div class="form-column">
           <label class="title w-full md:w-14rem" for="status">État :</label>
-          <Listbox id="status" :options="allDevelopers" optionLabel="name" optionImage="image" v-model="status" required class="input-field">
+          <Listbox id="status" v-model="status" required class="input-field">
             <!-- <template #option="allDevelopers">
               <div class="flex align-items-center">
                   <img src="image" style="width: 18px" />
