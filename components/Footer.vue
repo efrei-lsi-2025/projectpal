@@ -8,7 +8,7 @@
       Built with <img src="../assets/branding/nuxt.svg" />
       <a href="https://nuxtjs.org">Nuxt.js</a> and
       <img src="../assets/branding/primevue.svg" />
-      <a href="https://primefaces.org/primevue/">PrimeVue</a>
+      <a href="https://primevue.org/">PrimeVue</a>
     </span>
   </div>
 </template>
