@@ -3,7 +3,8 @@
         <div class="py-3 align-items-center formgrid grid">
             <div class="field col-12 md:col-6 pr-5">
                 <h2 class="mr-4">Nom du projet</h2>
-                <InputText class=" w-10" v-model="name" />
+                <InputText id="name" class=" w-10" :class="{ 'p-invalid': errorMessage }" v-model="name" />
+                <small class="p-error" id="text-error">{{ errorMessage || '&nbsp;' }}</small>
             </div>
 
             <div class="field col-12 md:col-6">
@@ -38,24 +39,28 @@
 <script setup lang="ts">
 import { Member } from "../../components/projects/UserTable.vue"
 
+// Fetch data and init variables
 const auth = useAuth();
 const allUsers = await useGetAllUsers();
-const allClients = await useGetAllClients();
+const allClients = ref(await useGetAllClients());
 
 const name = ref("");
 const description = ref("");
 const color = ref("bebebe");
 const categories: Ref<Array<string>> = ref([]);
 
-const clientList = ref(allClients);
-const selectedClient = ref();
-const setSelectedClient = (client: any) => {
-    selectedClient.value = client;
-}
+const clientList = computed(() => {
+    return allClients.value?.map(client => client.name)
+})
+
+const selectedClient = ref("");
+const setSelectedClient = (client: string) => { selectedClient.value = client; }
 
 const userList = ref(allUsers);
-const user = await useGetUserByName(auth.data.value?.user?.name || "");
 const members: Ref<Array<Member>> = ref([]);
+
+// Current user added as a member with role OWNER
+const user = await useGetUserByName(auth.data.value?.user?.name || "");
 
 if (user) {
     members.value.push(
@@ -68,16 +73,32 @@ if (user) {
     );
 }
 
-const createProject = async () => {
+// Form validation
+const errorMessage = ref("")
 
-    if (typeof selectedClient.value == "string" && selectedClient) {
-        //dialog
-        console.log("Create ", selectedClient)
-    } else if (selectedClient.value) {
-        selectedClient.value = selectedClient.value.name;
+function validateForm() {
+    if (!name.value) {
+        errorMessage.value = 'Un nom de projet est requis.';
+    } else {
+        errorMessage.value = ""
+        return true;
     }
 
+    return false;
+}
 
+// Create project on submit
+const createProject = async () => {
+
+    validateForm();
+    if (!name.value) return;
+
+    if (clientList.value?.includes(selectedClient.value)) {
+        // Dialog, selon retour on quitte
+
+    }
+
+    // Give order to the ticket states and add in a list
     const ticketStates: Array<{ name: string, order: number }> = [];
     let i = 0;
     categories.value.forEach(category => {
@@ -87,6 +108,7 @@ const createProject = async () => {
         });
     });
 
+    // Create list of members with userId and role
     const projectMembers = members.value.map(member => {
         return {
             userId: member.userId,
@@ -94,6 +116,7 @@ const createProject = async () => {
         };
     });
 
+    // Create the project
     await usePostProject({
         name: name.value,
         description: description.value,
