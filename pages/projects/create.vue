@@ -40,7 +40,7 @@
         icon="pi pi-check"
         label="Valider"
         severity="success"
-        @click="createProject"
+        @click="createNewProject"
       ></Button>
     </div>
   </div>
@@ -51,7 +51,7 @@ import { Member } from "../../components/projects/UserTable.vue";
 
 const auth = useAuth();
 const allUsers = await getUsers();
-const allClients = await useFetch("/api/");
+const allClients = await getClients();
 
 const name = ref("");
 const description = ref("");
@@ -79,7 +79,7 @@ if (user) {
   });
 }
 
-const createProject = async () => {
+const createNewProject = async () => {
   const ticketStates: Array<{ name: string; order: number }> = [];
   let i = 0;
   categories.value.forEach((category) => {
@@ -96,7 +96,7 @@ const createProject = async () => {
     };
   });
 
-  await usePostProject({
+  await createProject({
     name: name.value,
     description: description.value,
     color: color.value,

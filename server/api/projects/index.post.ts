@@ -6,6 +6,8 @@ export default defineEventHandler(async (event) => {
   const { name, color, description, client, ticketStates, projectMembers } =
     body;
 
+  console.log(body);
+
   const project = await prisma.project.create({
     data: {
       name: name,
@@ -15,10 +17,9 @@ export default defineEventHandler(async (event) => {
       members: {
         create: projectMembers,
       },
-      ticketStates: {
-        create: ticketStates,
-      },
+      ticketStates: ticketStates,
     },
   });
+
   return project;
 });

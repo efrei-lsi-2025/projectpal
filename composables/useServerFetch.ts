@@ -63,3 +63,15 @@ export const createProject = async (project: object) => {
     console.log(error);
   }
 };
+
+export const updateTicket = async (id: string, ticket: object) => {
+  try {
+    const res = await $fetch(`/api/tickets/${id}`, {
+      method: "PUT",
+      body: ticket,
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

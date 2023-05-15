@@ -37,7 +37,7 @@ enum Role {
 
 model Client {
   id   Int    @id @default(autoincrement())
-  name String
+  name String @unique
 
   projects Project[]
 }
@@ -82,10 +82,12 @@ model ProjectMember {
 
 model TicketState {
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  name      String   @id
+  name      String
   order     Int
   projectId Int
-  Ticket    Ticket[]
+  tickets   Ticket[]
+
+  @@unique([projectId, name])
 }
 
 model Ticket {
@@ -100,7 +102,7 @@ model Ticket {
   reporter   ProjectMember? @relation("reporter", fields: [reporterId], references: [id], onDelete: SetNull)
   reporterId String?
 
-  state     TicketState? @relation(fields: [stateName], references: [name], onUpdate: Cascade, onDelete: SetNull)
+  state     TicketState? @relation(fields: [stateName, projectId], references: [name, projectId], onUpdate: Cascade, onDelete: Cascade)
   stateName String?
 
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
