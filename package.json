@@ -23,6 +23,7 @@
     "@pinia-plugin-persistedstate/nuxt": "^1.1.1",
     "@pinia/nuxt": "^0.4.9",
     "@prisma/client": "^4.13.0",
+    "primeflex": "^3.3.0",
     "primeicons": "^6.0.1",
     "primevue": "^3.28.0",
     "sass": "^1.62.1"

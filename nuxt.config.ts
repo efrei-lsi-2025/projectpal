@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     "@/assets/style/global.scss",
     "@/assets/style/theme.css",
     "primevue/resources/primevue.css",
+    "primeflex/primeflex.css",
     "primeicons/primeicons.css",
   ],
   modules: ["@sidebase/nuxt-auth"],
