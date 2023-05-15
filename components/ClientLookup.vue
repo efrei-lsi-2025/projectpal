@@ -1,6 +1,6 @@
 <template>
     <AutoComplete class="inline-block" input-class="w-11" v-model="selectedClient" :suggestions="filteredClients"
-        optionLabel="name" @complete="searchClient" forceSelection dropdown-icon="pi pi-search" dropdown>
+        optionLabel="name" @complete="searchClient" dropdown-icon="pi pi-search" dropdown>
     </AutoComplete>
 </template>
 

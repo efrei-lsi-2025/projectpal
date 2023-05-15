@@ -37,13 +37,13 @@ enum Role {
 
 model Client {
   id   Int    @id @default(autoincrement())
-  name String
+  name String @unique
 
   projects Project[]
 }
 
 model Project {
-  id          Int    @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   description String?
   color       String?
