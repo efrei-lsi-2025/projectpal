@@ -1,34 +1,58 @@
 <template>
   <div class="container">
     <form @submit.prevent="submit_ticket">
-
       <div class="form-row">
         <div class="form-column">
           <label class="title" for="ticketName">Nom du ticket:</label>
-          <InputText type="text" id="ticketName" v-model="name" required class="input-field"/>
-        </div>
-  </div>
-
-      <div class="form-row">
-        <div class="form-column">
-        <label class="title" for="description">Description:</label>
-        <TextArea id="description" v-model="description" required class="input-field" />
+          <InputText
+            type="text"
+            id="ticketName"
+            v-model="name"
+            required
+            class="input-field"
+          />
         </div>
       </div>
 
       <div class="form-row">
-        <div class="form-column field mt-4 ">
-            <label class="title" for="assignedProject">Projet assigné:</label>
-            <span id="assignedProject" class="p-float-label">
-                <UserLookup :user-list="allProjects" optionLabel="name" class="w-full" required inputId="lookup" @user-selected="assignedProjects"></UserLookup>
-            </span>
+        <div class="form-column">
+          <label class="title" for="description">Description:</label>
+          <TextArea
+            id="description"
+            v-model="description"
+            required
+            class="input-field"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-column field mt-4">
+          <label class="title" for="assignedProject">Projet assigné:</label>
+          <span id="assignedProject" class="p-float-label">
+            <UserLookup
+              :user-list="allProjects"
+              optionLabel="name"
+              class="w-full"
+              required
+              inputId="lookup"
+              @user-selected="assignedProjects"
+            ></UserLookup>
+          </span>
         </div>
 
         <div class="form-column field mt-4">
-            <label class="title" for="assignedProject">Utilisateur(s) :</label>
-            <span class="p-float-label">
-                <UserLookup :user-list="allDevelopers" optionLabel="name" class="w-full" required inputId="lookup" @user-selected="assignedDevelopers"></UserLookup>
-            </span>
+          <label class="title" for="assignedProject">Utilisateur(s) :</label>
+          <span class="p-float-label">
+            <UserLookup
+              :user-list="allDevelopers"
+              optionLabel="name"
+              class="w-full"
+              required
+              inputId="lookup"
+              @user-selected="assignedDevelopers"
+            ></UserLookup>
+          </span>
         </div>
       </div>
 
@@ -46,12 +70,32 @@
         </div>
         <div class="form-column">
           <label class="title" for="generatedId">ID généré:</label>
-          <InputText ype="text" id="generatedId" v-model="generatedId" required class="input-field" />
+          <InputText
+            ype="text"
+            id="generatedId"
+            v-model="generatedId"
+            required
+            class="input-field"
+          />
         </div>
       </div>
 
-      <Button class="py-3" icon="pi pi-check" label="Valider" id="submitButton" severity="success" @click="submit_ticket"></Button>
-      <Button class="py-3" icon="pi pi-check" label="Annuler" id="cancelButton" severity="danger" @click="refresh_ticket"></Button>
+      <Button
+        class="py-3"
+        icon="pi pi-check"
+        label="Valider"
+        id="submitButton"
+        severity="success"
+        @click="submit_ticket"
+      ></Button>
+      <Button
+        class="py-3"
+        icon="pi pi-check"
+        label="Annuler"
+        id="cancelButton"
+        severity="danger"
+        @click="refresh_ticket"
+      ></Button>
     </form>
   </div>
 </template>
@@ -78,23 +122,23 @@
 }
 
 #submitButton {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 #cancelButton {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .title {
-    font-weight: bold;
+  font-weight: bold;
 }
 </style>
 
 <script setup lang="ts">
 const auth = useAuth();
 
-const allDevelopers = await useGetAllUsers();
-const allProjects = await useGetAllProjects();
+const allDevelopers = await getUsers();
+const allProjects = await getProjects();
 
 console.log("allProjects : ", allProjects);
 
@@ -104,13 +148,12 @@ const fetchData = async () => {
   // } catch (error) {
   //   console.log("Couldn't reach the clients table");
   // }
-
   // try {
   //   projectList.value = await $fetch('/api/ticket/projects');
   // } catch (error) {
   //   console.log("Couldn't reach the projects table");
   // }
-}
+};
 
 // try to fetch the data
 fetchData();
@@ -127,21 +170,19 @@ const generatedId = ref();
 const developers = ref(allDevelopers);
 const projects = ref(allProjects);
 
-
 // Called to submit the ticket to the Database
 const submit_ticket = async () => {
-
   const ticket = {
     name: name.value,
     description: description.value,
     assignedProjects: assignedProjects.value,
     assignedDevelopers: assignedDevelopers.value,
     status: status.value,
-    generatedId: generatedId.value
-  }
+    generatedId: generatedId.value,
+  };
 
   //Log the Ticket values
-  console.log('Ticket Values:', {
+  console.log("Ticket Values:", {
     name,
     description,
     assignedProjects,
@@ -150,10 +191,8 @@ const submit_ticket = async () => {
     generatedId,
   });
   //await $fetch('/api/ticket/create', { method: 'post', body: ticket });
-}
+};
 
 // Function triggered when the submit button or cancel button are pressed
-const refresh_ticket = async () => {
-
-}
+const refresh_ticket = async () => {};
 </script>

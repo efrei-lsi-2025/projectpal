@@ -15,6 +15,12 @@ export default NuxtAuthHandler({
       clientSecret: config.github.clientSecret,
     }),
   ],
+  callbacks: {
+    session(params) {
+      params.session.user.id = params.session.user.id;
+      return params.session;
+    },
+  },
   pages: {
     signIn: "/auth/login",
   },
