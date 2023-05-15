@@ -1,45 +1,57 @@
 <template>
-    <div class="project-layout">
-        <div class="py-3 align-items-center formgrid grid">
-            <div class="field col-12 md:col-6 pr-5">
-                <h2 class="mr-4">Nom du projet</h2>
-                <InputText class=" w-10" v-model="name" />
-            </div>
+  <div class="project-layout">
+    <div class="py-3 align-items-center formgrid grid">
+      <div class="field col-12 md:col-6 pr-5">
+        <h2 class="mr-4">Nom du projet</h2>
+        <InputText class="w-10" v-model="name" />
+      </div>
 
-            <div class="field col-12 md:col-6">
-                <h2 class="mr-5">Client</h2>
-                <ClientLookup class="mr-6 w-10" @client-selected="setSelectedClient" :client-list="clientList"></ClientLookup>
-                <ColorPicker v-model="color" />
-            </div>
-        </div>
-
-        <div class="py-3">
-            <h2>Description</h2>
-            <TextArea v-model="description" autoResize rows="5" class="w-full" />
-        </div>
-
-        <div class="py-3">
-            <h2>Utilisateurs</h2>
-            <ProjectsUserTable :model-value="members" :users-available="userList"></ProjectsUserTable>
-        </div>
-
-        <div class="py-3">
-            <h2>Catégories</h2>
-            <Chips v-model="categories" class="block" />
-        </div>
-
-        <div class="py-3">
-            <Button icon="pi pi-check" label="Valider" severity="success" @click="createProject"></Button>
-        </div>
+      <div class="field col-12 md:col-6">
+        <h2 class="mr-5">Client</h2>
+        <ClientLookup
+          class="mr-6 w-10"
+          @client-selected="setSelectedClient"
+          :client-list="clientList"
+        ></ClientLookup>
+        <ColorPicker v-model="color" />
+      </div>
     </div>
+
+    <div class="py-3">
+      <h2>Description</h2>
+      <TextArea v-model="description" autoResize rows="5" class="w-full" />
+    </div>
+
+    <div class="py-3">
+      <h2>Utilisateurs</h2>
+      <ProjectsUserTable
+        :model-value="members"
+        :users-available="userList"
+      ></ProjectsUserTable>
+    </div>
+
+    <div class="py-3">
+      <h2>Catégories</h2>
+      <Chips v-model="categories" class="block" />
+    </div>
+
+    <div class="py-3">
+      <Button
+        icon="pi pi-check"
+        label="Valider"
+        severity="success"
+        @click="createProject"
+      ></Button>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { Member } from "../../components/projects/UserTable.vue"
+import { Member } from "../../components/projects/UserTable.vue";
 
 const auth = useAuth();
-const allUsers = await useGetAllUsers();
-const allClients = await useGetAllClients();
+const allUsers = await getUsers();
+const allClients = await useFetch("/api/");
 
 const name = ref("");
 const description = ref("");
@@ -49,56 +61,54 @@ const categories: Ref<Array<string>> = ref([]);
 const clientList = ref(allClients);
 const selectedClient = ref();
 const setSelectedClient = (client: any) => {
-    if (typeof client !== "string" && client !== null) { selectedClient.value = client; }
-}
+  if (typeof client !== "string" && client !== null) {
+    selectedClient.value = client;
+  }
+};
 
 const userList = ref(allUsers);
-const user = await useGetUserByName(auth.data.value?.user?.name || "");
+const user = await getUserByName(auth.data.value?.user?.name || "");
 const members: Ref<Array<Member>> = ref([]);
 
 if (user) {
-    members.value.push(
-        {
-            userId: user.id,
-            role: "OWNER",
-            image: user.image,
-            name: user.name
-        }
-    );
+  members.value.push({
+    userId: user.id,
+    role: "OWNER",
+    image: user.image,
+    name: user.name,
+  });
 }
 
 const createProject = async () => {
-
-    const ticketStates: Array<{name: string, order: number}> = [];
-    let i = 0;
-    categories.value.forEach(category => {
-        ticketStates.push({
-            name: category,
-            order: i++,
-        });
+  const ticketStates: Array<{ name: string; order: number }> = [];
+  let i = 0;
+  categories.value.forEach((category) => {
+    ticketStates.push({
+      name: category,
+      order: i++,
     });
+  });
 
-    const projectMembers = members.value.map(member => {
-        return {
-            userId: member.userId,
-            role: member.role
-        };
-    });
+  const projectMembers = members.value.map((member) => {
+    return {
+      userId: member.userId,
+      role: member.role,
+    };
+  });
 
-    await usePostProject({
-        name: name.value,
-        description: description.value,
-        color: color.value,
-        client: selectedClient.value,
-        ticketStates: ticketStates,
-        projectMembers: projectMembers
-    });
+  await usePostProject({
+    name: name.value,
+    description: description.value,
+    color: color.value,
+    client: selectedClient.value,
+    ticketStates: ticketStates,
+    projectMembers: projectMembers,
+  });
 };
-
 </script>
 
 <style lang="scss" scoped>
 .project-layout {
-    margin: 1.5rem;
+  margin: 1.5rem;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
-  {{ project }}
+  {{ project?.name }}
 </template>
 
 <script lang="ts" setup>
-const auth = useAuth();
 const route = useRoute();
 
-const project = await useGetProjectById(route.params.id as number);
+const id = route.params.id as string;
+const project = await getProject(id);
 </script>
