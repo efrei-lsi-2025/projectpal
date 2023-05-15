@@ -78,7 +78,7 @@ const errorMessage = ref("")
 
 function validateForm() {
     if (!name.value) {
-        errorMessage.value = 'Name - Surname is required.';
+        errorMessage.value = 'Un nom de projet est requis.';
     } else {
         errorMessage.value = ""
         return true;
