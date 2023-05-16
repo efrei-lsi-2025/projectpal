@@ -39,9 +39,6 @@
     <Column field="text" header="Description" style="width: 25%"></Column>
   </DataTable>
 
-  <Paginator :rows="10" :totalRecords="120" :rowsPerPageOptions="[10, 20, 30]">
-  </Paginator>
-
 <div class="p-3 text-center">
     
 </div>
