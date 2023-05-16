@@ -19,13 +19,13 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (event: 'selected', payload: string): void;
+  (event: "selected", payload: string): void;
 }>();
 
 const filtered: Ref<any[]> = ref([...(props.list ?? [])]);
-const selection: Ref<string> = ref('');
+const selection: Ref<string> = ref("");
 
-watch(selection, (selection) => emit('selected', selection));
+watch(selection, (selection) => emit("selected", selection));
 
 const searchUser = (event: { originalEvent: Event; query: string }) => {
   if (!event.query.trim().length) {

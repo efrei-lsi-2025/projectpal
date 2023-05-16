@@ -1,4 +1,4 @@
-import { prisma } from '~/server/plugins/prisma';
+import { prisma } from "~/server/plugins/prisma";
 
 export const TicketSelect = {
   id: true,
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
     select: TicketSelect,
   });
 
-  if (!ticket) throw new Error('Ticket not found');
+  if (!ticket) throw new Error("Ticket not found");
 
   return ticket;
 });

@@ -1,5 +1,5 @@
-import { prisma } from '../../../../plugins/prisma';
-import { getServerSession } from '#auth';
+import { prisma } from "../../../../plugins/prisma";
+import { getServerSession } from "#auth";
 
 export default defineEventHandler(async (event) => {
   // Get the body

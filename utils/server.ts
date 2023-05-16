@@ -9,7 +9,7 @@ export const getProjects = async () => {
     return res as NoUndefinedField<typeof res>;
   } catch (err) {
     console.log(err);
-    error('Erreur lors de la récupération des projets.');
+    error("Erreur lors de la récupération des projets.");
   }
 };
 
@@ -19,27 +19,27 @@ export const getProject = async (id: string) => {
     return res as NoUndefinedField<typeof res>;
   } catch (err) {
     console.log(err);
-    error('Erreur lors de la récupération du projet.');
+    error("Erreur lors de la récupération du projet.");
   }
 };
 
 export const getClients = async () => {
   try {
-    const res = await $fetch('/api/clients');
+    const res = await $fetch("/api/clients");
     return res as NoUndefinedField<typeof res>;
   } catch (err) {
     console.log(err);
-    error('Erreur lors de la récupération des clients.');
+    error("Erreur lors de la récupération des clients.");
   }
 };
 
 export const getUsers = async () => {
   try {
-    const res = await $fetch('/api/users');
+    const res = await $fetch("/api/users");
     return res as NoUndefinedField<typeof res>;
   } catch (err) {
     console.log(err);
-    error('Erreur lors de la récupération des utilisateurs.');
+    error("Erreur lors de la récupération des utilisateurs.");
   }
 };
 
@@ -69,7 +69,7 @@ export const getTicket = async (id: string) => {
     return res as NoUndefinedField<typeof res>;
   } catch (err) {
     console.log(err);
-    error('Erreur lors de la récupération du ticket.');
+    error("Erreur lors de la récupération du ticket.");
   }
 };
 
@@ -82,14 +82,14 @@ export type ProjectCreationDTO = {
 
 export const createProject = async (project: object) => {
   try {
-    const res = await $fetch('/api/projects', {
-      method: 'POST',
+    const res = await $fetch("/api/projects", {
+      method: "POST",
       body: project,
     });
     return res as NoUndefinedField<typeof res>;
   } catch (err) {
     console.log(err);
-    error('Erreur lors de la création du projet.');
+    error("Erreur lors de la création du projet.");
   }
 };
 
@@ -106,27 +106,27 @@ export const createTicket = async (
 ) => {
   try {
     const res = await $fetch(`/api/projects/${projectId}/tickets`, {
-      method: 'POST',
+      method: "POST",
       body: ticket,
     });
-    success('Ticket créé.');
+    success("Ticket créé.");
     return res as NoUndefinedField<typeof res>;
   } catch (err) {
     console.log(err);
-    error('Erreur lors de la création du ticket.');
+    error("Erreur lors de la création du ticket.");
   }
 };
 
 export const updateTicket = async (id: string, ticket: object) => {
   try {
     const res = await $fetch(`/api/tickets/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: ticket,
     });
-    success('Ticket mis à jour.');
+    success("Ticket mis à jour.");
     return res as NoUndefinedField<typeof res>;
   } catch (err) {
     console.log(err);
-    error('Erreur lors de la mise à jour du ticket.');
+    error("Erreur lors de la mise à jour du ticket.");
   }
 };

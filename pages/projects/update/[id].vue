@@ -10,7 +10,7 @@
           :class="{ 'p-invalid': nameErrorMessage }"
         />
         <small id="text-error" class="p-error">{{
-          nameErrorMessage || '&nbsp;'
+          nameErrorMessage || "&nbsp;"
         }}</small>
       </div>
 
@@ -35,7 +35,7 @@
 
     <div class="py-3">
       <small id="text-error" class="p-error">{{
-        membersErrorMessage || '&nbsp;'
+        membersErrorMessage || "&nbsp;"
       }}</small>
       <ProjectsUserTable
         :model-value="members ?? []"
@@ -76,13 +76,13 @@ const name: Ref<string | undefined> = ref();
 const description: Ref<string | undefined> = ref();
 const color: Ref<string | undefined> = ref();
 const categories: Ref<
-  | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>['ticketStates']
+  | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["ticketStates"]
   | undefined
 > = ref();
 
 const selectedClient: Ref<string | undefined> = ref();
 const members: Ref<
-  | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>['members']
+  | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"]
   | undefined
 > = ref();
 const loaded = ref(false);
@@ -99,7 +99,7 @@ onMounted(async () => {
   description.value = project.value?.description;
   color.value = project.value?.color;
   categories.value = project.value?.ticketStates;
-  selectedClient.value = project.value?.client.name ?? '';
+  selectedClient.value = project.value?.client.name ?? "";
   members.value = project.value?.members;
   loaded.value = true;
 });
@@ -116,25 +116,25 @@ const setSelectedClient = (client: string) => {
 };
 
 // Form validation
-const nameErrorMessage = ref('');
-const membersErrorMessage = ref('');
+const nameErrorMessage = ref("");
+const membersErrorMessage = ref("");
 
 function validateForm() {
   let valid = true;
 
   if (!name.value) {
-    nameErrorMessage.value = 'Un nom de projet est requis.';
+    nameErrorMessage.value = "Un nom de projet est requis.";
     valid = false;
   }
 
-  if (!members.value?.find((member) => member.role === 'OWNER')) {
+  if (!members.value?.find((member) => member.role === "OWNER")) {
     membersErrorMessage.value =
-      'Un membre du projet avec le rôle OWNER est requis.';
+      "Un membre du projet avec le rôle OWNER est requis.";
   }
 
   if (valid) {
-    nameErrorMessage.value = '';
-    membersErrorMessage.value = '';
+    nameErrorMessage.value = "";
+    membersErrorMessage.value = "";
   }
 
   return valid;
@@ -143,7 +143,7 @@ function validateForm() {
 // Update project on submit
 const updateProject = async () => {
   if (!validateForm()) {
-    warn('Champs manquants ou invalides.');
+    warn("Champs manquants ou invalides.");
     return;
   }
 
@@ -152,9 +152,9 @@ const updateProject = async () => {
   const updated = true;
 
   if (updated) {
-    success('Projet modifié.');
+    success("Projet modifié.");
   } else {
-    error('Échec lors de la modification du projet.');
+    error("Échec lors de la modification du projet.");
   }
 };
 </script>

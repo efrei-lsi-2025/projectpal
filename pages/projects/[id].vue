@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-import { TicketCreationDTO } from '~/utils/server';
+import { TicketCreationDTO } from "~/utils/server";
 const route = useRoute();
 
 const id = route.params.id as string;
@@ -115,7 +115,7 @@ const drop = async (e: DragEvent) => {
 };
 
 const isDialogVisible = ref(false);
-const ticketStateToCreate = ref('');
+const ticketStateToCreate = ref("");
 
 function createTicketModal(ticketState: string) {
   ticketStateToCreate.value = ticketState;

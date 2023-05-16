@@ -5,5 +5,5 @@
 </template>
 
 <script setup>
-const { log } = defineProps(['log']);
+const { log } = defineProps(["log"]);
 </script>

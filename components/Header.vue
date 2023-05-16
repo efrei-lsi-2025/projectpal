@@ -46,18 +46,18 @@ const toggleMenu = (event: any) => {
 
 const userItems = ref([
   {
-    label: 'Profil',
-    icon: 'pi pi-fw pi-user',
+    label: "Profil",
+    icon: "pi pi-fw pi-user",
     command: () => $router.push(`/profile/${auth.data.value?.user?.id}`),
   },
   {
-    label: 'Paramètres',
-    icon: 'pi pi-fw pi-cog',
-    command: () => $router.push('/settings'),
+    label: "Paramètres",
+    icon: "pi pi-fw pi-cog",
+    command: () => $router.push("/settings"),
   },
   {
-    label: 'Se déconnecter',
-    icon: 'pi pi-fw pi-power-off',
+    label: "Se déconnecter",
+    icon: "pi pi-fw pi-power-off",
     command: () => auth.signOut(),
   },
 ]);

@@ -10,7 +10,7 @@
           :class="{ 'p-invalid': errorMessage }"
         />
         <small id="text-error" class="p-error">{{
-          errorMessage || '&nbsp;'
+          errorMessage || "&nbsp;"
         }}</small>
       </div>
 
@@ -62,13 +62,13 @@ const auth = useAuth();
 const allUsers: Ref<Awaited<ReturnType<typeof getUsers>>> = ref();
 const allClients: Ref<Awaited<ReturnType<typeof getClients>>> = ref();
 
-const name: Ref<string | undefined> = ref('');
-const description: Ref<string | undefined> = ref('');
-const color: Ref<string | undefined> = ref('bebebe');
+const name: Ref<string | undefined> = ref("");
+const description: Ref<string | undefined> = ref("");
+const color: Ref<string | undefined> = ref("bebebe");
 const stateLabels: Ref<Array<string>> = ref([]);
-const selectedClient: Ref<string | undefined> = ref('');
+const selectedClient: Ref<string | undefined> = ref("");
 const members: Ref<
-  | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>['members']
+  | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"]
   | undefined
 > = ref([]);
 
@@ -78,11 +78,11 @@ const loaded = ref(false);
 onMounted(async () => {
   allUsers.value = await getUsers();
   allClients.value = await getClients();
-  const user = await getUser(auth.data.value?.user?.id ?? '');
+  const user = await getUser(auth.data.value?.user?.id ?? "");
   if (user) {
     members.value?.push({
-      id: '',
-      role: 'OWNER',
+      id: "",
+      role: "OWNER",
       user: {
         id: user?.id,
         name: user?.name,
@@ -105,13 +105,13 @@ const setSelectedClient = (client: string) => {
 };
 
 // Form validation
-const errorMessage = ref('');
+const errorMessage = ref("");
 
 function validateForm() {
   if (!name.value) {
-    errorMessage.value = 'Un nom de projet est requis.';
+    errorMessage.value = "Un nom de projet est requis.";
   } else {
-    errorMessage.value = '';
+    errorMessage.value = "";
     return true;
   }
 
@@ -121,11 +121,11 @@ function validateForm() {
 // Create project on submit
 const createNewProject = async () => {
   if (!validateForm()) {
-    warn('Champs manquants ou invalides.');
+    warn("Champs manquants ou invalides.");
     return;
   }
 
-  if (clientList.value?.includes(selectedClient.value ?? '')) {
+  if (clientList.value?.includes(selectedClient.value ?? "")) {
     // Dialog, selon retour on quitte
   }
 

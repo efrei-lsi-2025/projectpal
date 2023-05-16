@@ -47,36 +47,36 @@
   color-scheme: light;
 }
 @font-face {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 300;
-  src: local(''),
-    url('./fonts/poppins-v15-latin-ext_latin-300.woff2') format('woff2'),
-    url('./fonts/poppins-v15-latin-ext_latin-300.woff') format('woff');
+  src: local(""),
+    url("./fonts/poppins-v15-latin-ext_latin-300.woff2") format("woff2"),
+    url("./fonts/poppins-v15-latin-ext_latin-300.woff") format("woff");
 }
 @font-face {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 400;
-  src: local(''),
-    url('./fonts/poppins-v15-latin-ext_latin-regular.woff2') format('woff2'),
-    url('./fonts/poppins-v15-latin-ext_latin-regular.woff') format('woff');
+  src: local(""),
+    url("./fonts/poppins-v15-latin-ext_latin-regular.woff2") format("woff2"),
+    url("./fonts/poppins-v15-latin-ext_latin-regular.woff") format("woff");
 }
 @font-face {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 600;
-  src: local(''),
-    url('./fonts/poppins-v15-latin-ext_latin-600.woff2') format('woff2'),
-    url('./fonts/poppins-v15-latin-ext_latin-600.woff') format('woff');
+  src: local(""),
+    url("./fonts/poppins-v15-latin-ext_latin-600.woff2") format("woff2"),
+    url("./fonts/poppins-v15-latin-ext_latin-600.woff") format("woff");
 }
 @font-face {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 700;
-  src: local(''),
-    url('./fonts/poppins-v15-latin-ext_latin-700.woff2') format('woff2'),
-    url('./fonts/poppins-v15-latin-ext_latin-700.woff') format('woff');
+  src: local(""),
+    url("./fonts/poppins-v15-latin-ext_latin-700.woff2") format("woff2"),
+    url("./fonts/poppins-v15-latin-ext_latin-700.woff") format("woff");
 }
 * {
   box-sizing: border-box;
@@ -3350,20 +3350,20 @@
   box-shadow: 0 0 0 0.1rem #999;
 }
 .fc.fc-unthemed .fc-toolbar .fc-button .fc-icon-chevron-left {
-  font-family: 'PrimeIcons' !important;
+  font-family: "PrimeIcons" !important;
   text-indent: 0;
   font-size: 1rem;
 }
 .fc.fc-unthemed .fc-toolbar .fc-button .fc-icon-chevron-left:before {
-  content: '';
+  content: "";
 }
 .fc.fc-unthemed .fc-toolbar .fc-button .fc-icon-chevron-right {
-  font-family: 'PrimeIcons' !important;
+  font-family: "PrimeIcons" !important;
   text-indent: 0;
   font-size: 1rem;
 }
 .fc.fc-unthemed .fc-toolbar .fc-button .fc-icon-chevron-right:before {
-  content: '';
+  content: "";
 }
 .fc.fc-unthemed .fc-toolbar .fc-button:focus {
   outline: 0 none;
@@ -3460,7 +3460,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  font-family: 'PrimeIcons' !important;
+  font-family: "PrimeIcons" !important;
   font-size: 1rem;
   width: 2rem;
   height: 2rem;
@@ -3475,7 +3475,7 @@
   .fc-popover
   .fc-popover-header
   .fc-popover-close:before {
-  content: '';
+  content: "";
 }
 .fc.fc-theme-standard
   .fc-view-harness
@@ -3558,20 +3558,20 @@
   border: 2px solid #000;
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button .fc-icon-chevron-left {
-  font-family: 'PrimeIcons' !important;
+  font-family: "PrimeIcons" !important;
   text-indent: 0;
   font-size: 1rem;
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button .fc-icon-chevron-left:before {
-  content: '';
+  content: "";
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button .fc-icon-chevron-right {
-  font-family: 'PrimeIcons' !important;
+  font-family: "PrimeIcons" !important;
   text-indent: 0;
   font-size: 1rem;
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button .fc-icon-chevron-right:before {
-  content: '';
+  content: "";
 }
 .fc.fc-theme-standard .fc-toolbar .fc-button:focus {
   outline: 0 none;
@@ -6078,7 +6078,7 @@
   color: #000000;
 }
 .p-steps .p-steps-item:before {
-  content: ' ';
+  content: " ";
   border-top: 1px solid #ebebeb;
   width: 100%;
   top: 50%;
@@ -6896,10 +6896,10 @@
   margin-left: auto;
 }
 .p-accordion .p-accordion-toggle-icon.pi-chevron-right::before {
-  content: '';
+  content: "";
 }
 .p-accordion .p-accordion-toggle-icon.pi-chevron-down::before {
-  content: '';
+  content: "";
 }
 .p-accordion .p-accordion-header.p-highlight .p-accordion-header-link {
   padding-bottom: calc(1rem + 2px);
@@ -6952,10 +6952,10 @@
   margin-left: auto;
 }
 .p-panelmenu .p-submenu-icon.pi-chevron-right::before {
-  content: '';
+  content: "";
 }
 .p-panelmenu .p-submenu-icon.pi-chevron-down::before {
-  content: '';
+  content: "";
 }
 .p-panelmenu .p-panelmenu-header.p-highlight > a {
   padding-bottom: calc(1rem + 2px);

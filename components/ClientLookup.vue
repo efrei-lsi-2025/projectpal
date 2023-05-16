@@ -18,18 +18,18 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (event: 'client-selected', payload: string): void;
+  (event: "client-selected", payload: string): void;
 }>();
 
 const clients = ref(props.clientList ?? []);
 const filteredClients: Ref<Array<string>> = ref([]);
-const selectedClient = ref('');
+const selectedClient = ref("");
 
 onMounted(() => {
-  selectedClient.value = props.defaultSelected ?? '';
+  selectedClient.value = props.defaultSelected ?? "";
 });
 
-watch(selectedClient, (client) => emit('client-selected', client));
+watch(selectedClient, (client) => emit("client-selected", client));
 
 const searchClient = (event: { originalEvent: Event; query: string }) => {
   if (!event.query.trim().length) {

@@ -55,10 +55,10 @@
 </template>
 
 <script setup lang="ts">
-import { TicketCreationDTO } from '~/utils/server';
+import { TicketCreationDTO } from "~/utils/server";
 
 const emit = defineEmits<{
-  (event: 'submit', payload: TicketCreationDTO): void;
+  (event: "submit", payload: TicketCreationDTO): void;
 }>();
 
 const props = defineProps<{
@@ -66,7 +66,7 @@ const props = defineProps<{
     | Exclude<
         Awaited<ReturnType<typeof getProject>>,
         null | undefined
-      >['members']
+      >["members"]
     | undefined;
   status: string;
 }>();
@@ -85,11 +85,11 @@ const submitTicket = async () => {
   const ticket: TicketCreationDTO = {
     name: name.value,
     description: description.value,
-    assignee: assignee.value?.user.id ?? '',
+    assignee: assignee.value?.user.id ?? "",
     status: props.status,
   };
 
-  emit('submit', ticket);
+  emit("submit", ticket);
 };
 </script>
 

@@ -96,12 +96,12 @@ const props = defineProps<{
   modelValue: Exclude<
     Awaited<ReturnType<typeof getProject>>,
     undefined
-  >['members'];
+  >["members"];
   usersAvailable: Awaited<ReturnType<typeof getUsers>>;
 }>();
 
 const emit = defineEmits<{
-  (event: 'update:modelValue', payload: typeof props.modelValue): void;
+  (event: "update:modelValue", payload: typeof props.modelValue): void;
 }>();
 
 // Add user dialog
@@ -109,17 +109,17 @@ const selectedUser: Ref<any | undefined> = ref();
 
 const roles: Array<{
   name: string;
-  role: (typeof props.modelValue)[number]['role'];
+  role: (typeof props.modelValue)[number]["role"];
 }> = [
-  { name: 'Propriétaire', role: 'OWNER' },
-  { name: 'Développeur', role: 'DEVELOPER' },
-  { name: 'Gestionnaire', role: 'MANAGER' },
+  { name: "Propriétaire", role: "OWNER" },
+  { name: "Développeur", role: "DEVELOPER" },
+  { name: "Gestionnaire", role: "MANAGER" },
 ];
 const selectedRole = ref(roles[1]);
 const isDialogVisible = ref(false);
 
 const setSelectedUser = (user: any) => {
-  if (typeof user !== 'string' && user !== null) {
+  if (typeof user !== "string" && user !== null) {
     selectedUser.value = user;
   }
 };
@@ -142,7 +142,7 @@ const addMember = async () => {
     return;
 
   props.modelValue?.push({
-    id: '',
+    id: "",
     role: selectedRole.value.role,
     user: {
       id: selectedUser.value.id,
