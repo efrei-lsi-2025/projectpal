@@ -51,9 +51,8 @@
 
     </Dialog>
 </template>
-  
-<script lang="ts" setup>
 
+<script lang="ts" setup>
 const auth = useAuth();
 
 const props = defineProps<{
@@ -88,11 +87,10 @@ const setDialogVisible = (value: boolean) => {
     if (!value) {
         selectedRole.value = roles[0];
     }
-}
+};
 
 const addMember = async () => {
-    if (!selectedRole.value || !selectedUser.value)
-        return;
+    if (!selectedRole.value || !selectedUser.value) return;
 
     if (props.modelValue?.find(member => member.user.name === selectedUser.value?.name))
         return;
@@ -108,9 +106,7 @@ const addMember = async () => {
     });
 
     setDialogVisible(false);
-}
-
+};
 </script>
 
 <style scoped></style>
-  
