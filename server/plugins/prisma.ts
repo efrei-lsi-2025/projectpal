@@ -1,9 +1,9 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
-let prisma: PrismaClient
+let prisma: PrismaClient;
 
 export default defineNitroPlugin((nitroApp) => {
-  prisma = new PrismaClient()
-})
+  prisma = new PrismaClient();
+});
 
-export { prisma }
+export { prisma };

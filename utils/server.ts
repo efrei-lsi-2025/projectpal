@@ -74,11 +74,10 @@ export const getTicket = async (id: string) => {
 };
 
 export type ProjectCreationDTO = {
-  name: string,
-  color: string,
-  description: string,
-  client: string,
-
+  name: string;
+  color: string;
+  description: string;
+  client: string;
 };
 
 export const createProject = async (project: object) => {

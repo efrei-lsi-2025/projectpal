@@ -8,7 +8,7 @@
       <p>{{ project?.description }}</p>
     </div>
   </div>
-  <div class="columns" ref="columns">
+  <div ref="columns" class="columns">
     <div
       v-for="ticketState in project?.ticketStates"
       :key="ticketState.name"

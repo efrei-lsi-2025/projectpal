@@ -1,14 +1,14 @@
 <template>
   <AutoComplete
+    v-model="selection"
     class="inline-block"
     input-class="w-11"
-    v-model="selection"
     :suggestions="filtered"
-    optionLabel="name"
-    @complete="searchUser"
-    forceSelection
+    option-label="name"
+    force-selection
     dropdown-icon="pi pi-search"
     dropdown
+    @complete="searchUser"
   >
   </AutoComplete>
 </template>

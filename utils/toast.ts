@@ -1,6 +1,6 @@
 const lifeTime = 3000;
 
-export const info = (body: string, title: string = "Information"): void => {
+export const info = (body: string, title = "Information"): void => {
   const { vueApp } = useNuxtApp();
   vueApp.config.globalProperties.$toast.add({
     severity: "info",
@@ -10,7 +10,7 @@ export const info = (body: string, title: string = "Information"): void => {
   });
 };
 
-export const success = (body: string, title: string = "Succès"): void => {
+export const success = (body: string, title = "Succès"): void => {
   const { vueApp } = useNuxtApp();
   vueApp.config.globalProperties.$toast.add({
     severity: "success",
@@ -20,7 +20,7 @@ export const success = (body: string, title: string = "Succès"): void => {
   });
 };
 
-export const error = (body: string, title: string = "Erreur"): void => {
+export const error = (body: string, title = "Erreur"): void => {
   const { vueApp } = useNuxtApp();
   vueApp.config.globalProperties.$toast.add({
     severity: "error",
@@ -30,7 +30,7 @@ export const error = (body: string, title: string = "Erreur"): void => {
   });
 };
 
-export const warn = (body: string, title: string = "Attention"): void => {
+export const warn = (body: string, title = "Attention"): void => {
   const { vueApp } = useNuxtApp();
   vueApp.config.globalProperties.$toast.add({
     severity: "warn",

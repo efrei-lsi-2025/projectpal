@@ -5,9 +5,9 @@
         <div class="form-column">
           <label class="title" for="ticketName">Nom du ticket</label>
           <InputText
-            type="text"
             id="ticketName"
             v-model="name"
+            type="text"
             required
             class="input-field"
           />
@@ -32,10 +32,10 @@
           <span class="p-float-label">
             <Lookup
               :list="members?.map((member) => member.user)"
-              optionLabel="name"
+              option-label="name"
               class="w-full"
               required
-              inputId="lookup"
+              input-id="lookup"
               @selected="setAssignee"
             ></Lookup>
           </span>
@@ -43,10 +43,10 @@
       </div>
 
       <Button
+        id="submitButton"
         class="py-3 flex justify-content-around align-items-center"
         icon="pi pi-check"
         label="Valider"
-        id="submitButton"
         severity="success"
         @click="submitTicket"
       ></Button>
