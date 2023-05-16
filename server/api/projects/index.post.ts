@@ -1,4 +1,4 @@
-import { prisma } from "../../plugins/prisma";
+import { prisma } from '../../plugins/prisma';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -8,28 +8,28 @@ export default defineEventHandler(async (event) => {
 
   const project = await prisma.project.create({
     data: {
-      name: name,
-      description: description,
+      name,
+      description,
       client:
         client.length > 0
           ? {
-            connectOrCreate: {
-              where: {
-                name: client,
+              connectOrCreate: {
+                where: {
+                  name: client,
+                },
+                create: {
+                  name: client,
+                },
               },
-              create: {
-                name: client,
-              },
-            },
-          }
+            }
           : undefined,
-      color: color,
+      color,
       members: {
         create: projectMembers,
       },
       ticketStates: {
         create: ticketStates,
-      }
+      },
     },
   });
 

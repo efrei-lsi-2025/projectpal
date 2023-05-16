@@ -1,4 +1,4 @@
-import { prisma } from "../../plugins/prisma";
+import { prisma } from '../../plugins/prisma';
 
 export default defineEventHandler(async (event) => {
   if (!event.context.params?.id) throw new Error("Aucun id n'a été fourni");

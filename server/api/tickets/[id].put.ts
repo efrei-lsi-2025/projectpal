@@ -1,4 +1,4 @@
-import { prisma } from "~/server/plugins/prisma";
+import { prisma } from '~/server/plugins/prisma';
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params?.id;
@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  if (!ticket) throw new Error("Ticket not found");
+  if (!ticket) throw new Error('Ticket not found');
 
   await prisma.ticket.update({
     where: {

@@ -1,5 +1,5 @@
-import { prisma } from "../../../../plugins/prisma";
-import { getServerSession } from "#auth";
+import { prisma } from '../../../../plugins/prisma';
+import { getServerSession } from '#auth';
 
 export default defineEventHandler(async (event) => {
   // Get the body
@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   // get project's ID
   const projectId = Number(event.context.params?.id);
 
-  //Send the ticket thanks to a post request to the BDD
+  // Send the ticket thanks to a post request to the BDD
 
   const ticket = await prisma.ticket.create({
     data: {

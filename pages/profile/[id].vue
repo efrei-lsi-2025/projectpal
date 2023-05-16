@@ -7,41 +7,37 @@
         style="width: 150%; height: 150%; max-width: 150px"
       />
       <div>
-      <h1>{{ user?.name }}</h1>
-      <h3>
-        {{ user?.projects.length }} projets pour
-        {{
-          user?.projects.reduce((acc, project) => acc + project._count.assignedTo,0)
-        }}
-        tickets assignés
-      </h3>
-    </div>
-
-
+        <h1>{{ user?.name }}</h1>
+        <h3>
+          {{ user?.projects.length }} projets pour
+          {{
+            user?.projects.reduce(
+              (acc, project) => acc + project._count.assignedTo,
+              0
+            )
+          }}
+          tickets assignés
+        </h3>
+      </div>
     </div>
   </div>
 
   <div class="recent-activity">
-
-    <p>
-        <h1>Activité récente</h1>
-    </p>
+    <h1>Activité récente</h1>
   </div>
   <DataTable
     :value="logs"
     paginator
     :rows="5"
-    :rowsPerPageOptions="[5, 10, 20, 50]"
-    tableStyle="min-width: 50rem"
+    :rows-per-page-options="[5, 10, 20, 50]"
+    table-style="min-width: 50rem"
   >
     <Column field="createdAt" header="Date" style="width: 25%"></Column>
     <Column field="user?.name" header="User" style="width: 25%"></Column>
     <Column field="text" header="Description" style="width: 25%"></Column>
   </DataTable>
 
-<div class="p-3 text-center">
-    
-</div>
+  <div class="p-3 text-center"></div>
   <div classe="ticket-create"></div>
 </template>
 
@@ -66,9 +62,7 @@ const logs = user.value?.logs;
   display: flex;
   .profile-header {
     align-items: center;
-    gap: 2rem;   
+    gap: 2rem;
   }
-
-  
 }
 </style>

@@ -1,4 +1,4 @@
-import { prisma } from "../../plugins/prisma";
+import { prisma } from '../../plugins/prisma';
 
 export default defineEventHandler(async (event) => {
   return await prisma.user.findMany({

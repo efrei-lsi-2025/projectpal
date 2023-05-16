@@ -1,17 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   css: [
-    "@/assets/style/global.scss",
-    "@/assets/style/theme.css",
-    "primevue/resources/primevue.css",
-    "primeflex/primeflex.css",
-    "primeicons/primeicons.css",
+    '@/assets/style/global.scss',
+    '@/assets/style/theme.css',
+    'primevue/resources/primevue.css',
+    'primeflex/primeflex.css',
+    'primeicons/primeicons.css',
   ],
 
-  modules: ["@sidebase/nuxt-auth"],
+  modules: ['@sidebase/nuxt-auth'],
 
   build: {
-    transpile: ["primevue"],
+    transpile: ['primevue'],
   },
 
   runtimeConfig: {
@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     public: {
       auth: {
         enableGlobalAppMiddleware: true,
-        defaultProvider: "github",
+        defaultProvider: 'github',
       },
       vercel: {
         commitSha: process.env.VERCEL_GIT_COMMIT_SHA,
@@ -34,6 +34,6 @@ export default defineNuxtConfig({
   },
 
   devtools: {
-    enabled: true
-  }
+    enabled: true,
+  },
 });

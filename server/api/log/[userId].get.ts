@@ -1,4 +1,4 @@
-import { prisma } from "~/server/plugins/prisma";
+import { prisma } from '~/server/plugins/prisma';
 
 export default defineEventHandler(async (event) => {
   if (!event.context.params?.userId)

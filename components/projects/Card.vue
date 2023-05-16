@@ -16,9 +16,9 @@
     <div class="card flex justify-content-center">
       <AvatarGroup>
         <Avatar
+          v-for="member in [props.project.members]"
           v-if="props.project.members.length < 6"
           :visible="true"
-          v-for="member in [props.project.members]"
           :image="member.user.image"
         />
         <Avatar

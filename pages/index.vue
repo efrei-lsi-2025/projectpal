@@ -11,7 +11,7 @@
 const auth = useAuth();
 
 try {
-  const testSession = await $fetch("/api/session");
+  const testSession = await $fetch('/api/session');
   console.log(testSession);
 } catch (error) {
   console.log(error);

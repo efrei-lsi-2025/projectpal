@@ -1,28 +1,35 @@
 <template>
-  <AutoComplete class="inline-block" input-class="w-11" v-model="selectedClient" :suggestions="filteredClients"
-    @complete="searchClient" dropdown-icon="pi pi-search" dropdown>
+  <AutoComplete
+    v-model="selectedClient"
+    class="inline-block"
+    input-class="w-11"
+    :suggestions="filteredClients"
+    dropdown-icon="pi pi-search"
+    dropdown
+    @complete="searchClient"
+  >
   </AutoComplete>
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
-  clientList: Array<string> | undefined,
-  defaultSelected: string | undefined
+  clientList: Array<string> | undefined;
+  defaultSelected: string | undefined;
 }>();
 
 const emit = defineEmits<{
-  (event: "client-selected", payload: string): void;
+  (event: 'client-selected', payload: string): void;
 }>();
 
 const clients = ref(props.clientList ?? []);
 const filteredClients: Ref<Array<string>> = ref([]);
-const selectedClient = ref("");
+const selectedClient = ref('');
 
 onMounted(() => {
-  selectedClient.value = props.defaultSelected ?? "";
-})
+  selectedClient.value = props.defaultSelected ?? '';
+});
 
-watch(selectedClient, (client) => emit("client-selected", client));
+watch(selectedClient, (client) => emit('client-selected', client));
 
 const searchClient = (event: { originalEvent: Event; query: string }) => {
   if (!event.query.trim().length) {
