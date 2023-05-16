@@ -1,4 +1,42 @@
 <template>
+  <div>
+    <DataTable :value="modelValue" removableSort tableStyle="min-width: 50rem">
+      <template #header>
+        <div class="flex justify-content-between align-items-center pr-5">
+          <h2>Utilisateurs</h2>
+          <Button
+            icon="pi pi-user-plus"
+            @click="setDialogVisible(true)"
+            class="my-2"
+            severity="info"
+            size="large"
+          ></Button>
+        </div>
+      </template>
+
+      <Column field="name" sortable header="Nom">
+        <template #body="slotProps">
+          <div class="flex align-items-center gap-4">
+            <img
+              :src="`${slotProps.data.image}`"
+              style="width: 30px; border-radius: 50%"
+            />
+            <span>{{ slotProps.data.name }}</span>
+          </div>
+        </template>
+      </Column>
+      <Column field="email" header="Email"></Column>
+      <Column field="role" sortable header="Role"></Column>
+    </DataTable>
+  </div>
+
+  <Dialog
+    v-model:visible="isDialogVisible"
+    modal
+    header="Add User"
+    class="w-5"
+    :draggable="false"
+  >
     <div>
         <DataTable :value="modelValue" removableSort tableStyle="min-width: 50rem">
             <template #header>
@@ -30,8 +68,12 @@
         <div>
             <div class="field mt-4">
                 <span class="p-float-label">
-                    <UserLookup :user-list="usersAvailable" class="w-full" inputId="lookup"
-                        @user-selected="setSelectedUser"></UserLookup>
+                    <Lookup
+                      :list="usersAvailable"
+                      class="w-full"
+                      inputId="lookup"
+                      @user-selected="setSelectedUser"
+                    ></Lookup>
                     <label for="lookup">Utilisateur</label>
                 </span>
             </div>
@@ -51,9 +93,8 @@
 
     </Dialog>
 </template>
-  
-<script lang="ts" setup>
 
+<script lang="ts" setup>
 const auth = useAuth();
 
 const props = defineProps<{
@@ -84,11 +125,11 @@ const setSelectedUser = (user: any) => {
 }
 
 const setDialogVisible = (value: boolean) => {
-    isDialogVisible.value = value;
-    if (!value) {
-        selectedRole.value = roles[0];
-    }
-}
+  isDialogVisible.value = value;
+  if (!value) {
+    selectedRole.value = roles[0];
+  }
+};
 
 const addMember = async () => {
     if (!selectedRole.value || !selectedUser.value)
@@ -107,10 +148,15 @@ const addMember = async () => {
         }
     });
 
-    setDialogVisible(false);
-}
+  props.modelValue?.push({
+    userId: selectedUser.value.id,
+    role: selectedRole.value.role,
+    name: selectedUser.value.name,
+    image: selectedUser.value.image,
+  });
 
+  setDialogVisible(false);
+};
 </script>
 
 <style scoped></style>
-  

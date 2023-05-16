@@ -24,13 +24,7 @@
       <div class="tickets">
         <div class="scroll">
           <TicketsCard
-            v-for="ticket in [
-              ...ticketState.tickets,
-              ...ticketState.tickets,
-              ...ticketState.tickets,
-              ...ticketState.tickets,
-              ...ticketState.tickets,
-            ]"
+            v-for="ticket in ticketState.tickets"
             :key="ticket.id"
             :ticket="ticket"
             :data-ticket-id="ticket.id"
@@ -39,13 +33,30 @@
             @dragend="dragEnd"
           ></TicketsCard>
         </div>
-        <div class="create-ticket">Créer un ticket</div>
+        <div class="create-ticket" @click="createTicketModal(ticketState.name)">
+          Créer un ticket
+        </div>
       </div>
     </div>
   </div>
+
+  <Dialog
+    v-model:visible="isDialogVisible"
+    modal
+    header="Ajouter un ticket"
+    class="w-5"
+    :draggable="false"
+  >
+    <TicketsCreate
+      :status="ticketStateToCreate"
+      :members="project?.members"
+      @submit="submitTicket"
+    />
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
+import { TicketCreationDTO } from "~/utils/server";
 const route = useRoute();
 
 const id = route.params.id as string;
@@ -102,6 +113,20 @@ const drop = async (e: DragEvent) => {
   await updateTicket(ticketId, { state: to });
   project.value = await getProject(id);
 };
+
+const isDialogVisible = ref(false);
+const ticketStateToCreate = ref("");
+
+function createTicketModal(ticketState: string) {
+  ticketStateToCreate.value = ticketState;
+  isDialogVisible.value = true;
+}
+
+async function submitTicket(dto: TicketCreationDTO) {
+  await createTicket(id, dto);
+  isDialogVisible.value = false;
+  project.value = await getProject(id);
+}
 </script>
 
 <style lang="scss" scoped>

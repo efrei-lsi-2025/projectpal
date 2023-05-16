@@ -27,12 +27,12 @@ const userItems = ref([
   {
     label: "Profil",
     icon: "pi pi-fw pi-user",
-    command: () => $router.push("profile"),
+    command: () => $router.push(`/profile/${auth.data.value?.user?.id}`),
   },
   {
     label: "Paramètres",
     icon: "pi pi-fw pi-cog",
-    command: () => $router.push("settings"),
+    command: () => $router.push("/settings"),
   },
   {
     label: "Se déconnecter",

@@ -77,7 +77,6 @@ const clientList = computed(() => {
 const userList = ref(allUsers);
 
 
-
 // Used by the client lookup to set the selected client
 const setSelectedClient = (client: string) => {
   selectedClient.value = client;
