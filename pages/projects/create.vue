@@ -1,14 +1,9 @@
 <template>
-  <div class="project-layout">
+  <div class="project-layout" v-if="loaded">
     <div class="py-3 align-items-center formgrid grid">
       <div class="field col-12 md:col-6 pr-5">
         <h2 class="mr-4">Nom du projet</h2>
-        <InputText
-          id="name"
-          class="w-10"
-          :class="{ 'p-invalid': errorMessage }"
-          v-model="name"
-        />
+        <InputText id="name" class="w-10" :class="{ 'p-invalid': errorMessage }" v-model="name" />
         <small class="p-error" id="text-error">{{
           errorMessage || "&nbsp;"
         }}</small>
@@ -16,11 +11,9 @@
 
       <div class="field col-12 md:col-6">
         <h2 class="mr-5">Client</h2>
-        <ClientLookup
-          class="mr-6 w-10"
-          @client-selected="setSelectedClient"
-          :client-list="clientList"
-        />
+        <ClientLookup class="mr-6 w-10" @client-selected="setSelectedClient" :client-list="clientList"
+          :default-selected="undefined">
+        </ClientLookup>
         <ColorPicker v-model="color" />
       </div>
     </div>
@@ -31,85 +24,66 @@
     </div>
 
     <div class="py-3">
-      <h2>Utilisateurs</h2>
-      <ProjectsUserTable :model-value="members" :users-available="userList" />
+      <ProjectsUserTable :model-value="members ?? []" :users-available="userList"></ProjectsUserTable>
     </div>
 
     <div class="py-3">
       <h2>Catégories</h2>
-      <Chips v-model="categories" class="block" />
+      <Chips v-model="stateLabels" class="block" />
     </div>
 
     <div class="py-3">
-      <Button
-        icon="pi pi-check"
-        label="Valider"
-        severity="success"
-        @click="createNewProject"
-      />
-    </div>
-
-    <div class="py-3">
-      <h2>Description</h2>
-      <TextArea v-model="description" autoResize rows="5" class="w-full" />
-    </div>
-
-    <div class="py-3">
-      <h2>Utilisateurs</h2>
-      <ProjectsUserTable
-        :model-value="members"
-        :users-available="userList"
-      ></ProjectsUserTable>
-    </div>
-
-    <div class="py-3">
-      <h2>Catégories</h2>
-      <Chips v-model="categories" class="block" />
-    </div>
-
-    <div class="py-3">
-      <Button
-        icon="pi pi-check"
-        label="Valider"
-        severity="success"
-        @click="createNewProject"
-      ></Button>
+      <Button icon="pi pi-check" label="Valider" severity="success" @click="createNewProject" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// Fetch data and init variables
 const auth = useAuth();
-const allUsers = ref(await getUsers());
-const allClients = ref(await getClients());
 
-const name = ref("");
-const description = ref("");
-const color = ref("bebebe");
-const categories: Ref<Array<string>> = ref([]);
+// Init variables
+const allUsers: Ref<Awaited<ReturnType<typeof getUsers>>> = ref();
+const allClients: Ref<Awaited<ReturnType<typeof getClients>>> = ref();
 
-const clientList = computed(() => {
-  return allClients.value?.map((client) => client.name);
+const name: Ref<string | undefined> = ref("");
+const description: Ref<string | undefined> = ref("");
+const color: Ref<string | undefined> = ref("bebebe");
+const stateLabels: Ref<Array<string>> = ref([]);
+const selectedClient: Ref<string | undefined> = ref("");
+const members: Ref<Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"] | undefined> = ref([]);
+
+let loaded = ref(false);
+
+// Fetch data
+onMounted(async () => {
+  allUsers.value = await getUsers();
+  allClients.value = await getClients();
+  const user = await getUser(auth.data.value?.user?.id ?? "");
+  if (user) {
+    members.value?.push({
+      id: "",
+      role: "OWNER",
+      user: {
+        id: user?.id,
+        name: user?.name,
+        image: user?.image,
+      }
+    });
+  }
+  loaded.value = true;
 });
 
-const selectedClient = ref("");
+// Initialize dropdowns / lookups lists
+const clientList = computed(() => {
+  return allClients.value?.map(client => client.name)
+})
+const userList = ref(allUsers);
+
+
+
+// Used by the client lookup to set the selected client
 const setSelectedClient = (client: string) => {
   selectedClient.value = client;
-};
-
-const userList = ref(allUsers);
-const members: Ref<Array<any>> = ref([]); // TODO: type with project members endpoint
-
-const user = await getUser(auth.data.value?.user?.id || "");
-
-if (user) {
-  members.value.push({
-    userId: user.id,
-    role: "OWNER",
-    image: user.image,
-    name: user.name,
-  });
 }
 
 // Form validation
@@ -128,27 +102,31 @@ function validateForm() {
 
 // Create project on submit
 const createNewProject = async () => {
-  validateForm();
-  if (!name.value) return;
 
-  if (clientList.value?.includes(selectedClient.value)) {
+  if (!validateForm()) {
+    warn("Champs manquants ou invalides.");
+    return;
+  }
+
+  if (clientList.value?.includes(selectedClient.value ?? "")) {
     // Dialog, selon retour on quitte
   }
 
   // Give order to the ticket states and add in a list
   const ticketStates: Array<{ name: string; order: number }> = [];
   let i = 0;
-  categories.value.forEach((category) => {
+
+  stateLabels.value?.forEach((label) => {
     ticketStates.push({
-      name: category,
+      name: label,
       order: i++,
     });
   });
 
   // Create list of members with userId and role
-  const projectMembers = members.value.map((member) => {
+  const projectMembers = members.value?.map((member) => {
     return {
-      userId: member.userId,
+      userId: member.user.id,
       role: member.role,
     };
   });
