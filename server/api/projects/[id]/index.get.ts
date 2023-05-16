@@ -1,7 +1,8 @@
-import { prisma } from "../../plugins/prisma";
-import { TicketSelect } from "../tickets/[id].get";
+import { prisma } from "../../../plugins/prisma";
+import { TicketSelect } from "../../tickets/[id].get";
 
 export default defineEventHandler(async (event) => {
+  console.log(event.context.params?.id);
   const project = await prisma.project.findUnique({
     where: {
       id: Number(event.context.params?.id),

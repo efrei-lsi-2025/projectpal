@@ -16,9 +16,9 @@ export default NuxtAuthHandler({
     }),
   ],
   callbacks: {
-    session(params) {
-      params.session.user.id = params.session.user.id;
-      return params.session;
+    session({ session, user }) {
+      session.user.id = user.id;
+      return session;
     },
   },
   pages: {
