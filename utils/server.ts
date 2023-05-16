@@ -75,12 +75,20 @@ export const getTicket = async (id: string) => {
 
 export type ProjectCreationDTO = {
   name: string;
-  color: string;
   description: string;
+  color: string;
   client: string;
+  ticketStates: Array<{
+    name: string,
+    order: number
+  }>;
+  projectMembers: Array<{
+    userId: string,
+    role: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"][number]["role"]
+  }>
 };
 
-export const createProject = async (project: object) => {
+export const createProject = async (project: ProjectCreationDTO) => {
   try {
     const res = await $fetch("/api/projects", {
       method: "POST",
