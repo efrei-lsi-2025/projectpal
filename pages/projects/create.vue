@@ -101,7 +101,7 @@ const setSelectedClient = (client: string) => {
 const userList = ref(allUsers);
 const members: Ref<Array<any>> = ref([]); // TODO: type with project members endpoint
 
-const user = await getUserByName(auth.data.value?.user?.name || "");
+const user = await getUser(auth.data.value?.user?.id || "");
 
 if (user) {
   members.value.push({
