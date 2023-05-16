@@ -10,15 +10,19 @@
             </template>
 
 
-            <Column field="name" sortable header="Nom">
+            <Column field="user" sortable header="Nom">
                 <template #body="slotProps">
                     <div class="flex align-items-center gap-4">
-                        <img :src="`${slotProps.data.image}`" style="width: 30px; border-radius: 50%;" />
-                        <span>{{ slotProps.data.name }}</span>
+                        <img :src="`${slotProps.data.user.image}`" style="width: 30px; border-radius: 50%;" />
+                        <span>{{ slotProps.data.user.name }}</span>
                     </div>
                 </template>
             </Column>
-            <Column field="role" sortable header="Role"></Column>
+            <Column field="role" sortable header="Role">
+                <template #body="slotProps">
+                    <span>{{ roles.find(({ role }) => role === slotProps.data.role)?.name }}</span>
+                </template>
+            </Column>
         </DataTable>
     </div>
 
@@ -33,7 +37,8 @@
             </div>
 
             <div class="field text-center w-100">
-                <SelectButton v-model="selectedRole" :options="roles" optionLabel="name" class="w-full m-auto" unselectable>
+                <SelectButton v-model="selectedRole" :options="roles.slice(1)" optionLabel="name" class="w-full m-auto"
+                    unselectable>
                 </SelectButton>
             </div>
 
@@ -51,33 +56,27 @@
 
 const auth = useAuth();
 
-const props = defineProps({
-    modelValue: Array<{
-        userId: string,
-        role: any,
-        name: string | null,
-        image: string | null,
-    }>,
-    usersAvailable: Array<any>
-});
+const props = defineProps<{
+    modelValue: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"]
+    usersAvailable: Awaited<ReturnType<typeof getUsers>>
+}>();
 
 const emit = defineEmits<{
-    (event: 'update:modelValue', payload: Ref<Array<{
-        userId: string,
-        role: string,
-        name: string | null,
-        image: string | null,
-    }>>): void,
+    (event: 'update:modelValue', payload: typeof props.modelValue): void,
 }>();
 
 // Add user dialog
 const selectedUser: Ref<any | undefined> = ref();
 
-const roles = [
-    { name: "Développeur", role: "DEVELOPER" },
-    { name: "Manager", role: "MANAGER" },
-]
-const selectedRole = ref(roles[0]);
+const roles: Array<{
+    name: string;
+    role: (typeof props.modelValue)[number]["role"]
+}> = [
+        { name: "Propriétaire", role: "OWNER" },
+        { name: "Développeur", role: "DEVELOPER" },
+        { name: "Gestionnaire", role: "MANAGER" },
+    ]
+const selectedRole = ref(roles[1]);
 const isDialogVisible = ref(false);
 
 const setSelectedUser = (user: any) => {
@@ -95,14 +94,17 @@ const addMember = async () => {
     if (!selectedRole.value || !selectedUser.value)
         return;
 
-    if (props.modelValue?.find(member => member.name === selectedUser.value?.name))
+    if (props.modelValue?.find(member => member.user.name === selectedUser.value?.name))
         return;
 
     props.modelValue?.push({
-        userId: selectedUser.value.id,
+        id: "",
         role: selectedRole.value.role,
-        name: selectedUser.value.name,
-        image: selectedUser.value.image
+        user: {
+            id: selectedUser.value.id,
+            name: selectedUser.value.name,
+            image: selectedUser.value.image
+        }
     });
 
     setDialogVisible(false);

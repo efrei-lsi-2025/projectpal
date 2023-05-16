@@ -63,6 +63,14 @@ export const getTicket = async (id: string) => {
   }
 };
 
+export type ProjectCreationDTO = {
+  name: string,
+  color: string,
+  description: string,
+  client: string,
+
+};
+
 export const createProject = async (project: object) => {
   try {
     const res = await $fetch("/api/projects", {

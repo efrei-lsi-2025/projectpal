@@ -5,10 +5,10 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  clientList: Array<string>,
-  defaultSelected: String
-});
+const props = defineProps<{
+  clientList: Array<string> | undefined,
+  defaultSelected: string | undefined
+}>();
 
 const emit = defineEmits<{
   (event: "client-selected", payload: string): void;
@@ -16,20 +16,23 @@ const emit = defineEmits<{
 
 const clients = ref(props.clientList ?? []);
 const filteredClients: Ref<Array<string>> = ref([]);
-const selectedClient = ref(props.defaultSelected ?? "");
+const selectedClient = ref("");
+
+onMounted(() => {
+  console.log(props.defaultSelected);
+  selectedClient.value = props.defaultSelected ?? "";
+})
 
 watch(selectedClient, (client) => emit("client-selected", client));
 
 const searchClient = (event: { originalEvent: Event; query: string }) => {
-  setTimeout(() => {
-    if (!event.query.trim().length) {
-      filteredClients.value = [...clients.value];
-    } else {
-      filteredClients.value = clients.value.filter((client: string) => {
-        return client.toLowerCase().startsWith(event.query.toLowerCase());
-      });
-    }
-  }, 250);
+  if (!event.query.trim().length) {
+    filteredClients.value = [...clients.value];
+  } else {
+    filteredClients.value = clients.value.filter((client: string) => {
+      return client.toLowerCase().startsWith(event.query.toLowerCase());
+    });
+  }
 };
 </script>
 

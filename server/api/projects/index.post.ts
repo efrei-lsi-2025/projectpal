@@ -15,21 +15,23 @@ export default defineEventHandler(async (event) => {
       client:
         client.length > 0
           ? {
-              connectOrCreate: {
-                where: {
-                  name: client,
-                },
-                create: {
-                  name: client,
-                },
+            connectOrCreate: {
+              where: {
+                name: client,
               },
-            }
+              create: {
+                name: client,
+              },
+            },
+          }
           : undefined,
       color: color,
       members: {
         create: projectMembers,
       },
-      ticketStates: ticketStates,
+      ticketStates: {
+        create: ticketStates,
+      }
     },
   });
 
