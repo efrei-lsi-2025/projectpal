@@ -94,7 +94,10 @@ function validateForm() {
 // Create project on submit
 const createProject = async () => {
 
-    if (!validateForm()) return;
+    if (!validateForm()) {
+        warn("Champs manquants ou invalides.");
+        return;
+    }
 
     if (clientList.value?.includes(selectedClient.value)) {
         // Dialog, selon retour on quitte
@@ -120,7 +123,7 @@ const createProject = async () => {
     });
 
     // Create the project
-    await usePostProject({
+    const created = await usePostProject({
         name: name.value,
         description: description.value,
         color: color.value,
@@ -128,6 +131,12 @@ const createProject = async () => {
         ticketStates: ticketStates,
         projectMembers: projectMembers
     });
+
+    if (created) {
+        success("Projet crée.");
+    } else {
+        error("Échec de la création du projet.")
+    }
 };
 
 </script>

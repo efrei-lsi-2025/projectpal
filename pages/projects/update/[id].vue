@@ -47,9 +47,9 @@ const auth = useAuth();
 const route = useRoute();
 
 // Fetch data
+const project = Number.isInteger(Number(route.params.id)) ? await useGetProjectById(Number(route.params.id)) : null;
 const allUsers = await useGetAllUsers();
 const allClients = ref(await useGetAllClients());
-const project = Number.isInteger(Number(route.params.id)) ? await useGetProjectById(Number(route.params.id)) : null;
 
 // Initialize dropdowns / lookups lists
 const clientList = computed(() => {
@@ -63,8 +63,6 @@ const description = ref(project?.description);
 const color = ref(project?.color);
 const categories: Ref<Array<{ name: string; order: number; projectId: number; }> | undefined> = ref(project?.ticketStates); // TODO
 const selectedClient = ref(project?.clientName ?? "");
-console.log(project?.clientName);
-console.log(selectedClient.value)
 const members: Ref<Array<{ id: string; projectId: number; userId: string; role: string; }> | undefined> = ref(project?.members);
 
 // Create a list with all the informations needed to display the project members (add informations about user)
@@ -115,10 +113,20 @@ function validateForm() {
 // Update project on submit
 const updateProject = async () => {
 
-    if (!validateForm()) return;
+    if (!validateForm()) {
+        warn("Champs manquants ou invalides.");
+        return;
+    }
 
     // TODO : update project
 
+    const updated = true;
+
+    if (updated) {
+        success("Projet modifié.");
+    } else {
+        error("Échec lors de la modification du projet.")
+    }
 };
 
 </script>
