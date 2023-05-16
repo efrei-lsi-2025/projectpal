@@ -19,7 +19,6 @@ const filteredClients: Ref<Array<string>> = ref([]);
 const selectedClient = ref("");
 
 onMounted(() => {
-  console.log(props.defaultSelected);
   selectedClient.value = props.defaultSelected ?? "";
 })
 

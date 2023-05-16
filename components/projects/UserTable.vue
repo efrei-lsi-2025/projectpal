@@ -30,8 +30,8 @@
         <div>
             <div class="field mt-4">
                 <span class="p-float-label">
-                    <UserLookup :user-list="usersAvailable" class="w-full" inputId="lookup"
-                        @user-selected="setSelectedUser"></UserLookup>
+                    <Lookup :list="usersAvailable" class="w-full" inputId="lookup" @selected="setSelectedUser">
+                    </Lookup>
                     <label for="lookup">Utilisateur</label>
                 </span>
             </div>

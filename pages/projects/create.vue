@@ -1,5 +1,5 @@
 <template>
-  <div class="project-layout">
+  <div class="project-layout" v-if="loaded">
     <div class="py-3 align-items-center formgrid grid">
       <div class="field col-12 md:col-6 pr-5">
         <h2 class="mr-4">Nom du projet</h2>
@@ -50,13 +50,15 @@ const description: Ref<string | undefined> = ref("");
 const color: Ref<string | undefined> = ref("bebebe");
 const stateLabels: Ref<Array<string>> = ref([]);
 const selectedClient: Ref<string | undefined> = ref("");
-const members: Ref<Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"] | undefined> = ref([])
+const members: Ref<Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"] | undefined> = ref([]);
+
+let loaded = ref(false);
 
 // Fetch data
 onMounted(async () => {
   allUsers.value = await getUsers();
   allClients.value = await getClients();
-  const user = await getUserByName(auth.data.value?.user?.name || "");
+  const user = await getUser(auth.data.value?.user?.id ?? "");
   if (user) {
     members.value?.push({
       id: "",
@@ -68,6 +70,7 @@ onMounted(async () => {
       }
     });
   }
+  loaded.value = true;
 });
 
 // Initialize dropdowns / lookups lists
