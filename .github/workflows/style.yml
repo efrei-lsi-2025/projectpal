@@ -1,4 +1,4 @@
-name: Check the source code style
+name: Linter
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Check the source code style
+    name: Prettier and ESLint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
