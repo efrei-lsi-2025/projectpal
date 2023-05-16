@@ -7,12 +7,12 @@ import ColorPicker from "primevue/colorpicker";
 import Chips from "primevue/chips";
 import Menu from "primevue/menu";
 import Avatar from "primevue/avatar";
-import AutoComplete from 'primevue/autocomplete'
-import SelectButton from 'primevue/selectbutton'
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
-import Dialog from 'primevue/dialog'
-import Listbox from 'primevue/listbox'
+import AutoComplete from "primevue/autocomplete";
+import SelectButton from "primevue/selectbutton";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Dialog from "primevue/dialog";
+import Listbox from "primevue/listbox";
 
 import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
