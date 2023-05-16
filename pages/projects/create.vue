@@ -3,7 +3,12 @@
     <div class="py-3 align-items-center formgrid grid">
       <div class="field col-12 md:col-6 pr-5">
         <h2 class="mr-4">Nom du projet</h2>
-        <InputText id="name" class="w-10" :class="{ 'p-invalid': errorMessage }" v-model="name" />
+        <InputText
+          id="name"
+          class="w-10"
+          :class="{ 'p-invalid': errorMessage }"
+          v-model="name"
+        />
         <small class="p-error" id="text-error">{{
           errorMessage || "&nbsp;"
         }}</small>
@@ -11,8 +16,12 @@
 
       <div class="field col-12 md:col-6">
         <h2 class="mr-5">Client</h2>
-        <ClientLookup class="mr-6 w-10" @client-selected="setSelectedClient" :client-list="clientList"
-          :default-selected="undefined">
+        <ClientLookup
+          class="mr-6 w-10"
+          @client-selected="setSelectedClient"
+          :client-list="clientList"
+          :default-selected="undefined"
+        >
         </ClientLookup>
         <ColorPicker v-model="color" />
       </div>
@@ -24,7 +33,10 @@
     </div>
 
     <div class="py-3">
-      <ProjectsUserTable :model-value="members ?? []" :users-available="userList"></ProjectsUserTable>
+      <ProjectsUserTable
+        :model-value="members ?? []"
+        :users-available="userList"
+      ></ProjectsUserTable>
     </div>
 
     <div class="py-3">
@@ -33,7 +45,12 @@
     </div>
 
     <div class="py-3">
-      <Button icon="pi pi-check" label="Valider" severity="success" @click="createNewProject" />
+      <Button
+        icon="pi pi-check"
+        label="Valider"
+        severity="success"
+        @click="createNewProject"
+      />
     </div>
   </div>
 </template>
@@ -50,7 +67,10 @@ const description: Ref<string | undefined> = ref("");
 const color: Ref<string | undefined> = ref("bebebe");
 const stateLabels: Ref<Array<string>> = ref([]);
 const selectedClient: Ref<string | undefined> = ref("");
-const members: Ref<Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"] | undefined> = ref([])
+const members: Ref<
+  | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"]
+  | undefined
+> = ref([]);
 
 // Fetch data
 onMounted(async () => {
@@ -65,23 +85,21 @@ onMounted(async () => {
         id: user?.id,
         name: user?.name,
         image: user?.image,
-      }
+      },
     });
   }
 });
 
 // Initialize dropdowns / lookups lists
 const clientList = computed(() => {
-  return allClients.value?.map(client => client.name)
-})
+  return allClients.value?.map((client) => client.name);
+});
 const userList = ref(allUsers);
-
-
 
 // Used by the client lookup to set the selected client
 const setSelectedClient = (client: string) => {
   selectedClient.value = client;
-}
+};
 
 // Form validation
 const errorMessage = ref("");
@@ -99,7 +117,6 @@ function validateForm() {
 
 // Create project on submit
 const createNewProject = async () => {
-
   if (!validateForm()) {
     warn("Champs manquants ou invalides.");
     return;
