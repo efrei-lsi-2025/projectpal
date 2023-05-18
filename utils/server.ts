@@ -6,7 +6,7 @@ export type NoUndefinedField<T> = Exclude<
 
 export const deleteProject = async (id: number) => {
   try {
-    await $fetch(`/api/projects/${id}/delete`);
+    await $fetch(`/api/projects/${id}`, { method: 'DELETE' });
     success("Projet supprimé");
   } catch (err) {
     console.log(err);

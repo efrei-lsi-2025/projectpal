@@ -87,8 +87,6 @@
 </template>
 
 <script setup lang="ts">
-import { del } from "nuxt/dist/app/compat/capi";
-import { idText } from "typescript";
 import { updateProject } from "~/utils/server";
 
 const auth = useAuth();
@@ -121,6 +119,9 @@ onMounted(async () => {
   project.value = Number.isInteger(Number(route.params.id))
     ? await getProject(route.params.id as string)
     : undefined;
+
+  if (project.value?.id === undefined) project.value = undefined;
+
   allUsers.value = await getUsers();
   allClients.value = await getClients();
 
@@ -205,6 +206,8 @@ const deleteThisProject = async () => {
   if (!project.value?.id) return;
 
   await deleteProject(project.value?.id);
+
+  navigateTo("/");
 };
 </script>
 
