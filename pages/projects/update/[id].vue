@@ -201,6 +201,10 @@ const updateThisProject = async () => {
 // Delete project
 const deleteThisProject = async () => {
   isDeleteDialogVisible.value = false;
+
+  if (!project.value?.id) return;
+
+  await deleteProject(project.value?.id);
 };
 </script>
 
