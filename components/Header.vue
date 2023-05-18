@@ -1,30 +1,32 @@
 <template>
   <div class="header">
     <div class="logo">
-      <img
-        src="../assets/branding/logo-inline.svg"
-        alt="ProjectPal Inline Logo"
-      />
+      <NuxtLink to="/"
+        ><img
+          src="../assets/branding/logo-inline.svg"
+          alt="ProjectPal Inline Logo"
+      /></NuxtLink>
     </div>
     <div class="buttons">
       <Button
         severity="secondary"
         class="user-button"
         text
-        @click="toggleMenu"
         aria-haspopup="true"
         aria-controls="overlay_menu"
         size="large"
-        ><Avatar
-          :image="auth.data.value?.user?.image"
+        @click="toggleMenu"
+      >
+        <Avatar
+          :image="auth.data.value?.user?.image ?? undefined"
           size="normal"
           shape="circle"
         />
       </Button>
       <Menu
+        id="overlay_menu"
         ref="menu"
         append-to="self"
-        id="overlay_menu"
         :model="userItems"
         :popup="true"
       />
@@ -44,17 +46,17 @@ const toggleMenu = (event: any) => {
 
 const userItems = ref([
   {
-    label: "Profile",
+    label: "Profil",
     icon: "pi pi-fw pi-user",
-    command: () => $router.push("profile"),
+    command: () => $router.push(`/profile/${auth.data.value?.user?.id}`),
   },
   {
-    label: "Settings",
+    label: "Paramètres",
     icon: "pi pi-fw pi-cog",
-    command: () => $router.push("settings"),
+    command: () => $router.push("/settings"),
   },
   {
-    label: "Logout",
+    label: "Se déconnecter",
     icon: "pi pi-fw pi-power-off",
     command: () => auth.signOut(),
   },
