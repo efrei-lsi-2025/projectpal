@@ -40,12 +40,13 @@
       <ProjectsUserTable
         :model-value="members ?? []"
         :users-available="userList"
+        @member-added="addMember"
       ></ProjectsUserTable>
     </div>
 
     <div class="py-3">
       <h2>Catégories</h2>
-      <Chips v-model="categories" class="block" disabled />
+      <Chips v-model="stateLabels" class="block" disabled />
     </div>
 
     <div class="py-3">
@@ -53,7 +54,7 @@
         icon="pi pi-check"
         label="Valider"
         severity="success"
-        @click="updateProject"
+        @click="updateThisProject"
       ></Button>
     </div>
   </div>
@@ -64,6 +65,9 @@
 </template>
 
 <script setup lang="ts">
+import { idText } from 'typescript';
+import { updateProject } from '~/utils/server';
+
 const auth = useAuth();
 const route = useRoute();
 
@@ -79,12 +83,13 @@ const categories: Ref<
   | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["ticketStates"]
   | undefined
 > = ref();
-
+const stateLabels: Ref<Array<string>> = ref([]);
 const selectedClient: Ref<string | undefined> = ref();
 const members: Ref<
   | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"]
   | undefined
 > = ref();
+const newMembers: typeof members = ref([]);
 const loaded = ref(false);
 
 // Fetch data
@@ -99,6 +104,7 @@ onMounted(async () => {
   description.value = project.value?.description;
   color.value = project.value?.color;
   categories.value = project.value?.ticketStates;
+  stateLabels.value = categories.value?.map(category => category.name) ?? [];
   selectedClient.value = project.value?.client.name ?? "";
   members.value = project.value?.members;
   loaded.value = true;
@@ -114,6 +120,11 @@ const userList = ref(allUsers);
 const setSelectedClient = (client: string) => {
   selectedClient.value = client;
 };
+
+// Track new members
+const addMember = (member: Exclude<(typeof members)["value"], undefined>[number]) => {
+  newMembers.value?.push(member);
+}
 
 // Form validation
 const nameErrorMessage = ref("");
@@ -141,21 +152,20 @@ function validateForm() {
 }
 
 // Update project on submit
-const updateProject = async () => {
+const updateThisProject = async () => {
   if (!validateForm()) {
     warn("Champs manquants ou invalides.");
     return;
   }
 
-  // TODO : update project
-
-  const updated = true;
-
-  if (updated) {
-    success("Projet modifié.");
-  } else {
-    error("Échec lors de la modification du projet.");
-  }
+  await updateProject(project.value?.id ?? 0, {
+    id: project.value?.id ?? 0,
+    name: name.value ?? "",
+    description: description.value ?? "",
+    color: color.value ?? "",
+    client: selectedClient.value ?? "",
+    newMembers: newMembers.value?.map(member => ({ userId: member.user.id, role: member.role })) ?? [],
+  });
 };
 </script>
 

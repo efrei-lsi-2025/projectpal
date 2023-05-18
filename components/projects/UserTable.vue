@@ -102,6 +102,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: "update:modelValue", payload: typeof props.modelValue): void;
+  (event: "memberAdded", payload: typeof props.modelValue[number]): void;
 }>();
 
 // Add user dialog
@@ -127,7 +128,7 @@ const setSelectedUser = (user: any) => {
 const setDialogVisible = (value: boolean) => {
   isDialogVisible.value = value;
   if (!value) {
-    selectedRole.value = roles[0];
+    selectedRole.value = roles[1];
   }
 };
 
@@ -141,7 +142,7 @@ const addMember = async () => {
   )
     return;
 
-  props.modelValue?.push({
+  const newMember = {
     id: "",
     role: selectedRole.value.role,
     user: {
@@ -149,7 +150,10 @@ const addMember = async () => {
       name: selectedUser.value.name,
       image: selectedUser.value.image,
     },
-  });
+  }
+
+  props.modelValue?.push(newMember);
+  emit("memberAdded", newMember);
 
   setDialogVisible(false);
 };
