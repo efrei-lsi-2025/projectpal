@@ -146,14 +146,14 @@ const createNewProject = async () => {
       userId: member.user.id,
       role: member.role,
     };
-  });
+  }) ?? [];
 
   // Create the project
   await createProject({
-    name: name.value,
-    description: description.value,
-    color: color.value,
-    client: selectedClient.value,
+    name: name.value ?? "",
+    description: description.value ?? "",
+    color: color.value ?? "",
+    client: selectedClient.value ?? "",
     ticketStates,
     projectMembers,
   });

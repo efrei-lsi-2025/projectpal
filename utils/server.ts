@@ -75,17 +75,26 @@ export const getTicket = async (id: string) => {
 
 export type ProjectCreationDTO = {
   name: string;
-  color: string;
   description: string;
+  color: string;
   client: string;
+  ticketStates: Array<{
+    name: string,
+    order: number
+  }>;
+  projectMembers: Array<{
+    userId: string,
+    role: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"][number]["role"]
+  }>
 };
 
-export const createProject = async (project: object) => {
+export const createProject = async (project: ProjectCreationDTO) => {
   try {
     const res = await $fetch("/api/projects", {
       method: "POST",
       body: project,
     });
+    success("Projet créé.");
     return res as NoUndefinedField<typeof res>;
   } catch (err) {
     console.log(err);
@@ -128,5 +137,31 @@ export const updateTicket = async (id: string, ticket: object) => {
   } catch (err) {
     console.log(err);
     error("Erreur lors de la mise à jour du ticket.");
+  }
+};
+
+export type ProjectUpdateDTO = {
+  id: number,
+  name: string;
+  description: string;
+  color: string;
+  client: string;
+  newMembers: Array<{
+    userId: string,
+    role: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"][number]["role"]
+  }>;
+};
+
+export const updateProject = async (id: number, project: ProjectUpdateDTO) => {
+  try {
+    const res = await $fetch(`/api/projects/${id}`, {
+      method: "PUT",
+      body: project
+    });
+    success("Projet mis à jour.");
+    return res as NoUndefinedField<typeof res>;
+  } catch (err) {
+    console.log(err);
+    error("Erreur lors de la mise à jour du projet.");
   }
 };
