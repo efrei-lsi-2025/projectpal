@@ -49,15 +49,37 @@
       <Chips v-model="stateLabels" class="block" disabled />
     </div>
 
-    <div class="py-3">
+    <div class="py-3 flex justify-content-between">
       <Button
         icon="pi pi-check"
         label="Valider"
         severity="success"
         @click="updateThisProject"
       ></Button>
+
+      <Button
+        icon="pi pi-trash"
+        label="Supprimer"
+        severity="danger"
+        @click="() => (isDeleteDialogVisible = true)"
+      ></Button>
     </div>
+
+    <Dialog
+      v-model:visible="isDeleteDialogVisible"
+      modal
+      header="Attention"
+      class="w-5"
+      :draggable="false"
+    >
+      <ProjectsDeleteDialog
+        :project-name="project.name"
+        @delete="deleteThisProject"
+      >
+      </ProjectsDeleteDialog>
+    </Dialog>
   </div>
+
   <div v-if="!project && loaded" class="project-layout">
     <h1 style="color: #f83a3a; font-size: x-large">Projet introuvable</h1>
     <p>Id : {{ route.params.id }}</p>
@@ -65,13 +87,15 @@
 </template>
 
 <script setup lang="ts">
-import { idText } from 'typescript';
-import { updateProject } from '~/utils/server';
+import { del } from "nuxt/dist/app/compat/capi";
+import { idText } from "typescript";
+import { updateProject } from "~/utils/server";
 
 const auth = useAuth();
 const route = useRoute();
 
 // Init variables
+const isDeleteDialogVisible = ref(false);
 const project: Ref<Awaited<ReturnType<typeof getProject>>> = ref();
 const allUsers: Ref<Awaited<ReturnType<typeof getUsers>>> = ref();
 const allClients: Ref<Awaited<ReturnType<typeof getClients>>> = ref();
@@ -90,9 +114,9 @@ const members: Ref<
   | undefined
 > = ref();
 const newMembers: typeof members = ref([]);
-const loaded = ref(false);
 
 // Fetch data
+const loaded = ref(false);
 onMounted(async () => {
   project.value = Number.isInteger(Number(route.params.id))
     ? await getProject(route.params.id as string)
@@ -104,7 +128,7 @@ onMounted(async () => {
   description.value = project.value?.description;
   color.value = project.value?.color;
   categories.value = project.value?.ticketStates;
-  stateLabels.value = categories.value?.map(category => category.name) ?? [];
+  stateLabels.value = categories.value?.map((category) => category.name) ?? [];
   selectedClient.value = project.value?.client.name ?? "";
   members.value = project.value?.members;
   loaded.value = true;
@@ -122,9 +146,11 @@ const setSelectedClient = (client: string) => {
 };
 
 // Track new members
-const addMember = (member: Exclude<(typeof members)["value"], undefined>[number]) => {
+const addMember = (
+  member: Exclude<(typeof members)["value"], undefined>[number]
+) => {
   newMembers.value?.push(member);
-}
+};
 
 // Form validation
 const nameErrorMessage = ref("");
@@ -164,8 +190,17 @@ const updateThisProject = async () => {
     description: description.value ?? "",
     color: color.value ?? "",
     client: selectedClient.value ?? "",
-    newMembers: newMembers.value?.map(member => ({ userId: member.user.id, role: member.role })) ?? [],
+    newMembers:
+      newMembers.value?.map((member) => ({
+        userId: member.user.id,
+        role: member.role,
+      })) ?? [],
   });
+};
+
+// Delete project
+const deleteThisProject = async () => {
+  isDeleteDialogVisible.value = false;
 };
 </script>
 
