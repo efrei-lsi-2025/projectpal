@@ -42,7 +42,7 @@
   <Dialog
     v-model:visible="isDialogVisible"
     modal
-    header="Add User"
+    header="Ajouter un membre au projet"
     class="w-5"
     :draggable="false"
   >

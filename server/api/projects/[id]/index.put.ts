@@ -1,6 +1,5 @@
 import { prisma } from "~/server/plugins/prisma";
 import { ProjectUpdateDTO } from "~/utils/server";
-import { ProjectMember } from "@prisma/client";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params?.id;
