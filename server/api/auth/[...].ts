@@ -1,7 +1,7 @@
-import { NuxtAuthHandler } from "#auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prisma } from "~/server/plugins/prisma";
 import GithubProvider from "next-auth/providers/github";
+import { NuxtAuthHandler } from "#auth";
+import { prisma } from "~/server/plugins/prisma";
 
 const config = useRuntimeConfig();
 
@@ -15,6 +15,12 @@ export default NuxtAuthHandler({
       clientSecret: config.github.clientSecret,
     }),
   ],
+  callbacks: {
+    session({ session, user }) {
+      session.user.id = user.id;
+      return session;
+    },
+  },
   pages: {
     signIn: "/auth/login",
   },

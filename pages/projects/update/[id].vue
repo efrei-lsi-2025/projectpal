@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loaded" class="project-layout">
+  <div v-if="project && loaded" class="project-layout">
     <div class="py-3 align-items-center formgrid grid">
       <div class="field col-12 md:col-6 pr-5">
         <h2 class="mr-4">Nom du projet</h2>
@@ -7,19 +7,20 @@
           id="name"
           v-model="name"
           class="w-10"
-          :class="{ 'p-invalid': errorMessage }"
+          :class="{ 'p-invalid': nameErrorMessage }"
         />
         <small id="text-error" class="p-error">{{
-          errorMessage || "&nbsp;"
+          nameErrorMessage || "&nbsp;"
         }}</small>
       </div>
 
       <div class="field col-12 md:col-6">
         <h2 class="mr-5">Client</h2>
         <ClientLookup
+          v-if="loaded"
           class="mr-6 w-10"
           :client-list="clientList"
-          :default-selected="undefined"
+          :default-selected="selectedClient"
           @client-selected="setSelectedClient"
         >
         </ClientLookup>
@@ -33,6 +34,9 @@
     </div>
 
     <div class="py-3">
+      <small id="text-error" class="p-error">{{
+        membersErrorMessage || "&nbsp;"
+      }}</small>
       <ProjectsUserTable
         :model-value="members ?? []"
         :users-available="userList"
@@ -41,7 +45,7 @@
 
     <div class="py-3">
       <h2>Catégories</h2>
-      <Chips v-model="stateLabels" class="block" />
+      <Chips v-model="categories" class="block" disabled />
     </div>
 
     <div class="py-3">
@@ -49,47 +53,54 @@
         icon="pi pi-check"
         label="Valider"
         severity="success"
-        @click="createNewProject"
-      />
+        @click="updateProject"
+      ></Button>
     </div>
+  </div>
+  <div v-if="!project && loaded" class="project-layout">
+    <h1 style="color: #f83a3a; font-size: x-large">Projet introuvable</h1>
+    <p>Id : {{ route.params.id }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
 const auth = useAuth();
+const route = useRoute();
 
 // Init variables
+const project: Ref<Awaited<ReturnType<typeof getProject>>> = ref();
 const allUsers: Ref<Awaited<ReturnType<typeof getUsers>>> = ref();
 const allClients: Ref<Awaited<ReturnType<typeof getClients>>> = ref();
 
-const name: Ref<string | undefined> = ref("");
-const description: Ref<string | undefined> = ref("");
-const color: Ref<string | undefined> = ref("bebebe");
-const stateLabels: Ref<Array<string>> = ref([]);
-const selectedClient: Ref<string | undefined> = ref("");
+const name: Ref<string | undefined> = ref();
+const description: Ref<string | undefined> = ref();
+const color: Ref<string | undefined> = ref();
+const categories: Ref<
+  | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["ticketStates"]
+  | undefined
+> = ref();
+
+const selectedClient: Ref<string | undefined> = ref();
 const members: Ref<
   | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"]
   | undefined
-> = ref([]);
-
+> = ref();
 const loaded = ref(false);
 
 // Fetch data
 onMounted(async () => {
+  project.value = Number.isInteger(Number(route.params.id))
+    ? await getProject(route.params.id as string)
+    : undefined;
   allUsers.value = await getUsers();
   allClients.value = await getClients();
-  const user = await getUser(auth.data.value?.user?.id ?? "");
-  if (user) {
-    members.value?.push({
-      id: "",
-      role: "OWNER",
-      user: {
-        id: user?.id,
-        name: user?.name,
-        image: user?.image,
-      },
-    });
-  }
+
+  name.value = project.value?.name;
+  description.value = project.value?.description;
+  color.value = project.value?.color;
+  categories.value = project.value?.ticketStates;
+  selectedClient.value = project.value?.client.name ?? "";
+  members.value = project.value?.members;
   loaded.value = true;
 });
 
@@ -105,58 +116,46 @@ const setSelectedClient = (client: string) => {
 };
 
 // Form validation
-const errorMessage = ref("");
+const nameErrorMessage = ref("");
+const membersErrorMessage = ref("");
 
 function validateForm() {
+  let valid = true;
+
   if (!name.value) {
-    errorMessage.value = "Un nom de projet est requis.";
-  } else {
-    errorMessage.value = "";
-    return true;
+    nameErrorMessage.value = "Un nom de projet est requis.";
+    valid = false;
   }
 
-  return false;
+  if (!members.value?.find((member) => member.role === "OWNER")) {
+    membersErrorMessage.value =
+      "Un membre du projet avec le rôle OWNER est requis.";
+  }
+
+  if (valid) {
+    nameErrorMessage.value = "";
+    membersErrorMessage.value = "";
+  }
+
+  return valid;
 }
 
-// Create project on submit
-const createNewProject = async () => {
+// Update project on submit
+const updateProject = async () => {
   if (!validateForm()) {
     warn("Champs manquants ou invalides.");
     return;
   }
 
-  if (clientList.value?.includes(selectedClient.value ?? "")) {
-    // Dialog, selon retour on quitte
+  // TODO : update project
+
+  const updated = true;
+
+  if (updated) {
+    success("Projet modifié.");
+  } else {
+    error("Échec lors de la modification du projet.");
   }
-
-  // Give order to the ticket states and add in a list
-  const ticketStates: Array<{ name: string; order: number }> = [];
-  let i = 0;
-
-  stateLabels.value?.forEach((label) => {
-    ticketStates.push({
-      name: label,
-      order: i++,
-    });
-  });
-
-  // Create list of members with userId and role
-  const projectMembers = members.value?.map((member) => {
-    return {
-      userId: member.user.id,
-      role: member.role,
-    };
-  });
-
-  // Create the project
-  await createProject({
-    name: name.value,
-    description: description.value,
-    color: color.value,
-    client: selectedClient.value,
-    ticketStates,
-    projectMembers,
-  });
 };
 </script>
 

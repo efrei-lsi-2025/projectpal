@@ -7,10 +7,13 @@ export default defineNuxtConfig({
     "primeflex/primeflex.css",
     "primeicons/primeicons.css",
   ],
+
   modules: ["@sidebase/nuxt-auth"],
+
   build: {
     transpile: ["primevue"],
   },
+
   runtimeConfig: {
     secret: process.env.APP_SECRET,
     github: {
@@ -28,5 +31,9 @@ export default defineNuxtConfig({
         env: process.env.VERCEL_ENV,
       },
     },
+  },
+
+  devtools: {
+    enabled: true,
   },
 });
