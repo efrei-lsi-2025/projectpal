@@ -130,7 +130,7 @@ onMounted(async () => {
   color.value = project.value?.color;
   categories.value = project.value?.ticketStates;
   stateLabels.value = categories.value?.map((category) => category.name) ?? [];
-  selectedClient.value = project.value?.client.name ?? "";
+  selectedClient.value = project.value?.client?.name ?? "";
   members.value = project.value?.members;
   loaded.value = true;
 });
