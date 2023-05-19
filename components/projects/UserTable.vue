@@ -310,7 +310,7 @@ const deleteMember = async () => {
 
   props.modelValue.splice(currentMemberIndex, 1);
   emit("memberDeleted", selectedMember.value);
-  updateOverlay.value.hide();
+  deleteOverlay.value.hide();
 };
 </script>
 
