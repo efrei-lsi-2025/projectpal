@@ -157,10 +157,12 @@ export type ProjectUpdateDTO = {
   description: string;
   color: string;
   client: string;
-  newMembers: Array<{
+  newMembers?: Array<{
     userId: string,
     role: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"][number]["role"]
   }>;
+  updateMembers?: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"];
+  deleteMembers?: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"];
 };
 
 export const updateProject = async (id: number, project: ProjectUpdateDTO) => {

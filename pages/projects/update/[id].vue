@@ -112,6 +112,8 @@ const members: Ref<
   | undefined
 > = ref();
 const newMembers: typeof members = ref([]);
+const updateMembers: typeof members = ref([]);
+const deleteMembers: typeof members = ref([]);
 
 // Fetch data
 const loaded = ref(false);
