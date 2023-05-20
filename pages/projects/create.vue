@@ -1,4 +1,14 @@
 <template>
+  <div class="flex justify-content-end -mt-8 mb-6 mr-8 pt-2">
+    <Button
+      icon="pi pi-arrow-left"
+      label="Retour"
+      class=""
+      size="small"
+      @click="$router.back()"
+    ></Button>
+  </div>
+
   <div v-if="loaded" class="project-layout">
     <div class="py-3 align-items-center formgrid grid">
       <div class="field col-12 md:col-6 pr-5">
@@ -141,12 +151,13 @@ const createNewProject = async () => {
   });
 
   // Create list of members with userId and role
-  const projectMembers = members.value?.map((member) => {
-    return {
-      userId: member.user.id,
-      role: member.role,
-    };
-  }) ?? [];
+  const projectMembers =
+    members.value?.map((member) => {
+      return {
+        userId: member.user.id,
+        role: member.role,
+      };
+    }) ?? [];
 
   // Create the project
   await createProject({

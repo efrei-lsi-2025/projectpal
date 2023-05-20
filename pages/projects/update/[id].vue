@@ -1,4 +1,14 @@
 <template>
+  <div class="flex justify-content-end -mt-8 mb-6 mr-8 pt-2">
+    <Button
+      icon="pi pi-arrow-left"
+      label="Retour"
+      class=""
+      size="small"
+      @click="$router.back()"
+    ></Button>
+  </div>
+
   <div v-if="project && loaded" class="project-layout">
     <div class="py-3 align-items-center formgrid grid">
       <div class="field col-12 md:col-6 pr-5">
