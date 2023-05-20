@@ -41,6 +41,8 @@
         :model-value="members ?? []"
         :users-available="userList"
         @member-added="addMember"
+        @member-edited="updateMember"
+        @member-deleted="deleteMember"
       ></ProjectsUserTable>
     </div>
 
@@ -112,6 +114,8 @@ const members: Ref<
   | undefined
 > = ref();
 const newMembers: typeof members = ref([]);
+const updatedMembers: typeof members = ref([]);
+const deletedMembers: typeof members = ref([]);
 
 // Fetch data
 const loaded = ref(false);
@@ -152,6 +156,22 @@ const addMember = (
 ) => {
   newMembers.value?.push(member);
 };
+
+// Tracl members to update
+const updateMember = (
+  member: Exclude<(typeof members)["value"], undefined>[number]
+) => {
+  updatedMembers.value?.push(member);
+};
+
+// Track members to delete
+const deleteMember = (
+  member: Exclude<(typeof members)["value"], undefined>[number]
+) => {
+  deletedMembers.value?.push(member);
+};
+
+// Track members to delete
 
 // Form validation
 const nameErrorMessage = ref("");
@@ -196,6 +216,8 @@ const updateThisProject = async () => {
         userId: member.user.id,
         role: member.role,
       })) ?? [],
+    updateMembers: updatedMembers.value,
+    deleteMembers: deletedMembers.value,
   });
 };
 
