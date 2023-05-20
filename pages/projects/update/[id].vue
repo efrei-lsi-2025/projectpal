@@ -28,7 +28,7 @@
         <h2 class="mr-5">Client</h2>
         <ClientLookup
           v-if="loaded"
-          auto-complete-class="mr-6 w-10"
+          class="mr-6 w-10"
           :client-list="clientList"
           :default-selected="selectedClient"
           @client-selected="setSelectedClient"
@@ -66,7 +66,7 @@
         icon="pi pi-check"
         label="Valider"
         severity="success"
-        @click="updateThisProject"
+        @click="tryUpdateThisProject"
       ></Button>
 
       <Button
@@ -90,6 +90,34 @@
       >
       </ProjectsDeleteDialog>
     </Dialog>
+
+    <Dialog
+      v-model:visible="isClientDialogVisible"
+      modal
+      :draggable="false"
+      :closable="false"
+      header="Souhaitez-vous créer un nouveau client ?"
+    >
+      <div class="">
+        <div class="flex justify-content-center">
+          <Button
+            rounded
+            outlined
+            icon="pi pi-check"
+            severity="success"
+            class="mr-3"
+            @click="confirmCreateClient(true)"
+          ></Button>
+          <Button
+            rounded
+            outlined
+            icon="pi pi-times"
+            severity="danger"
+            @click="confirmCreateClient(false)"
+          ></Button>
+        </div>
+      </div>
+    </Dialog>
   </div>
 
   <div v-if="!project && loaded" class="project-layout">
@@ -106,6 +134,8 @@ const route = useRoute();
 
 // Init variables
 const isDeleteDialogVisible = ref(false);
+const isClientDialogVisible = ref(false);
+
 const project: Ref<Awaited<ReturnType<typeof getProject>>> = ref();
 const allUsers: Ref<Awaited<ReturnType<typeof getUsers>>> = ref();
 const allClients: Ref<Awaited<ReturnType<typeof getClients>>> = ref();
@@ -208,6 +238,32 @@ function validateForm() {
   return valid;
 }
 
+// Check if form is valid before creating the project
+const tryUpdateThisProject = () => {
+  if (!validateForm()) {
+    warn("Champs manquants ou invalides.");
+    return;
+  }
+
+  if (
+    selectedClient.value !== "" &&
+    clientList.value?.indexOf(selectedClient.value ?? "") == -1
+  ) {
+    isClientDialogVisible.value = true;
+  } else {
+    updateThisProject();
+  }
+};
+
+// In case selectClient does not exist yet, confirm its creation
+const confirmCreateClient = (confirm: boolean) => {
+  isClientDialogVisible.value = false;
+
+  if (confirm) {
+    updateThisProject();
+  }
+};
+
 // Update project on submit
 const updateThisProject = async () => {
   if (!validateForm()) {
@@ -229,6 +285,8 @@ const updateThisProject = async () => {
     updateMembers: updatedMembers.value,
     deleteMembers: deletedMembers.value,
   });
+
+  navigateTo(`/projects/${route.params.id}`);
 };
 
 // Delete project
