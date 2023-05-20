@@ -28,7 +28,7 @@
         <h2 class="mr-5">Client</h2>
         <ClientLookup
           v-if="loaded"
-          class="mr-6 w-10"
+          auto-complete-class="mr-6 w-10"
           :client-list="clientList"
           :default-selected="selectedClient"
           @client-selected="setSelectedClient"

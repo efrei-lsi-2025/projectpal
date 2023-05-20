@@ -27,7 +27,7 @@
       <div class="field col-12 md:col-6">
         <h2 class="mr-5">Client</h2>
         <ClientLookup
-          class="mr-6 w-10"
+          auto-complete-class="mr-6 w-10"
           :client-list="clientList"
           :default-selected="undefined"
           @client-selected="setSelectedClient"
