@@ -178,3 +178,18 @@ export const updateProject = async (id: number, project: ProjectUpdateDTO) => {
     error("Erreur lors de la mise à jour du projet.");
   }
 };
+
+export const createLog = async (userId: string, text: string) => {
+  try {
+    const res = await $fetch('/api/log', {
+      method: "POST",
+      body: {
+        userId: userId,
+        text: text
+      }
+    });
+    return res as NoUndefinedField<typeof res>;
+  } catch (err) {
+    console.log(err);
+  }
+}
