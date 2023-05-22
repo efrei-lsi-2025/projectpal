@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
         select: {
           project: {
             select: {
+              color: true,
               client: true,
               members: {
                 select: {

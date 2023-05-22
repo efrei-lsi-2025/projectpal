@@ -1,5 +1,5 @@
 <template>
-  <div class="project">
+  <div class="project" :style="{ 'border-color': '#' + props.project.color }">
     <NuxtLink to="/projects/16">
       <h3>{{ props.project.name }}</h3>
       <p>
@@ -47,10 +47,10 @@ const plusMember = memberNumber - 3;
   border-radius: 5px;
   padding: 0.2rem 1rem;
   margin-top: 1rem;
+  border-left: solid 0.5rem;
 
   &:hover {
     box-shadow: 0 0 5px rgb(255, 0, 0);
-    // background-color: greenyellow;
     cursor: pointer;
   }
 
