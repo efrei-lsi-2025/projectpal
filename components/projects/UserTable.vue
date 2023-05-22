@@ -118,7 +118,7 @@ const roles: Array<{
 const selectedRole = ref(roles[1]);
 const isDialogVisible = ref(false);
 
-const setSelectedUser = (user: any) => {
+const setSelectedUser = (user: string) => {
   if (typeof user !== "string" && user !== null) {
     selectedUser.value = user;
   }

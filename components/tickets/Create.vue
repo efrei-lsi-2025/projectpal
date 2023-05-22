@@ -76,9 +76,9 @@ const description = ref();
 const assignee: Ref<Exclude<typeof props.members, undefined>[number] | null> =
   ref(null);
 
-const setAssignee = ({ id }: { id: string }) => {
+const setAssignee = (userId: string) => {
   assignee.value =
-    props.members?.find((member) => member.user.id === id) ?? null;
+    props.members?.find((member) => member.user.id === userId) ?? null;
 };
 
 const submitTicket = async () => {
