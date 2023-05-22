@@ -201,7 +201,7 @@ async function submitTicket(dto: TicketCreationDTO) {
 }
 
 async function submitModifiedTicket(dto: TicketCreationDTO) {
-  await updateTicket(id, dto);
+  await updateTicket(id, dto); // TO DO ( get ticket ID)
   isDialogVisibleModifyTicket.value = false;
   project.value = await getProject(id);
 }

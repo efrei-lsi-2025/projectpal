@@ -92,7 +92,7 @@ onMounted(() => {
 
 const setAssignee = ({ id }: { id: string }) => {
   assignee.value =
-    props.members?.find((member) => member.user.id === id) ?? null;
+    props.members?.find((member) => member.user.name === id) ?? null;
 };
 
 const submitTicket = async () => {
