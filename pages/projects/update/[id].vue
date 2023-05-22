@@ -285,6 +285,9 @@ const updateThisProject = async () => {
     updateMembers: updatedMembers.value,
     deleteMembers: deletedMembers.value,
   });
+  await createLog(
+    "a mis à jour #" + String(project.value?.id) + " - " + project.value?.name
+  );
 
   navigateTo(`/projects/${route.params.id}`);
 };
@@ -296,6 +299,12 @@ const deleteThisProject = async () => {
   if (!project.value?.id) return;
 
   await deleteProject(project.value?.id);
+  await createLog(
+    "a supprimé le projet #" +
+      String(project.value.id) +
+      " - " +
+      project.value.name
+  );
 
   navigateTo("/");
 };

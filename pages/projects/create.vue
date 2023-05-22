@@ -238,6 +238,13 @@ const createNewProject = async () => {
     projectMembers,
   });
 
+  await createLog(
+    "a créé le projet #" +
+      String(projectCreated?.id) +
+      " - " +
+      projectCreated?.name
+  );
+
   navigateTo(`/projects/${projectCreated?.id}`);
 };
 </script>
