@@ -27,6 +27,23 @@
     <div class="title">
       <h3>{{ project?.client?.name }}</h3>
       <h1>{{ project?.name }}</h1>
+      <div>
+        <AvatarGroup>
+          <Avatar
+            v-for="member in project?.members.slice(0, 5)"
+            :key="member.id + 'Avatar'"
+            :image="member.user.image"
+            size="normal"
+            shape="circle"
+          />
+          <Avatar
+            size="normal"
+            shape="circle"
+            v-if="(project?.members.length ?? 0) > 5"
+            :label="'+' + String((project?.members.length ?? 0) - 6)"
+          />
+        </AvatarGroup>
+      </div>
     </div>
     <div class="description">
       <p>{{ project?.description }}</p>

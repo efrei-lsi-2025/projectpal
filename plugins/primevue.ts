@@ -7,6 +7,7 @@ import ColorPicker from "primevue/colorpicker";
 import Chips from "primevue/chips";
 import Menu from "primevue/menu";
 import Avatar from "primevue/avatar";
+import AvatarGroup from "primevue/avatargroup";
 import AutoComplete from "primevue/autocomplete";
 import SelectButton from "primevue/selectbutton";
 import DataTable from "primevue/datatable";
@@ -30,6 +31,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component("Chips", Chips);
   nuxtApp.vueApp.component("Menu", Menu);
   nuxtApp.vueApp.component("Avatar", Avatar);
+  nuxtApp.vueApp.component("AvatarGroup", AvatarGroup);
   nuxtApp.vueApp.component("AutoComplete", AutoComplete);
   nuxtApp.vueApp.component("SelectButton", SelectButton);
   nuxtApp.vueApp.component("DataTable", DataTable);
