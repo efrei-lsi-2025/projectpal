@@ -119,7 +119,7 @@ export type TicketCreationDTO = {
   name: string;
   description: string;
   assignee: string;
-  status: string;
+  state: string;
 };
 
 export const createTicket = async (
@@ -139,7 +139,7 @@ export const createTicket = async (
   }
 };
 
-export const updateTicket = async (id: string, ticket: TicketCreationDTO) => {
+export const updateTicket = async (id: number, ticket: TicketCreationDTO) => {
   try {
     const res = await $fetch(`/api/tickets/${id}`, {
       method: "PUT",
@@ -201,5 +201,16 @@ export const createLog = async (text: string) => {
     return res as NoUndefinedField<typeof res>;
   } catch (err) {
     console.log(err);
+  }
+
+
+}
+export const getLogs = async (userId: string) => {
+  try {
+    const res = await $fetch(`/api/log/${userId}`);
+    return res as NoUndefinedField<typeof res>;
+  } catch (err) {
+    console.log(err);
+    error("Erreur lors de la récupération du log.");
   }
 }

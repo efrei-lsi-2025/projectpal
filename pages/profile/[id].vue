@@ -1,46 +1,41 @@
 <template>
-  <div class="profile-header flex">
-    <div>
-      <Avatar :image="user?.image" shape="circle"
-        style="width: 150%; height: 150%; max-width: 150px; max-height: 150px;" />
+  <div class="grid">
+    <div class="col-3">
+      <Avatar
+        :image="user?.image"
+        shape="circle"
+        style="width: 150%; height: 150%; max-width: 150px; max-height: 150px"
+      />
 
       <h1>{{ user?.name }}</h1>
       <h3>
         {{ user?.projects.length }} projets pour
-        {{
-          user?.projects.length
-        }}
-        tickets assignés
+        {{ user?.projects.length }} tickets assignés
       </h3>
-
     </div>
 
-    <div>
-      <h1>Projets Attribué</h1>
-
-      <div class="test flex">
-
-        <div v-for="project in user?.projects">
-          <ProjectsCard  class="" :project="{ clientName :project.project.client.name,
-                                    projectMembers :project.project.members,
-                                    projectName : project.project.name}" ></ProjectsCard>
-          <!-- <LogLine :projectId="project.projectId">
-          </LogLine> -->
-        </div>
-
-
-      </div>
-      <p class="recent-activity ">
-      <h1>Activité récente</h1>
-      </p>
+    <div class="col-8">
       <div>
-        <DataTable :value="user?.logs" paginator :rows="5" :rows-per-page-options="[5, 10, 20, 50]"
-          table-style="min-width: 50rem">
-          <Column field="createdAt" header="Date" style="width: 25%"></Column>
-          <!-- <Column field="user" header="User" style="width: 25%"></Column> -->
-          <Column field="text" header="Description" style="width: 25%"></Column>
-        </DataTable>
+        <h1>Projets attribué</h1>
+        <div class="test flex flex-wrap">
+          <div v-for="projectMember in user?.projects">
+            <ProjectsCard
+              class=""
+              :project="projectMember.project"
+            ></ProjectsCard>
+          </div>
+        </div>
+      </div>
 
+      <div class="recent-activity">
+        <h1>Activité récente</h1>
+        <div v-for="log in logs?.slice(0, 15)">
+          <p>
+            <span class="strong">{{ log.user.name }}</span
+            >&nbsp; <span>{{ log.text }}</span> le&nbsp;
+            <span>{{ new Date(log.createdAt).toDateString() }}</span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -54,23 +49,15 @@ const userId =
   (route.params.id as string) || (auth.data.value?.user.id as string);
 
 const user: Ref<Awaited<ReturnType<typeof getUser>>> = ref();
-
-
+const logs: Ref<Awaited<ReturnType<typeof getLogs>>> = ref();
 
 onMounted(async () => {
   user.value = await getUser(userId);
+  logs.value = await getLogs(userId);
 });
-
 </script>
 
 <style scoped lang="scss">
-.profile-header {
-  // align-items: center;
-  gap: 5rem;
-  display: flex;
-  margin-top: 2rem;
-}
-
 .recent-activity {
   gap: 2rem;
   margin-top: 5rem;
@@ -79,5 +66,9 @@ onMounted(async () => {
 .test {
   gap: 2rem;
   margin-top: 2rem;
+}
+
+.strong {
+  font-weight: bold;
 }
 </style>

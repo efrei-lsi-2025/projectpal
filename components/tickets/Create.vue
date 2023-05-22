@@ -91,16 +91,18 @@ onMounted(() => {
 });
 
 const setAssignee = ({ id }: { id: string }) => {
+  console.log(assignee.value);
   assignee.value =
-    props.members?.find((member) => member.user.name === id) ?? null;
+    props.members?.find((member) => member.user.id === id) ?? null;
 };
 
 const submitTicket = async () => {
+  console.log(assignee.value);
   const ticket: TicketCreationDTO = {
     name: name.value,
     description: description.value,
     assignee: assignee.value?.user.id ?? "",
-    status: props.status,
+    state: props.status,
   };
 
   emit("submit", ticket);

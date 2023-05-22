@@ -8,27 +8,30 @@ export default defineEventHandler(async (event) => {
     where: {
       id: event.context.params?.id,
     },
-    select:{
+    select: {
+      id: true,
+      image: true,
+      name: true,
       projects: {
-        select:{
-          project:{
-            select:{
-              client:true,
-              members:{
-                select:{
-                  id:true,
-                  user:true,
-                  role :true
+        select: {
+          project: {
+            select: {
+              client: true,
+              members: {
+                select: {
+                  id: true,
+                  user: true,
+                  role: true
                 }
               },
-              name:true
+              name: true
             }
           }
         },
-      
-    },
-    
-      logs:true,
+
+      },
+
+      logs: true,
     }
   });
 });

@@ -28,6 +28,16 @@ export default defineEventHandler(async (event) => {
           },
         },
       },
+      assignee: {
+        connect: {
+          projectId_userId: {
+            projectId: ticket.projectId,
+            userId: body.assignee
+          }
+        }
+      },
+      description: body.description,
+      name: body.name
     },
   });
 

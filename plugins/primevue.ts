@@ -11,6 +11,7 @@ import AvatarGroup from "primevue/avatargroup";
 import AutoComplete from "primevue/autocomplete";
 import SelectButton from "primevue/selectbutton";
 import DataTable from "primevue/datatable";
+import DataView from "primevue/dataview";
 import Column from "primevue/column";
 import Dialog from "primevue/dialog";
 import Listbox from "primevue/listbox";
@@ -35,6 +36,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component("AutoComplete", AutoComplete);
   nuxtApp.vueApp.component("SelectButton", SelectButton);
   nuxtApp.vueApp.component("DataTable", DataTable);
+  nuxtApp.vueApp.component("DataView", DataView);
   nuxtApp.vueApp.component("Column", Column);
   nuxtApp.vueApp.component("Dialog", Dialog);
   nuxtApp.vueApp.component("Listbox", Listbox);
