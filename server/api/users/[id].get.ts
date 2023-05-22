@@ -19,6 +19,7 @@ export default defineEventHandler(async (event) => {
       },
       projects: {
         select: {
+          projectId: true,
           _count: {
             select: {
               assignedTo: true,
