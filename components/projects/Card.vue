@@ -4,30 +4,11 @@
     <p>
       {{ props.project.client.name }}
     </p>
-    <!-- <div class="users">
-      <img
-        v-for="user in [props.users.reporter, props.users.assignee]"
-        :key="user?.id"
-        :src="user?.user.image"
-        class="user"
-      />
-    </div> -->
-
     <div class="card flex justify-content-center">
       <AvatarGroup>
-        <Avatar
-          v-for="member in [props.project.members]"
-          v-if="props.project.members.length < 6"
-          :visible="true"
-          :image="member.user.image"
-        />
-        <Avatar
-          v-else
-          label="+2"
-          shape="circle"
-          size="large"
-          style="background-color: '#9c27b0', color: '#ffffff'"
-        />
+        <Avatar v-for="member in props.project.members.slice(0, 3)" :visible="true" :image="member.user.image" />
+        <Avatar v-if="plusMember > 0" :label="'+' + String(plusMember)" shape="circle" size="large"
+          style="background-color: '#9c27b0', color: '#ffffff'" />
       </AvatarGroup>
     </div>
   </div>
@@ -35,9 +16,12 @@
 
 <script lang="ts" setup>
 const props = defineProps<{
-  //   users: NonNullable<Awaited<ReturnType<typeof getUsers>>>;
   project: NonNullable<Awaited<ReturnType<typeof getProject>>>;
 }>();
+
+const memberNumber = props.project.members.length;
+const plusMember = memberNumber - 3;
+
 </script>
 
 <style lang="scss" scoped>
