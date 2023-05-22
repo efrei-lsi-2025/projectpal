@@ -55,6 +55,7 @@
             draggable="true"
             @dragstart="dragStart"
             @dragend="dragEnd"
+            @click="modifyTicketModal($event, ticket.id)"
           ></TicketsCard>
         </div>
         <div class="create-ticket" @click="createTicketModal(ticketState.name)">
@@ -75,6 +76,21 @@
       :status="ticketStateToCreate"
       :members="project?.members"
       @submit="submitTicket"
+    />
+  </Dialog>
+
+  <Dialog
+    v-model:visible="isDialogVisibleModifyTicket"
+    modal
+    header="Modifier un ticket"
+    class="w-5"
+    :draggable="false"
+  >
+    <TicketsCreate
+      :ticket="ticketToEdit"
+      :status="ticketStateToModify"
+      :members="project?.members"
+      @submit="submitModifiedTicket"
     />
   </Dialog>
 </template>
@@ -139,7 +155,22 @@ const drop = async (e: DragEvent) => {
 };
 
 const isDialogVisibleAddTicket = ref(false);
+const isDialogVisibleModifyTicket = ref(false);
 const ticketStateToCreate = ref("");
+const ticketStateToModify = ref("");
+
+const ticketToEditId = ref(0);
+
+const allTickets = computed(() => {
+  return [
+    ...(project.value?.tickets ?? []),
+    ...(project.value?.ticketStates.flatMap((ts) => ts.tickets) ?? []),
+  ];
+});
+
+const ticketToEdit = computed(() => {
+  return allTickets.value.find((it) => it.id === ticketToEditId.value);
+});
 
 function createTicketModal(ticketState: string) {
   ticketStateToCreate.value = ticketState;
@@ -150,6 +181,17 @@ async function submitTicket(dto: TicketCreationDTO) {
   await createTicket(id, dto);
   isDialogVisibleAddTicket.value = false;
   project.value = await getProject(id);
+}
+
+async function submitModifiedTicket(dto: TicketCreationDTO) {
+  await updateTicket(id, dto);
+  isDialogVisibleModifyTicket.value = false;
+  project.value = await getProject(id);
+}
+
+async function modifyTicketModal(event: any, id: number) {
+  ticketToEditId.value = id;
+  isDialogVisibleModifyTicket.value = true;
 }
 </script>
 
