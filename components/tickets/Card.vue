@@ -8,7 +8,7 @@
       <img
         v-for="user in [props.ticket.reporter, props.ticket.assignee]"
         :key="user?.id"
-        :src="user?.user.image ?? '../assets/icons/user_icon.svg'"
+        :src="user?.user.image ?? '/icons/user_icon.svg'"
         class="user"
       />
     </div>
