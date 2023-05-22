@@ -1,40 +1,43 @@
 <template>
-  <div class="grid">
-    <div class="col-3">
-      <Avatar
-        :image="user?.image"
-        shape="circle"
-        style="width: 150%; height: 150%; max-width: 150px; max-height: 150px"
-      />
+  <div class="grid m-5">
+    <div class="col-4">
+      <div class="align-items-center">
+        <Avatar
+          :image="user?.image"
+          shape="circle"
+          style="width: 150%; height: 150%; max-width: 150px; max-height: 150px"
+        />
+        <div>
+          <h1>{{ user?.name }}</h1>
+          <h3>
+            {{ user?.projects.length }} projets pour
+            {{ user?.projects.length }} tickets assignés
+          </h3>
+        </div>
+      </div>
 
-      <h1>{{ user?.name }}</h1>
-      <h3>
-        {{ user?.projects.length }} projets pour
-        {{ user?.projects.length }} tickets assignés
-      </h3>
+      <div class="recent-activity">
+        <h1>Activité récente</h1>
+        <ul>
+          <li v-for="log in logs?.slice(0, 15)">
+            <span class="strong">{{ log.user.name }}</span
+            >&nbsp; <span>{{ log.text }}</span> le&nbsp;
+            <span>{{ new Date(log.createdAt).toLocaleDateString("fr") }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <div class="col-8">
+    <div class="col-7">
       <div>
         <h1>Projets attribué</h1>
-        <div class="test flex flex-wrap">
+        <div class="mt-6 flex flex-wrap column-gap-5">
           <div v-for="projectMember in user?.projects">
             <ProjectsCard
               class=""
               :project="projectMember.project"
             ></ProjectsCard>
           </div>
-        </div>
-      </div>
-
-      <div class="recent-activity">
-        <h1>Activité récente</h1>
-        <div v-for="log in logs?.slice(0, 15)">
-          <p>
-            <span class="strong">{{ log.user.name }}</span
-            >&nbsp; <span>{{ log.text }}</span> le&nbsp;
-            <span>{{ new Date(log.createdAt).toDateString() }}</span>
-          </p>
         </div>
       </div>
     </div>
