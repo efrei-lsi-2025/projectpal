@@ -216,8 +216,7 @@ const updateOverlay = ref();
 const deleteOverlay = ref();
 const isAddDialogVisible = ref(false);
 
-// Set the user to add
-const setSelectedUser = (user: any) => {
+const setSelectedUser = (user: string) => {
   if (typeof user !== "string" && user !== null) {
     selectedUser.value = user;
   }

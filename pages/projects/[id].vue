@@ -65,7 +65,7 @@
   </div>
 
   <Dialog
-    v-model:visible="isDialogVisible"
+    v-model:visible="isDialogVisibleAddTicket"
     modal
     header="Ajouter un ticket"
     class="w-5"
@@ -138,17 +138,17 @@ const drop = async (e: DragEvent) => {
   project.value = await getProject(id);
 };
 
-const isDialogVisible = ref(false);
+const isDialogVisibleAddTicket = ref(false);
 const ticketStateToCreate = ref("");
 
 function createTicketModal(ticketState: string) {
   ticketStateToCreate.value = ticketState;
-  isDialogVisible.value = true;
+  isDialogVisibleAddTicket.value = true;
 }
 
 async function submitTicket(dto: TicketCreationDTO) {
   await createTicket(id, dto);
-  isDialogVisible.value = false;
+  isDialogVisibleAddTicket.value = false;
   project.value = await getProject(id);
 }
 </script>
