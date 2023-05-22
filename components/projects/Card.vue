@@ -1,43 +1,34 @@
 <template>
-  <div class="project" :data-project-id="props.project.id">
-    <h3>{{ props.project.name }}</h3>
+  <div class="project">
+    <h3>{{ props.project.projectName }}</h3>
     <p>
-      {{ props.project.client.name }}
+      {{ props.project.clientName }}
     </p>
-    <!-- <div class="users">
-      <img
-        v-for="user in [props.users.reporter, props.users.assignee]"
-        :key="user?.id"
-        :src="user?.user.image"
-        class="user"
-      />
-    </div> -->
-
     <div class="card flex justify-content-center">
       <AvatarGroup>
-        <Avatar
-          v-for="member in [props.project.members]"
-          v-if="props.project.members.length < 6"
-          :visible="true"
-          :image="member.user.image"
-        />
-        <Avatar
-          v-else
-          label="+2"
-          shape="circle"
-          size="large"
-          style="background-color: '#9c27b0', color: '#ffffff'"
-        />
+        <Avatar v-for="member in props.project.projectMembers.slice(0, 3)" :visible="true" :image="member.user.image" />
+        <Avatar v-if="plusMember > 0" :label="'+' + String(plusMember)" shape="circle" size="large"
+          style="background-color: '#9c27b0', color: '#ffffff'" />
       </AvatarGroup>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { list } from 'postcss';
+
 const props = defineProps<{
-  //   users: NonNullable<Awaited<ReturnType<typeof getUsers>>>;
-  project: NonNullable<Awaited<ReturnType<typeof getProject>>>;
+  // project: NonNullable<Awaited<ReturnType<typeof getUser>>>["projects"][number];
+  project: {
+    projectName: String;
+    clientName: String;
+    projectMembers: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"]
+  }
 }>();
+
+const memberNumber = props.project.projectMembers.length;
+const plusMember = memberNumber - 3;
+
 </script>
 
 <style lang="scss" scoped>
