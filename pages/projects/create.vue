@@ -1,4 +1,9 @@
 <template>
+  <div>
+    <Head>
+      <Title>ProjectPal - Projet</Title>
+    </Head>
+  </div>
   <div class="flex justify-content-end -mt-8 mb-6 mr-8 pt-2">
     <Button
       icon="pi pi-arrow-left"

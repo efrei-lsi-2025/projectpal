@@ -1,5 +1,5 @@
 <template>
-  <div class="project" :style="{ 'border-color': '#' + props.project.color }">
+  <div class="project" :style="styleObject">
     <NuxtLink :to="`/projects/${props.project.id}`">
       <h3>{{ props.project.name }}</h3>
       <p>
@@ -35,6 +35,11 @@ const props = defineProps<{
   >["projects"][number]["project"];
 }>();
 
+const styleObject = {
+  "border-color": "#" + props.project.color,
+  "hover-color": "#" + props.project.color,
+};
+
 const memberNumber = props.project.members.length;
 const plusMember = memberNumber - 3;
 </script>
@@ -43,14 +48,14 @@ const plusMember = memberNumber - 3;
 .project {
   background-color: white;
   height: 10rem;
-  width: 20rem;
+  width: 18rem;
   border-radius: 5px;
   padding: 0.2rem 1rem;
   margin-top: 1rem;
   border-left: solid 0.5rem;
 
   &:hover {
-    box-shadow: 0 0 5px rgb(255, 0, 0);
+    box-shadow: 0 0 5px #1a1919;
     cursor: pointer;
   }
 

@@ -153,6 +153,20 @@ export const updateTicket = async (id: number, ticket: TicketCreationDTO) => {
   }
 };
 
+export const changeTicketState = async (ticketId: number, projectId: number, state: string) => {
+  try {
+    const res = await $fetch(`/api/projects/${ticketId}/tickets`, {
+      method: "PUT",
+      body: { state },
+    });
+    success("Ticket mis à jour.");
+    return res as NoUndefinedField<typeof res>;
+  } catch (err) {
+    console.log(err);
+    error("Erreur lors de la mise à jour du ticket.");
+  }
+};
+
 export type ProjectUpdateDTO = {
   id: number;
   name: string;

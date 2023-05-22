@@ -1,5 +1,11 @@
 <template>
   <div>
+    <Head>
+      <Title>ProjectPal - Login</Title>
+    </Head>
+  </div>
+
+  <div>
     <Button
       icon="pi pi-github"
       size="large"
@@ -10,10 +16,13 @@
 </template>
 
 <script lang="ts" setup>
+const { signIn, data } = useAuth();
+
 definePageMeta({
   layout: "login",
-  auth: { unauthenticatedOnly: true, navigateAuthenticatedTo: "/" },
+  auth: {
+    unauthenticatedOnly: true,
+    navigateAuthenticatedTo: "/",
+  },
 });
-
-const { signIn } = useAuth();
 </script>

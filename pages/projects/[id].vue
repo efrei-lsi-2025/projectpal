@@ -1,4 +1,10 @@
 <template>
+  <div>
+    <Head>
+      <Title>ProjectPal - Projet</Title>
+    </Head>
+  </div>
+
   <div class="flex justify-content-end -mt-8 mb-6 mr-8 pt-2">
     <Button
       icon="pi pi-arrow-left"
@@ -24,7 +30,7 @@
   </div>
 
   <div class="header" :style="{ '--color': `#${project?.color}` }">
-    <div class="title">
+    <div class="title pb-2">
       <h3>{{ project?.client?.name }}</h3>
       <h1>{{ project?.name }}</h1>
       <div>
@@ -175,7 +181,7 @@ const drop = async (e: DragEvent) => {
   const ticketToMove = fromState.tickets.splice(ticketIndex, 1)[0];
   toState.tickets.push(ticketToMove);
 
-  await updateTicket(ticketId, { state: to });
+  await changeTicketState(Number(ticketId), project.value?.id ?? 0, to ?? "");
   project.value = await getProject(id);
 };
 
@@ -239,6 +245,7 @@ async function modifyTicketModal(
     border-radius: 5px;
     border-left: 5px solid var(--color);
     background-color: white;
+    min-width: 325px;
 
     h3 {
       font-size: 1rem;

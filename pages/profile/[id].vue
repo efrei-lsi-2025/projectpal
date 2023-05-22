@@ -1,5 +1,21 @@
 <template>
-  <div class="grid m-5">
+  <div>
+    <Head>
+      <Title>ProjectPal - Profil</Title>
+    </Head>
+  </div>
+
+  <div class="flex justify-content-end -mt-8 mb-8 mr-8 pt-2">
+    <Button
+      icon="pi pi-plus"
+      label="Nouveau"
+      class=""
+      size="small"
+      @click="navigateTo('/projects/create')"
+    ></Button>
+  </div>
+
+  <div class="grid mt-5 ml-5">
     <div class="col-4">
       <div class="align-items-center">
         <Avatar
@@ -25,10 +41,11 @@
             <span>{{ new Date(log.createdAt).toLocaleDateString("fr") }}</span>
           </li>
         </ul>
+        <p v-if="(logs?.length ?? -1) <= 0">Aucune activité récente</p>
       </div>
     </div>
 
-    <div class="col-7">
+    <div class="col-8">
       <div>
         <h1>Projets attribués</h1>
         <div class="mt-6 flex flex-wrap column-gap-5">

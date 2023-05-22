@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="logo">
-      <NuxtLink to="/"
+      <NuxtLink :to="'/profile/' + auth.data.value?.user?.id"
         ><img
           src="../assets/branding/logo-inline.svg"
           alt="ProjectPal Inline Logo"
