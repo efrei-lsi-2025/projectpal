@@ -40,7 +40,7 @@
             size="normal"
             shape="circle"
             v-if="(project?.members.length ?? 0) > 5"
-            :label="'+' + String((project?.members.length ?? 0) - 6)"
+            :label="'+' + String((project?.members.length ?? 0) - 5)"
           />
         </AvatarGroup>
       </div>

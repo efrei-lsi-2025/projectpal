@@ -1,12 +1,12 @@
 <template>
   <div class="project" :style="{ 'border-color': '#' + props.project.color }">
-    <NuxtLink to="/projects/16">
+    <NuxtLink :to="`/projects/${props.project.id}`">
       <h3>{{ props.project.name }}</h3>
       <p>
         {{ props.project.client?.name }}
       </p>
 
-      <div class="card flex justify-content-end">
+      <div class="flex justify-content-end">
         <AvatarGroup>
           <Avatar
             v-for="member in props.project.members.slice(0, 3)"
@@ -77,6 +77,7 @@ const plusMember = memberNumber - 3;
 }
 a:link {
   text-decoration: none;
+  color: black;
 }
 
 a:visited {

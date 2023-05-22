@@ -30,7 +30,7 @@
 
     <div class="col-7">
       <div>
-        <h1>Projets attribué</h1>
+        <h1>Projets attribués</h1>
         <div class="mt-6 flex flex-wrap column-gap-5">
           <div v-for="projectMember in user?.projects">
             <ProjectsCard
