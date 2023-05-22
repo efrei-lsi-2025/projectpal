@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
       state: {
         connect: {
           projectId_name: {
-            name: body.status,
+            name: body.state,
             projectId,
           },
         },

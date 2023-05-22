@@ -1,4 +1,19 @@
 <template>
+  <div>
+    <Head>
+      <Title>ProjectPal - Projet</Title>
+    </Head>
+  </div>
+  <div class="flex justify-content-end -mt-8 mb-6 mr-8 pt-2">
+    <Button
+      icon="pi pi-arrow-left"
+      label="Retour"
+      class=""
+      size="small"
+      @click="$router.back()"
+    ></Button>
+  </div>
+
   <div v-if="loaded" class="project-layout">
     <div class="py-3 align-items-center formgrid grid">
       <div class="field col-12 md:col-6 pr-5">
@@ -7,10 +22,10 @@
           id="name"
           v-model="name"
           class="w-10"
-          :class="{ 'p-invalid': errorMessage }"
+          :class="{ 'p-invalid': nameErrorMessage }"
         />
         <small id="text-error" class="p-error">{{
-          errorMessage || "&nbsp;"
+          nameErrorMessage || "&nbsp;"
         }}</small>
       </div>
 
@@ -41,7 +56,14 @@
 
     <div class="py-3">
       <h2>Catégories</h2>
-      <Chips v-model="stateLabels" class="block" />
+      <Chips
+        v-model="stateLabels"
+        class="block"
+        :class="{ 'p-invalid': ticketStatesErrorMessage }"
+      />
+      <small id="text-error" class="p-error">{{
+        ticketStatesErrorMessage || "&nbsp;"
+      }}</small>
     </div>
 
     <div class="py-3">
@@ -49,10 +71,38 @@
         icon="pi pi-check"
         label="Valider"
         severity="success"
-        @click="createNewProject"
+        @click="tryCreateNewProject"
       />
     </div>
   </div>
+
+  <Dialog
+    v-model:visible="isClientDialogVisible"
+    modal
+    :draggable="false"
+    :closable="false"
+    header="Souhaitez-vous créer un nouveau client ?"
+  >
+    <div class="">
+      <div class="flex justify-content-center">
+        <Button
+          rounded
+          outlined
+          icon="pi pi-check"
+          severity="success"
+          class="mr-3"
+          @click="confirmCreateClient(true)"
+        ></Button>
+        <Button
+          rounded
+          outlined
+          icon="pi pi-times"
+          severity="danger"
+          @click="confirmCreateClient(false)"
+        ></Button>
+      </div>
+    </div>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
@@ -71,6 +121,8 @@ const members: Ref<
   | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"]
   | undefined
 > = ref([]);
+
+const isClientDialogVisible = ref(false);
 
 const loaded = ref(false);
 
@@ -105,26 +157,58 @@ const setSelectedClient = (client: string) => {
 };
 
 // Form validation
-const errorMessage = ref("");
+const nameErrorMessage = ref("");
+const ticketStatesErrorMessage = ref("");
 
 function validateForm() {
+  let validate = true;
+
   if (!name.value) {
-    errorMessage.value = "Un nom de projet est requis.";
+    nameErrorMessage.value = "Un nom de projet est requis.";
+    validate = false;
   } else {
-    errorMessage.value = "";
-    return true;
+    nameErrorMessage.value = "";
   }
 
-  return false;
+  if (!stateLabels.value.length) {
+    ticketStatesErrorMessage.value =
+      "Au moins une catégorie de ticket doit être renseignée.";
+    validate = false;
+  } else {
+    ticketStatesErrorMessage.value = "";
+  }
+
+  return validate;
 }
 
-// Create project on submit
-const createNewProject = async () => {
+// Check if form is valid before creating the project
+const tryCreateNewProject = () => {
   if (!validateForm()) {
     warn("Champs manquants ou invalides.");
     return;
   }
 
+  if (
+    selectedClient.value !== "" &&
+    clientList.value?.indexOf(selectedClient.value ?? "") == -1
+  ) {
+    isClientDialogVisible.value = true;
+  } else {
+    createNewProject();
+  }
+};
+
+// In case selectClient does not exist yet, confirmp its creation
+const confirmCreateClient = (confirm: boolean) => {
+  isClientDialogVisible.value = false;
+
+  if (confirm) {
+    createNewProject();
+  }
+};
+
+// Create project on submit
+const createNewProject = async () => {
   if (clientList.value?.includes(selectedClient.value ?? "")) {
     // Dialog, selon retour on quitte
   }
@@ -141,15 +225,16 @@ const createNewProject = async () => {
   });
 
   // Create list of members with userId and role
-  const projectMembers = members.value?.map((member) => {
-    return {
-      userId: member.user.id,
-      role: member.role,
-    };
-  }) ?? [];
+  const projectMembers =
+    members.value?.map((member) => {
+      return {
+        userId: member.user.id,
+        role: member.role,
+      };
+    }) ?? [];
 
   // Create the project
-  await createProject({
+  const projectCreated = await createProject({
     name: name.value ?? "",
     description: description.value ?? "",
     color: color.value ?? "",
@@ -157,6 +242,15 @@ const createNewProject = async () => {
     ticketStates,
     projectMembers,
   });
+
+  await createLog(
+    "a créé le projet #" +
+      String(projectCreated?.id) +
+      " - " +
+      projectCreated?.name
+  );
+
+  navigateTo(`/projects/${projectCreated?.id}`);
 };
 </script>
 

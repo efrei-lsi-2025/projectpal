@@ -1,4 +1,20 @@
 <template>
+  <div>
+    <Head>
+      <Title>ProjectPal - Projet</Title>
+    </Head>
+  </div>
+
+  <div class="flex justify-content-end -mt-8 mb-6 mr-8 pt-2">
+    <Button
+      icon="pi pi-arrow-left"
+      label="Retour"
+      class=""
+      size="small"
+      @click="$router.back()"
+    ></Button>
+  </div>
+
   <div v-if="project && loaded" class="project-layout">
     <div class="py-3 align-items-center formgrid grid">
       <div class="field col-12 md:col-6 pr-5">
@@ -41,6 +57,8 @@
         :model-value="members ?? []"
         :users-available="userList"
         @member-added="addMember"
+        @member-edited="updateMember"
+        @member-deleted="deleteMember"
       ></ProjectsUserTable>
     </div>
 
@@ -54,7 +72,7 @@
         icon="pi pi-check"
         label="Valider"
         severity="success"
-        @click="updateThisProject"
+        @click="tryUpdateThisProject"
       ></Button>
 
       <Button
@@ -78,6 +96,34 @@
       >
       </ProjectsDeleteDialog>
     </Dialog>
+
+    <Dialog
+      v-model:visible="isClientDialogVisible"
+      modal
+      :draggable="false"
+      :closable="false"
+      header="Souhaitez-vous créer un nouveau client ?"
+    >
+      <div class="">
+        <div class="flex justify-content-center">
+          <Button
+            rounded
+            outlined
+            icon="pi pi-check"
+            severity="success"
+            class="mr-3"
+            @click="confirmCreateClient(true)"
+          ></Button>
+          <Button
+            rounded
+            outlined
+            icon="pi pi-times"
+            severity="danger"
+            @click="confirmCreateClient(false)"
+          ></Button>
+        </div>
+      </div>
+    </Dialog>
   </div>
 
   <div v-if="!project && loaded" class="project-layout">
@@ -94,6 +140,8 @@ const route = useRoute();
 
 // Init variables
 const isDeleteDialogVisible = ref(false);
+const isClientDialogVisible = ref(false);
+
 const project: Ref<Awaited<ReturnType<typeof getProject>>> = ref();
 const allUsers: Ref<Awaited<ReturnType<typeof getUsers>>> = ref();
 const allClients: Ref<Awaited<ReturnType<typeof getClients>>> = ref();
@@ -112,6 +160,8 @@ const members: Ref<
   | undefined
 > = ref();
 const newMembers: typeof members = ref([]);
+const updatedMembers: typeof members = ref([]);
+const deletedMembers: typeof members = ref([]);
 
 // Fetch data
 const loaded = ref(false);
@@ -130,7 +180,7 @@ onMounted(async () => {
   color.value = project.value?.color;
   categories.value = project.value?.ticketStates;
   stateLabels.value = categories.value?.map((category) => category.name) ?? [];
-  selectedClient.value = project.value?.client.name ?? "";
+  selectedClient.value = project.value?.client?.name ?? "";
   members.value = project.value?.members;
   loaded.value = true;
 });
@@ -152,6 +202,22 @@ const addMember = (
 ) => {
   newMembers.value?.push(member);
 };
+
+// Tracl members to update
+const updateMember = (
+  member: Exclude<(typeof members)["value"], undefined>[number]
+) => {
+  updatedMembers.value?.push(member);
+};
+
+// Track members to delete
+const deleteMember = (
+  member: Exclude<(typeof members)["value"], undefined>[number]
+) => {
+  deletedMembers.value?.push(member);
+};
+
+// Track members to delete
 
 // Form validation
 const nameErrorMessage = ref("");
@@ -178,6 +244,32 @@ function validateForm() {
   return valid;
 }
 
+// Check if form is valid before creating the project
+const tryUpdateThisProject = () => {
+  if (!validateForm()) {
+    warn("Champs manquants ou invalides.");
+    return;
+  }
+
+  if (
+    selectedClient.value !== "" &&
+    clientList.value?.indexOf(selectedClient.value ?? "") == -1
+  ) {
+    isClientDialogVisible.value = true;
+  } else {
+    updateThisProject();
+  }
+};
+
+// In case selectClient does not exist yet, confirm its creation
+const confirmCreateClient = (confirm: boolean) => {
+  isClientDialogVisible.value = false;
+
+  if (confirm) {
+    updateThisProject();
+  }
+};
+
 // Update project on submit
 const updateThisProject = async () => {
   if (!validateForm()) {
@@ -196,7 +288,14 @@ const updateThisProject = async () => {
         userId: member.user.id,
         role: member.role,
       })) ?? [],
+    updateMembers: updatedMembers.value,
+    deleteMembers: deletedMembers.value,
   });
+  await createLog(
+    "a mis à jour #" + String(project.value?.id) + " - " + project.value?.name
+  );
+
+  navigateTo(`/projects/${route.params.id}`);
 };
 
 // Delete project
@@ -206,6 +305,12 @@ const deleteThisProject = async () => {
   if (!project.value?.id) return;
 
   await deleteProject(project.value?.id);
+  await createLog(
+    "a supprimé le projet #" +
+      String(project.value.id) +
+      " - " +
+      project.value.name
+  );
 
   navigateTo("/");
 };

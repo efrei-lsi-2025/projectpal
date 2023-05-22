@@ -1,4 +1,4 @@
-import { prisma } from "../../../server/plugins/prisma";
+import { prisma } from "../../../../plugins/prisma";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params?.id;
@@ -28,16 +28,6 @@ export default defineEventHandler(async (event) => {
           },
         },
       },
-      assignee: {
-        connect: {
-          projectId_userId: {
-            projectId: ticket.projectId,
-            userId: body.assignee
-          }
-        }
-      },
-      description: body.description,
-      name: body.name
     },
   });
 

@@ -10,11 +10,8 @@
 <script lang="ts" setup>
 const auth = useAuth();
 
-try {
-  const testSession = await $fetch("/api/session");
-  console.log(testSession);
-} catch (error) {
-  console.log(error);
+if (auth.data.value?.user) {
+  navigateTo(`/profile/${auth.data.value.user.id}`);
 }
 </script>
 

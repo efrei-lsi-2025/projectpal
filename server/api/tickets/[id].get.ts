@@ -1,12 +1,14 @@
-import { prisma } from "~/server/plugins/prisma";
+import { prisma } from "../../../server/plugins/prisma";
 
 export const TicketSelect = {
   id: true,
   name: true,
   description: true,
+  state: true,
   assignee: {
     select: {
       id: true,
+      role: true,
       user: {
         select: {
           id: true,
@@ -19,6 +21,7 @@ export const TicketSelect = {
   reporter: {
     select: {
       id: true,
+      role: true,
       user: {
         select: {
           id: true,

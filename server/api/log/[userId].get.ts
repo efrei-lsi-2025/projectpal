@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
       text: true,
       user: true,
       createdAt: true,
+
     },
   });
 });

@@ -62,6 +62,12 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps<{
+  ticket:
+    | Exclude<
+        Awaited<ReturnType<typeof getProject>>,
+        null | undefined
+      >["tickets"][number]
+    | undefined;
   members:
     | Exclude<
         Awaited<ReturnType<typeof getProject>>,
@@ -76,17 +82,27 @@ const description = ref();
 const assignee: Ref<Exclude<typeof props.members, undefined>[number] | null> =
   ref(null);
 
+onMounted(() => {
+  if (props.ticket) {
+    name.value = props.ticket.name;
+    description.value = props.ticket.description;
+    assignee.value = props.ticket.assignee;
+  }
+});
+
 const setAssignee = ({ id }: { id: string }) => {
+  console.log(assignee.value);
   assignee.value =
     props.members?.find((member) => member.user.id === id) ?? null;
 };
 
 const submitTicket = async () => {
+  console.log(assignee.value);
   const ticket: TicketCreationDTO = {
     name: name.value,
     description: description.value,
     assignee: assignee.value?.user.id ?? "",
-    status: props.status,
+    state: props.status,
   };
 
   emit("submit", ticket);
@@ -95,7 +111,6 @@ const submitTicket = async () => {
 
 <style scoped>
 .container {
-  margin-left: 30px;
   width: 500px;
 }
 
