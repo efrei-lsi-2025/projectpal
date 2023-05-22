@@ -8,10 +8,7 @@
       <h3>
         {{ user?.projects.length }} projets pour
         {{
-          user?.projects.reduce(
-            (acc, project) => acc + project._count.assignedTo,
-            0
-          )
+          user?.projects.length
         }}
         tickets assignés
       </h3>
@@ -23,11 +20,12 @@
 
       <div class="test flex">
 
-
-        <div v-for="projectId in user?.projects">
-
-          <LogLine :projectId="projectId.projectId">
-          </LogLine>
+        <div v-for="project in user?.projects">
+          <ProjectsCard  class="" :project="{ clientName :project.project.client.name,
+                                    projectMembers :project.project.members,
+                                    projectName : project.project.name}" ></ProjectsCard>
+          <!-- <LogLine :projectId="project.projectId">
+          </LogLine> -->
         </div>
 
 

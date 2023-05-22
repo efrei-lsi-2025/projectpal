@@ -1,3 +1,4 @@
+import { ALL } from "dns";
 import { prisma } from "../../plugins/prisma";
 
 export default defineEventHandler(async (event) => {
@@ -7,26 +8,27 @@ export default defineEventHandler(async (event) => {
     where: {
       id: event.context.params?.id,
     },
-    select: {
-      id: true,
-      name: true,
-      image: true,
-      logs: {
-        select: {
-          text: true,
-          createdAt: true,
-        },
-      },
+    select:{
       projects: {
-        select: {
-          projectId: true,
-          _count: {
-            select: {
-              assignedTo: true,
-            },
-          },
+        select:{
+          project:{
+            select:{
+              client:true,
+              members:{
+                select:{
+                  id:true,
+                  user:true,
+                  role :true
+                }
+              },
+              name:true
+            }
+          }
         },
-      },
+      
     },
+    
+      logs:true,
+    }
   });
 });
