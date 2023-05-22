@@ -3,16 +3,15 @@ export type NoUndefinedField<T> = Exclude<
   null | undefined
 >;
 
-
 export const deleteProject = async (id: number) => {
   try {
-    await $fetch(`/api/projects/${id}`, { method: 'DELETE' });
+    await $fetch(`/api/projects/${id}`, { method: "DELETE" });
     success("Projet supprimé");
   } catch (err) {
     console.log(err);
     error("Erreur lors de la suppresion du projet.");
   }
-}
+};
 
 export const getProjects = async () => {
   try {
@@ -90,13 +89,16 @@ export type ProjectCreationDTO = {
   color: string;
   client: string;
   ticketStates: Array<{
-    name: string,
-    order: number
+    name: string;
+    order: number;
   }>;
   projectMembers: Array<{
-    userId: string,
-    role: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"][number]["role"]
-  }>
+    userId: string;
+    role: Exclude<
+      Awaited<ReturnType<typeof getProject>>,
+      undefined
+    >["members"][number]["role"];
+  }>;
 };
 
 export const createProject = async (project: ProjectCreationDTO) => {
@@ -137,7 +139,7 @@ export const createTicket = async (
   }
 };
 
-export const updateTicket = async (id: string, ticket: object) => {
+export const updateTicket = async (id: string, ticket: TicketCreationDTO) => {
   try {
     const res = await $fetch(`/api/tickets/${id}`, {
       method: "PUT",
@@ -152,24 +154,33 @@ export const updateTicket = async (id: string, ticket: object) => {
 };
 
 export type ProjectUpdateDTO = {
-  id: number,
+  id: number;
   name: string;
   description: string;
   color: string;
   client: string;
   newMembers?: Array<{
-    userId: string,
-    role: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"][number]["role"]
+    userId: string;
+    role: Exclude<
+      Awaited<ReturnType<typeof getProject>>,
+      undefined
+    >["members"][number]["role"];
   }>;
-  updateMembers?: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"];
-  deleteMembers?: Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"];
+  updateMembers?: Exclude<
+    Awaited<ReturnType<typeof getProject>>,
+    undefined
+  >["members"];
+  deleteMembers?: Exclude<
+    Awaited<ReturnType<typeof getProject>>,
+    undefined
+  >["members"];
 };
 
 export const updateProject = async (id: number, project: ProjectUpdateDTO) => {
   try {
     const res = await $fetch(`/api/projects/${id}`, {
       method: "PUT",
-      body: project
+      body: project,
     });
     success("Projet mis à jour.");
     return res as NoUndefinedField<typeof res>;

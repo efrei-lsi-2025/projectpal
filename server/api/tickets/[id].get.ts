@@ -4,6 +4,7 @@ export const TicketSelect = {
   id: true,
   name: true,
   description: true,
+  state: true,
   assignee: {
     select: {
       id: true,
