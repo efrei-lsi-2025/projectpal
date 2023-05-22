@@ -179,12 +179,11 @@ export const updateProject = async (id: number, project: ProjectUpdateDTO) => {
   }
 };
 
-export const createLog = async (userId: string, text: string) => {
+export const createLog = async (text: string) => {
   try {
     const res = await $fetch('/api/log', {
       method: "POST",
       body: {
-        userId: userId,
         text: text
       }
     });
