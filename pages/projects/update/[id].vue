@@ -1,4 +1,14 @@
 <template>
+  <div class="flex justify-content-end -mt-8 mb-6 mr-8 pt-2">
+    <Button
+      icon="pi pi-arrow-left"
+      label="Retour"
+      class=""
+      size="small"
+      @click="$router.back()"
+    ></Button>
+  </div>
+
   <div v-if="project && loaded" class="project-layout">
     <div class="py-3 align-items-center formgrid grid">
       <div class="field col-12 md:col-6 pr-5">
@@ -40,23 +50,76 @@
       <ProjectsUserTable
         :model-value="members ?? []"
         :users-available="userList"
+        @member-added="addMember"
+        @member-edited="updateMember"
+        @member-deleted="deleteMember"
       ></ProjectsUserTable>
     </div>
 
     <div class="py-3">
       <h2>Catégories</h2>
-      <Chips v-model="categories" class="block" disabled />
+      <Chips v-model="stateLabels" class="block" disabled />
     </div>
 
-    <div class="py-3">
+    <div class="py-3 flex justify-content-between">
       <Button
         icon="pi pi-check"
         label="Valider"
         severity="success"
-        @click="updateProject"
+        @click="tryUpdateThisProject"
+      ></Button>
+
+      <Button
+        icon="pi pi-trash"
+        label="Supprimer"
+        severity="danger"
+        @click="() => (isDeleteDialogVisible = true)"
       ></Button>
     </div>
+
+    <Dialog
+      v-model:visible="isDeleteDialogVisible"
+      modal
+      header="Attention"
+      class="w-5"
+      :draggable="false"
+    >
+      <ProjectsDeleteDialog
+        :project-name="project.name"
+        @delete="deleteThisProject"
+      >
+      </ProjectsDeleteDialog>
+    </Dialog>
+
+    <Dialog
+      v-model:visible="isClientDialogVisible"
+      modal
+      :draggable="false"
+      :closable="false"
+      header="Souhaitez-vous créer un nouveau client ?"
+    >
+      <div class="">
+        <div class="flex justify-content-center">
+          <Button
+            rounded
+            outlined
+            icon="pi pi-check"
+            severity="success"
+            class="mr-3"
+            @click="confirmCreateClient(true)"
+          ></Button>
+          <Button
+            rounded
+            outlined
+            icon="pi pi-times"
+            severity="danger"
+            @click="confirmCreateClient(false)"
+          ></Button>
+        </div>
+      </div>
+    </Dialog>
   </div>
+
   <div v-if="!project && loaded" class="project-layout">
     <h1 style="color: #f83a3a; font-size: x-large">Projet introuvable</h1>
     <p>Id : {{ route.params.id }}</p>
@@ -64,10 +127,15 @@
 </template>
 
 <script setup lang="ts">
+import { updateProject } from "~/utils/server";
+
 const auth = useAuth();
 const route = useRoute();
 
 // Init variables
+const isDeleteDialogVisible = ref(false);
+const isClientDialogVisible = ref(false);
+
 const project: Ref<Awaited<ReturnType<typeof getProject>>> = ref();
 const allUsers: Ref<Awaited<ReturnType<typeof getUsers>>> = ref();
 const allClients: Ref<Awaited<ReturnType<typeof getClients>>> = ref();
@@ -79,19 +147,25 @@ const categories: Ref<
   | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["ticketStates"]
   | undefined
 > = ref();
-
+const stateLabels: Ref<Array<string>> = ref([]);
 const selectedClient: Ref<string | undefined> = ref();
 const members: Ref<
   | Exclude<Awaited<ReturnType<typeof getProject>>, undefined>["members"]
   | undefined
 > = ref();
-const loaded = ref(false);
+const newMembers: typeof members = ref([]);
+const updatedMembers: typeof members = ref([]);
+const deletedMembers: typeof members = ref([]);
 
 // Fetch data
+const loaded = ref(false);
 onMounted(async () => {
   project.value = Number.isInteger(Number(route.params.id))
     ? await getProject(route.params.id as string)
     : undefined;
+
+  if (project.value?.id === undefined) project.value = undefined;
+
   allUsers.value = await getUsers();
   allClients.value = await getClients();
 
@@ -99,7 +173,8 @@ onMounted(async () => {
   description.value = project.value?.description;
   color.value = project.value?.color;
   categories.value = project.value?.ticketStates;
-  selectedClient.value = project.value?.client.name ?? "";
+  stateLabels.value = categories.value?.map((category) => category.name) ?? [];
+  selectedClient.value = project.value?.client?.name ?? "";
   members.value = project.value?.members;
   loaded.value = true;
 });
@@ -114,6 +189,29 @@ const userList = ref(allUsers);
 const setSelectedClient = (client: string) => {
   selectedClient.value = client;
 };
+
+// Track new members
+const addMember = (
+  member: Exclude<(typeof members)["value"], undefined>[number]
+) => {
+  newMembers.value?.push(member);
+};
+
+// Tracl members to update
+const updateMember = (
+  member: Exclude<(typeof members)["value"], undefined>[number]
+) => {
+  updatedMembers.value?.push(member);
+};
+
+// Track members to delete
+const deleteMember = (
+  member: Exclude<(typeof members)["value"], undefined>[number]
+) => {
+  deletedMembers.value?.push(member);
+};
+
+// Track members to delete
 
 // Form validation
 const nameErrorMessage = ref("");
@@ -140,22 +238,66 @@ function validateForm() {
   return valid;
 }
 
-// Update project on submit
-const updateProject = async () => {
+// Check if form is valid before creating the project
+const tryUpdateThisProject = () => {
   if (!validateForm()) {
     warn("Champs manquants ou invalides.");
     return;
   }
 
-  // TODO : update project
-
-  const updated = true;
-
-  if (updated) {
-    success("Projet modifié.");
+  if (
+    selectedClient.value !== "" &&
+    clientList.value?.indexOf(selectedClient.value ?? "") == -1
+  ) {
+    isClientDialogVisible.value = true;
   } else {
-    error("Échec lors de la modification du projet.");
+    updateThisProject();
   }
+};
+
+// In case selectClient does not exist yet, confirm its creation
+const confirmCreateClient = (confirm: boolean) => {
+  isClientDialogVisible.value = false;
+
+  if (confirm) {
+    updateThisProject();
+  }
+};
+
+// Update project on submit
+const updateThisProject = async () => {
+  if (!validateForm()) {
+    warn("Champs manquants ou invalides.");
+    return;
+  }
+
+  await updateProject(project.value?.id ?? 0, {
+    id: project.value?.id ?? 0,
+    name: name.value ?? "",
+    description: description.value ?? "",
+    color: color.value ?? "",
+    client: selectedClient.value ?? "",
+    newMembers:
+      newMembers.value?.map((member) => ({
+        userId: member.user.id,
+        role: member.role,
+      })) ?? [],
+    updateMembers: updatedMembers.value,
+    deleteMembers: deletedMembers.value,
+  });
+
+  navigateTo(`/projects/${route.params.id}`);
+};
+
+// Delete project
+const deleteThisProject = async () => {
+  isDeleteDialogVisible.value = false;
+
+  if (!project.value?.id) return;
+
+  await deleteProject(project.value?.id);
+
+  navigateTo("/");
 };
 </script>
 

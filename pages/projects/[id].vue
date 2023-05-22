@@ -1,4 +1,28 @@
 <template>
+  <div class="flex justify-content-end -mt-8 mb-6 mr-8 pt-2">
+    <Button
+      icon="pi pi-arrow-left"
+      label="Retour"
+      class="mr-3"
+      size="small"
+      @click="$router.back()"
+    ></Button>
+    <Button
+      icon="pi pi-plus"
+      label="Nouveau"
+      class="mr-3"
+      size="small"
+      @click="navigateTo('create')"
+    ></Button>
+    <Button
+      icon="pi pi-cog"
+      label="Modifier"
+      class=""
+      size="small"
+      @click="navigateTo(`update/${$route.params.id}`)"
+    ></Button>
+  </div>
+
   <div class="header" :style="{ '--color': `#${project?.color}` }">
     <div class="title">
       <h3>{{ project?.client?.name }}</h3>
