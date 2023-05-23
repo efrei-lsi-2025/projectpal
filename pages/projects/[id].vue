@@ -99,7 +99,7 @@
     v-model:visible="isDialogVisibleAddTicket"
     modal
     header="Ajouter un ticket"
-    class="w-5"
+    class="w-6"
     :draggable="false"
   >
     <TicketsCreate
@@ -113,7 +113,7 @@
     v-model:visible="isDialogVisibleModifyTicket"
     modal
     header="Modifier un ticket"
-    class="w-5"
+    class="w-6"
     :draggable="false"
   >
     <TicketsCreate
