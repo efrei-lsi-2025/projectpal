@@ -183,6 +183,12 @@ const drop = async (e: DragEvent) => {
 
   await changeTicketState(Number(ticketId), project.value?.id ?? 0, to ?? "");
   project.value = await getProject(id);
+  await createLog(
+    "a changé le statut d'un ticket dans #" +
+      String(project.value?.id) +
+      " - " +
+      project.value?.name
+  );
 };
 
 const isDialogVisibleAddTicket = ref(false);
@@ -213,12 +219,24 @@ async function submitTicket(dto: TicketCreationDTO) {
   await createTicket(id, dto);
   isDialogVisibleAddTicket.value = false;
   project.value = await getProject(id);
+  await createLog(
+    "a créé un ticket dans #" +
+      String(project.value?.id) +
+      " - " +
+      project.value?.name
+  );
 }
 
 async function submitModifiedTicket(dto: TicketCreationDTO) {
   await updateTicket(ticketToEditId.value, dto);
   isDialogVisibleModifyTicket.value = false;
   project.value = await getProject(id);
+  await createLog(
+    "a modifié un ticket dans" +
+      String(project.value?.id) +
+      " - " +
+      project.value?.name
+  );
 }
 
 async function modifyTicketModal(
