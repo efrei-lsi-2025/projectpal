@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="w-full">
     <form @submit.prevent="submitTicket">
       <div class="form-row">
         <div class="form-column">
@@ -110,10 +110,6 @@ const submitTicket = async () => {
 </script>
 
 <style scoped>
-.container {
-  width: 500px;
-}
-
 .form-row {
   /* display: flex; */
   margin-bottom: 10px;

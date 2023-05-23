@@ -35,7 +35,7 @@
       <div class="recent-activity">
         <h1>Activité récente</h1>
         <ul>
-          <li v-for="log in logs?.slice(0, 15)">
+          <li v-for="log in logs?.slice(0, 15).reverse()">
             <span class="strong">{{ log.user.name }}</span
             >&nbsp; <span>{{ log.text }}</span> le&nbsp;
             <span>{{ new Date(log.createdAt).toLocaleDateString("fr") }}</span>

@@ -3,7 +3,7 @@
     <NuxtLink :to="`/projects/${props.project.id}`">
       <h3>{{ props.project.name }}</h3>
       <p>
-        {{ props.project.client?.name }}
+        {{ props.project.client?.name ?? "&nbsp;" }}
       </p>
 
       <div class="flex justify-content-end">
